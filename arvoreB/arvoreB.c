@@ -4,7 +4,7 @@
 
 typedef struct page{
 	void *Path;
-	void *listaBlocos; //ordenada por key
+	void *key; //ordenada por key
 }pages;
 
 int id = 0;
@@ -31,10 +31,10 @@ void freePages(void *page){
 
 	p = (pages *) page;
 	free(p->Path);
-	free(p->listaBlocos);
+	free(p->key);
 }
 
-//cria uma pagina
+//cria um novo no em branco
 void page(void *page, int qtd){
 
 	//cria nova pagina
@@ -52,7 +52,7 @@ void page(void *page, int qtd){
 	strcpy(pg->Path, nome);
 
 	//insere pagina
-	pg->listaBlocos = calloc(qtd, sizeof(void*));
+	pg->key = calloc(qtd, sizeof(void*));
 
 	KDT_insert(page, pg);
 
@@ -61,3 +61,4 @@ void page(void *page, int qtd){
 	fprintf(f, "%d\n", 0);	//qtd de objetos no arquivo
 	fclose(f);
 }
+
