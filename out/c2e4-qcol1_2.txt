@@ -1,0 +1,19 @@
+dc engav--2
+Carros Colididos -> br.AAE1Q01 / br.AAE1Q00
+rau br.AAE1Q00
+Removido -> br.AAE1Q00 (1340.000000 ,2645.840000)
+rau br.AAE1Q11
+Removido -> br.AAE1Q11 (5502.950000 ,3640.000000)
+rau br.AAE1Q22
+Removido -> br.AAE1Q22 (10850.000000 ,2605.830000)
+rau br.AAE1Q33
+Removido -> br.AAE1Q33 (3125.460000 ,5775.000000)
+rau br.AAE1Q44
+Removido -> br.AAE1Q44 (4235.000000 ,4468.940000)
+rau br.AAE1Q55
+Removido -> br.AAE1Q55 (8040.120000 ,4200.000000)
+rau br.AAE1Q66
+Removido -> br.AAE1Q66 (13065.000000 ,4049.040000)
+rau br.AAE1Q77
+Removido -> br.AAE1Q77 (15651.850000 ,5565.000000)
+dc engav--2rem

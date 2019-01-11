@@ -1,0 +1,12 @@
+@m? R2 000.000.461-83
+R2  <--  000.000.461-83 - (Cord: [1545.000000 , 4675.000000])
+@tp? R8 bxb R2
+R8  <-- (Cord: [2805.000000 , 4730.000000])
+p? t D R8 R2
+Siga pela rua Moreland_St,
+Vire a esquerda na rua Mulford_Aly,
+Vire a esquerda na rua Moraga_Ave,
+Vire a esquerda na rua Mullen_Ave,
+Vire a direita na rua Morningside_Dr,
+Vire a direita na rua Naglee_Ave,
+Voce Alcançou seu destino!!

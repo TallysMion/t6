@@ -1,0 +1,35 @@
+<<<<<<< HEAD
+@e? R3 b04.4 N 10
+@tp? R9 assl R3
+p? p 03-c D R9 R3 cyan
+au br.AAA2B09 347.500000 293.590000 4.500000 11.250000
+au br.AAA2B10 347.725000 294.715000 4.500000 11.250000
+au br.AAA2B20 347.725000 294.715000 4.500000 11.250000
+dc engav--3
+@e? R3 b04.4 N 10
+@tp? R9 assl R3
+p? p 03-c D R9 R3 cyan
+rau br.AAA2B09
+rau br.AAA2B10
+dc engav--3rem
+@e? R3 b04.4 N 10
+@tp? R9 assl R3
+p? p 03-c D R9 R3 cyan
+=======
+@e? R3 b05.2 N 10
+@tp? R9 adv R3
+p? p 03-c D R9 R3 cyan
+au br.AAA2B09 492.500000 528.760000 4.500000 11.250000
+au br.AAA2B10 492.725000 529.885000 4.500000 11.250000
+au br.AAA2B20 492.725000 529.885000 4.500000 11.250000
+dc engav--3
+@e? R3 b05.2 N 10
+@tp? R9 adv R3
+p? p 03-cx D R9 R3 cyan
+rau br.AAA2B09
+rau br.AAA2B10
+dc engav--3remx
+@e? R3 b05.2 N 10
+@tp? R9 adv R3
+p? p 03-cy D R9 R3 cyan
+>>>>>>> 7d9449c51505ed34b19685482ce12ec345b353ef

@@ -1,0 +1,68 @@
+@e? R3 B44-4.6 N 10
+R3  <--  B44-4.6 N nº 10.000000 - (Cord: [5505.000000 , 1750.000000])
+@tp? R9 bxb R3
+R9  <-- (Cord: [5385.000000 , 1655.000000])
+p? p 03-c D R9 R3 cyan
+dc engav--4
+Carros Colididos -> br.AAA9Y46 / br.AAA9Y45
+Carros Colididos -> br.AAA9Y56 / br.AAA9Y45
+Carros Colididos -> br.AAA9Y66 / br.AAA9Y45
+@e? R3 B44-4.6 N 10
+R3  <--  B44-4.6 N nº 10.000000 - (Cord: [5505.000000 , 1750.000000])
+@tp? R9 bxb R3
+R9  <-- (Cord: [5385.000000 , 1655.000000])
+p? p 03-cx D R9 R3 cyan
+rau br.AAA9Y45
+Removido -> br.AAA9Y45 (790.000000 ,731.220000)
+rau br.AAA9Y46
+Removido -> br.AAA9Y46 (790.150000 ,731.970000)
+rau br.AAA9Y56
+Removido -> br.AAA9Y56 (790.150000 ,731.970000)
+rau br.AAA9Y76
+Removido -> br.AAA9Y76 (1528.970000 ,750.000000)
+rau br.AAA9Y77
+Removido -> br.AAA9Y77 (1529.720000 ,750.150000)
+rau br.AAA9Y87
+Removido -> br.AAA9Y87 (1529.720000 ,750.150000)
+rau br.AAA0Z00
+Removido -> br.AAA0Z00 (3370.000000 ,687.160000)
+rau br.AAA0Z01
+Removido -> br.AAA0Z01 (3370.150000 ,687.910000)
+rau br.AAA0Z11
+Removido -> br.AAA0Z11 (3370.150000 ,687.910000)
+rau br.AAA0Z31
+Removido -> br.AAA0Z31 (308.360000 ,1545.000000)
+rau br.AAA0Z32
+Removido -> br.AAA0Z32 (309.110000 ,1545.150000)
+rau br.AAA0Z42
+Removido -> br.AAA0Z42 (309.110000 ,1545.150000)
+rau br.AAA0Z62
+Removido -> br.AAA0Z62 (2245.000000 ,1424.020000)
+rau br.AAA0Z63
+Removido -> br.AAA0Z63 (2245.150000 ,1424.770000)
+rau br.AAA0Z73
+Removido -> br.AAA0Z73 (2245.150000 ,1424.770000)
+rau br.AAA0Z93
+Removido -> br.AAA0Z93 (2767.980000 ,1545.000000)
+rau br.AAA0Z94
+Removido -> br.AAA0Z94 (2768.730000 ,1545.150000)
+rau br.AAA1Z04
+Removido -> br.AAA1Z04 (2768.730000 ,1545.150000)
+rau br.AAA1Z24
+Removido -> br.AAA1Z24 (4105.000000 ,1813.050000)
+rau br.AAA1Z25
+Removido -> br.AAA1Z25 (4105.150000 ,1813.800000)
+rau br.AAA1Z35
+Removido -> br.AAA1Z35 (4105.150000 ,1813.800000)
+rau br.AAA1Z55
+Removido -> br.AAA1Z55 (5287.930000 ,1440.000000)
+rau br.AAA1Z56
+Removido -> br.AAA1Z56 (5288.680000 ,1440.150000)
+rau br.AAA1Z66
+Removido -> br.AAA1Z66 (5288.680000 ,1440.150000)
+dc engav--4remx
+@e? R3 B44-4.6 N 10
+R3  <--  B44-4.6 N nº 10.000000 - (Cord: [5505.000000 , 1750.000000])
+@tp? R9 bxb R3
+R9  <-- (Cord: [5385.000000 , 1655.000000])
+p? p 03-cy D R9 R3 cyan

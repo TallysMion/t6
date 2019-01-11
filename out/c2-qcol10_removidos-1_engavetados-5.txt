@@ -1,0 +1,187 @@
+dc engav--5
+Carros Colididos -> br.AAB3U17 / br.AAB0U71
+Carros Colididos -> br.AAB3U18 / br.AAB0U71
+Carros Colididos -> br.AAB3U28 / br.AAB0U71
+Carros Colididos -> br.AAB3U38 / br.AAB0U71
+Carros Colididos -> br.AAB3U48 / br.AAB0U71
+Carros Colididos -> br.AAB0U71 / br.AAB3U17
+Carros Colididos -> br.AAB0U72 / br.AAB3U17
+Carros Colididos -> br.AAB0U82 / br.AAB3U17
+Carros Colididos -> br.AAB0U92 / br.AAB3U17
+Carros Colididos -> br.AAB1U02 / br.AAB3U17
+Carros Colididos -> br.AAB6R26 / br.AAB6R25
+Carros Colididos -> br.AAB6R36 / br.AAB6R25
+Carros Colididos -> br.AAB6R46 / br.AAB6R25
+Carros Colididos -> br.AAB6R56 / br.AAB6R25
+rau br.AAB6R25
+Removido -> br.AAB6R25 (460.000000 ,855.380000)
+rau br.AAB6R66
+Removido -> br.AAB6R66 (367.900000 ,1090.000000)
+rau br.AAB7R07
+Removido -> br.AAB7R07 (680.000000 ,1026.320000)
+rau br.AAB7R48
+Removido -> br.AAB7R48 (475.900000 ,495.000000)
+rau br.AAB7R89
+Removido -> br.AAB7R89 (460.000000 ,374.120000)
+rau br.AAB8R30
+Removido -> br.AAB8R30 (321.550000 ,580.000000)
+rau br.AAB8R71
+Removido -> br.AAB8R71 (680.000000 ,937.390000)
+rau br.AAB9R12
+Removido -> br.AAB9R12 (608.480000 ,1090.000000)
+rau br.AAB9R53
+Removido -> br.AAB9R53 (1120.000000 ,1022.710000)
+rau br.AAB9R94
+Removido -> br.AAB9R94 (1103.780000 ,920.000000)
+rau br.AAB0S30
+Removido -> br.AAB0S30 (1475.000000 ,768.150000)
+rau br.AAB0S71
+Removido -> br.AAB0S71 (1541.100000 ,410.000000)
+rau br.AAB1S12
+Removido -> br.AAB1S12 (1805.000000 ,523.440000)
+rau br.AAB1S53
+Removido -> br.AAB1S53 (1395.540000 ,1090.000000)
+rau br.AAB1S94
+Removido -> br.AAB1S94 (1475.000000 ,310.960000)
+rau br.AAB2S35
+Removido -> br.AAB2S35 (1517.670000 ,1005.000000)
+rau br.AAB2S76
+Removido -> br.AAB2S76 (1475.000000 ,362.850000)
+rau br.AAB3S17
+Removido -> br.AAB3S17 (1492.620000 ,580.000000)
+rau br.AAB3S58
+Removido -> br.AAB3S58 (1585.000000 ,651.300000)
+rau br.AAB3S99
+Removido -> br.AAB3S99 (2099.900000 ,1090.000000)
+rau br.AAB4S40
+Removido -> br.AAB4S40 (3370.000000 ,732.820000)
+rau br.AAB4S81
+Removido -> br.AAB4S81 (2768.750000 ,1090.000000)
+rau br.AAB5S22
+Removido -> br.AAB5S22 (3040.000000 ,622.150000)
+rau br.AAB5S63
+Removido -> br.AAB5S63 (3316.040000 ,835.000000)
+rau br.AAB6S04
+Removido -> br.AAB6S04 (3040.000000 ,465.540000)
+rau br.AAB6S45
+Removido -> br.AAB6S45 (2973.410000 ,410.000000)
+rau br.AAB6S86
+Removido -> br.AAB6S86 (3040.000000 ,766.490000)
+rau br.AAB7S27
+Removido -> br.AAB7S27 (3056.820000 ,750.000000)
+rau br.AAB7S68
+Removido -> br.AAB7S68 (2820.000000 ,962.860000)
+rau br.AAB8S09
+Removido -> br.AAB8S09 (3068.510000 ,325.000000)
+rau br.AAB8S50
+Removido -> br.AAB8S50 (500.000000 ,1387.700000)
+rau br.AAB8S91
+Removido -> br.AAB8S91 (551.880000 ,1860.000000)
+rau br.AAB9S32
+Removido -> br.AAB9S32 (1020.000000 ,1398.730000)
+rau br.AAB9S73
+Removido -> br.AAB9S73 (719.190000 ,1755.000000)
+rau br.AAB0T10
+Removido -> br.AAB0T10 (1020.000000 ,1596.020000)
+rau br.AAB0T51
+Removido -> br.AAB0T51 (411.040000 ,1650.000000)
+rau br.AAB0T92
+Removido -> br.AAB0T92 (630.000000 ,1671.820000)
+rau br.AAB1T33
+Removido -> br.AAB1T33 (607.010000 ,1440.000000)
+rau br.AAB1T74
+Removido -> br.AAB1T74 (1020.000000 ,1720.630000)
+rau br.AAB2T15
+Removido -> br.AAB2T15 (656.670000 ,1650.000000)
+rau br.AAB2T56
+Removido -> br.AAB2T56 (1855.000000 ,1487.140000)
+rau br.AAB2T97
+Removido -> br.AAB2T97 (1674.250000 ,1755.000000)
+rau br.AAB3T38
+Removido -> br.AAB3T38 (2115.000000 ,1499.120000)
+rau br.AAB3T79
+Removido -> br.AAB3T79 (2082.820000 ,1755.000000)
+rau br.AAB4T20
+Removido -> br.AAB4T20 (1855.000000 ,1614.970000)
+rau br.AAB4T61
+Removido -> br.AAB4T61 (1683.360000 ,1440.000000)
+rau br.AAB5T02
+Removido -> br.AAB5T02 (1855.000000 ,1566.060000)
+rau br.AAB5T43
+Removido -> br.AAB5T43 (1903.340000 ,1860.000000)
+rau br.AAB5T84
+Removido -> br.AAB5T84 (1985.000000 ,1711.810000)
+rau br.AAB6T25
+Removido -> br.AAB6T25 (1651.520000 ,1545.000000)
+rau br.AAB6T66
+Removido -> br.AAB6T66 (3110.000000 ,1563.910000)
+rau br.AAB7T07
+Removido -> br.AAB7T07 (2888.660000 ,1860.000000)
+rau br.AAB7T48
+Removido -> br.AAB7T48 (3110.000000 ,1682.340000)
+rau br.AAB7T89
+Removido -> br.AAB7T89 (3171.110000 ,1545.000000)
+rau br.AAB8T30
+Removido -> br.AAB8T30 (2720.000000 ,1697.430000)
+rau br.AAB8T71
+Removido -> br.AAB8T71 (3150.160000 ,1860.000000)
+rau br.AAB9T12
+Removido -> br.AAB9T12 (3110.000000 ,1349.680000)
+rau br.AAB9T53
+Removido -> br.AAB9T53 (3286.460000 ,1860.000000)
+rau br.AAB9T94
+Removido -> br.AAB9T94 (3240.000000 ,1674.060000)
+rau br.AAB0U30
+Removido -> br.AAB0U30 (2754.490000 ,1755.000000)
+rau br.AAB0U71
+Removido -> br.AAB0U71 (3975.000000 ,1693.490000)
+rau br.AAB1U12
+Removido -> br.AAB1U12 (3909.320000 ,1860.000000)
+rau br.AAB1U53
+Removido -> br.AAB1U53 (3975.000000 ,1610.640000)
+rau br.AAB1U94
+Removido -> br.AAB1U94 (3815.780000 ,1860.000000)
+rau br.AAB2U35
+Removido -> br.AAB2U35 (4495.000000 ,1395.090000)
+rau br.AAB2U76
+Removido -> br.AAB2U76 (4395.440000 ,1440.000000)
+rau br.AAB3U17
+Removido -> br.AAB3U17 (3975.000000 ,1698.940000)
+rau br.AAB3U58
+Removido -> br.AAB3U58 (4433.950000 ,1755.000000)
+rau br.AAB3U99
+Removido -> br.AAB3U99 (4365.000000 ,1357.440000)
+rau br.AAB4U40
+Removido -> br.AAB4U40 (4023.290000 ,1545.000000)
+rau br.AAB4U81
+Removido -> br.AAB4U81 (5490.000000 ,1498.520000)
+rau br.AAB5U22
+Removido -> br.AAB5U22 (5394.360000 ,1755.000000)
+rau br.AAB5U63
+Removido -> br.AAB5U63 (5100.000000 ,1477.240000)
+rau br.AAB6U04
+Removido -> br.AAB6U04 (5190.310000 ,1860.000000)
+rau br.AAB6U45
+Removido -> br.AAB6U45 (5100.000000 ,1386.290000)
+rau br.AAB6U86
+Removido -> br.AAB6U86 (4895.230000 ,1860.000000)
+rau br.AAB7U27
+Removido -> br.AAB7U27 (5620.000000 ,1809.420000)
+rau br.AAB7U68
+Removido -> br.AAB7U68 (5402.930000 ,1545.000000)
+rau br.AAB8U09
+Removido -> br.AAB8U09 (5230.000000 ,1360.800000)
+rau br.AAB8U50
+Removido -> br.AAB8U50 (5308.740000 ,1545.000000)
+dc engav--5rem
+Carros Colididos -> br.AAB6U15 / br.AAB6U05
+Carros Colididos -> br.AAB6U25 / br.AAB6U05
+Carros Colididos -> br.AAB6U35 / br.AAB6U05
+Carros Colididos -> br.AAB3U18 / br.AAB0U72
+Carros Colididos -> br.AAB3U28 / br.AAB0U72
+Carros Colididos -> br.AAB3U38 / br.AAB0U72
+Carros Colididos -> br.AAB3U48 / br.AAB0U72
+Carros Colididos -> br.AAB0U72 / br.AAB3U18
+Carros Colididos -> br.AAB0U82 / br.AAB3U18
+Carros Colididos -> br.AAB0U92 / br.AAB3U18
+Carros Colididos -> br.AAB1U02 / br.AAB3U18

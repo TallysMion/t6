@@ -1,0 +1,11 @@
+@xy R6 5062.500000 1944.000000
+R6  <-- (Cord: [5062.500000 , 1944.000000])
+@g? R7 hoB42-5.4
+R7  <-- hoB42-5.4 (Cord: [3105.000000 , 1807.500000])
+p? t T R6 R7
+Siga pela rua Perimetral_Norte,
+Vire a esquerda na rua .,
+Siga em Frente na rua Via_Ferlinghetti,
+Vire a direita na rua Verna_St,
+Vire a direita na rua Vicente_St,
+Voce Alcançou seu destino!!

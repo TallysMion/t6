@@ -1,0 +1,19 @@
+dc engav--2
+Carros Colididos -> br.AAA9L56 / br.AAA9L55
+rau br.AAA9L55
+Removido -> br.AAA9L55 (570.000000 ,1047.540000)
+rau br.AAA9L66
+Removido -> br.AAA9L66 (1852.600000 ,580.000000)
+rau br.AAA9L77
+Removido -> br.AAA9L77 (2820.000000 ,284.390000)
+rau br.AAA9L88
+Removido -> br.AAA9L88 (909.060000 ,1440.000000)
+rau br.AAA9L99
+Removido -> br.AAA9L99 (2115.000000 ,1517.580000)
+rau br.AAA0M10
+Removido -> br.AAA0M10 (3342.490000 ,1650.000000)
+rau br.AAA0M21
+Removido -> br.AAA0M21 (4365.000000 ,1509.140000)
+rau br.AAA0M32
+Removido -> br.AAA0M32 (4863.860000 ,1650.000000)
+dc engav--2rem

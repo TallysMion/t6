@@ -1,0 +1,31 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "(gdb) Launch",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/siguel",
+<<<<<<< HEAD
+            "args": ["-e", "./test/", "-o", "./out", "-f", "c1.geo", "-v", "c1-v.via", "-q", "c1/todos.qry", "-pm", "c1.pm", "-ec", "c1.ec"],
+=======
+            "args": ["-e", "./test", "-o", "./out", "-f", "c2e4.geo", "-pm", "c2e4.pm", "-ec", "c2e4.ec", "-v", "c2e4-v.via", "-q", "c2e4/qcolseq3_.qry"],
+>>>>>>> 7348a623ea62710560f6a0b352626112de5feeb6
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": true,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,85 @@
+@e? R3 B44-4.6 N 10
+R3  <--  B44-4.6 N nº 10.000000 - (Cord: [5505.000000 , 1750.000000])
+@tp? R9 bxb R3
+R9  <-- (Cord: [5385.000000 , 1655.000000])
+p? p 03-c D R9 R3 cyan
+dc engav--5
+Carros Colididos -> br.AAB0O32 / br.AAB0O31
+Carros Colididos -> br.AAB0O42 / br.AAB0O31
+Carros Colididos -> br.AAB0O52 / br.AAB0O31
+Carros Colididos -> br.AAB0O62 / br.AAB0O31
+@e? R3 B44-4.6 N 10
+R3  <--  B44-4.6 N nº 10.000000 - (Cord: [5505.000000 , 1750.000000])
+@tp? R9 bxb R3
+R9  <-- (Cord: [5385.000000 , 1655.000000])
+p? p 03-cx D R9 R3 cyan
+rau br.AAB0O31
+Removido -> br.AAB0O31 (1010.000000 ,732.390000)
+rau br.AAB0O32
+Removido -> br.AAB0O32 (1010.150000 ,733.140000)
+rau br.AAB0O42
+Removido -> br.AAB0O42 (1010.150000 ,733.140000)
+rau br.AAB0O52
+Removido -> br.AAB0O52 (1010.150000 ,733.140000)
+rau br.AAB0O72
+Removido -> br.AAB0O72 (1511.150000 ,1005.000000)
+rau br.AAB0O73
+Removido -> br.AAB0O73 (1511.900000 ,1005.150000)
+rau br.AAB0O83
+Removido -> br.AAB0O83 (1511.900000 ,1005.150000)
+rau br.AAB0O93
+Removido -> br.AAB0O93 (1511.900000 ,1005.150000)
+rau br.AAB1O13
+Removido -> br.AAB1O13 (2600.000000 ,772.410000)
+rau br.AAB1O14
+Removido -> br.AAB1O14 (2600.150000 ,773.160000)
+rau br.AAB1O24
+Removido -> br.AAB1O24 (2600.150000 ,773.160000)
+rau br.AAB1O34
+Removido -> br.AAB1O34 (2600.150000 ,773.160000)
+rau br.AAB1O54
+Removido -> br.AAB1O54 (299.320000 ,1650.000000)
+rau br.AAB1O55
+Removido -> br.AAB1O55 (300.070000 ,1650.150000)
+rau br.AAB1O65
+Removido -> br.AAB1O65 (300.070000 ,1650.150000)
+rau br.AAB1O75
+Removido -> br.AAB1O75 (300.070000 ,1650.150000)
+rau br.AAB1O95
+Removido -> br.AAB1O95 (1855.000000 ,1398.920000)
+rau br.AAB1O96
+Removido -> br.AAB1O96 (1855.150000 ,1399.670000)
+rau br.AAB2O06
+Removido -> br.AAB2O06 (1855.150000 ,1399.670000)
+rau br.AAB2O16
+Removido -> br.AAB2O16 (1855.150000 ,1399.670000)
+rau br.AAB2O36
+Removido -> br.AAB2O36 (2630.060000 ,1440.000000)
+rau br.AAB2O37
+Removido -> br.AAB2O37 (2630.810000 ,1440.150000)
+rau br.AAB2O47
+Removido -> br.AAB2O47 (2630.810000 ,1440.150000)
+rau br.AAB2O57
+Removido -> br.AAB2O57 (2630.810000 ,1440.150000)
+rau br.AAB2O77
+Removido -> br.AAB2O77 (4235.000000 ,1478.700000)
+rau br.AAB2O78
+Removido -> br.AAB2O78 (4235.150000 ,1479.450000)
+rau br.AAB2O88
+Removido -> br.AAB2O88 (4235.150000 ,1479.450000)
+rau br.AAB2O98
+Removido -> br.AAB2O98 (4235.150000 ,1479.450000)
+rau br.AAB3O18
+Removido -> br.AAB3O18 (5001.880000 ,1755.000000)
+rau br.AAB3O19
+Removido -> br.AAB3O19 (5002.630000 ,1755.150000)
+rau br.AAB3O29
+Removido -> br.AAB3O29 (5002.630000 ,1755.150000)
+rau br.AAB3O39
+Removido -> br.AAB3O39 (5002.630000 ,1755.150000)
+dc engav--5remx
+@e? R3 B44-4.6 N 10
+R3  <--  B44-4.6 N nº 10.000000 - (Cord: [5505.000000 , 1750.000000])
+@tp? R9 bxb R3
+R9  <-- (Cord: [5385.000000 , 1655.000000])
+p? p 03-cy D R9 R3 cyan

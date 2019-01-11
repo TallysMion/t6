@@ -1,0 +1,23 @@
+@m? R2 000.001.091-00
+R2  <--  000.001.091-00 - (Cord: [2805.000000 , 1435.000000])
+@e? R3 B44-4.6 N 10
+R3  <--  B44-4.6 N nº 10.000000 - (Cord: [5505.000000 , 1750.000000])
+@xy R4 562.500000 216.000000
+R4  <-- (Cord: [562.500000 , 216.000000])
+@xy R5 2812.500000 1080.000000
+R5  <-- (Cord: [2812.500000 , 1080.000000])
+@xy R6 5062.500000 1944.000000
+R6  <-- (Cord: [5062.500000 , 1944.000000])
+@g? R7 hoB42-5.4
+R7  <-- hoB42-5.4 (Cord: [3105.000000 , 1807.500000])
+@tp? R8 ext R2
+R8  <-- (Cord: [2240.000000 , 1600.000000])
+@tp? R9 bxb R3
+R9  <-- (Cord: [5385.000000 , 1655.000000])
+dc seq-trajs
+Carros Colididos -> br.AAC3I63 / br.AAC2I97
+Carros Colididos -> br.AAC3I64 / br.AAC2I97
+Carros Colididos -> br.AAC2I97 / br.AAC3I63
+Carros Colididos -> br.AAC2I98 / br.AAC3I63
+Carros Colididos -> br.AAC9H54 / br.AAC9H53
+sp? p qstp D 8 R2 R3 R4 R5 R6 R7 R8 R9 blue red

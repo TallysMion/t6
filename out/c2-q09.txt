@@ -1,0 +1,19 @@
+@m? R2 000.001.091-00
+R2  <--  000.001.091-00 - (Cord: [2805.000000 , 1435.000000])
+@tp? R8 ext R2
+R8  <-- (Cord: [2240.000000 , 1600.000000])
+p? t D R8 R2
+Siga pela rua Walker_Ct,
+Vire a esquerda na rua Vista_Ct,
+Vire a esquerda na rua Vulcan_Stwy,
+Siga em Frente na rua .,
+Vire a esquerda na rua ExpressaLesteOeste,
+Vire a direita na rua .,
+Vire a esquerda na rua Interbairros_II,
+Siga em Frente na rua .,
+Vire a esquerda na rua ExpressaLesteOeste,
+Vire a esquerda na rua .,
+Vire a direita na rua Vine_Ter,
+Vire a esquerda na rua Victoria_St,
+Vire a esquerda na rua Via_Bufano,
+Voce Alcançou seu destino!!
