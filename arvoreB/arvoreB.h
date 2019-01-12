@@ -1,18 +1,37 @@
 #ifndef ARVOREB_H
 #define ARVOREB_H
 
-void *Pages(int bloco);	                //cria e abre a estrutura paginas
+typedef void* Tree;
 
-void page(void *pages, int qtd);	//cria e insere uma pagina
+// cria um banco de dados novo
+Tree BTREE_inicializa(int tam, char*bdName, int objSize, int (*compare)(void*, void*));
 
-void insert(void *page, void *pos);	//insere um bloco
+// Busca um item na arvore
+void* BTREE_busca(Tree arvore, int valor, void* obj);
 
-void delet(void *page, void *pos);	//apaga bloco
+//Remove um item da arvore
+int BTREE_deletar(Tree arvore, int valor, void* obj);
 
-int compare(void *keyA, void *keyB);    //compara chave de ordenação da arvore
+//Inclui um item na arvore
+int BTREE_insere(Tree arvore, int valor, void* obj);
 
-void *getPage(void *pages, void *key);  //retorna pagina com a info buscada
+/*
 
-void *getBloco(void *page, void *key);  //retorna info buscada 
+//Carrega um Banco de Dados Existente
+Tree BTREE_Carrega(char* bdName);
 
+//Retorna todos os itens
+Lista BTREE_getAll(Tree arvore);
+
+//Retorna o item mais proximo da referencia
+//se ctr != 0, permite retorno de item com dist = 0
+void* BTREE_closestNeibord(void* tree, void* reference, int ctr);
+
+
+//Retorna uma lista de itens que estao entre as referencias
+void* BTREE_itensInsideArea(void* tree, void* refInicial, void* refFinal);
+
+//Limpa a memoria da BTREE
+void   BTREE_free(KDTB tree);
+*/
 #endif
