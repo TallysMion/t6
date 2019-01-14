@@ -25,8 +25,8 @@ int main(int argc, char *argv[]) {
 
   GtkWidget *event_box;
 
-  GtkWidget *image;
-  image = gtk_image_new_from_file ("../c2-todos.svg");
+ /* GtkWidget *image;
+  image = gtk_image_new_from_file ("../c2-todos.svg");*/
 
   gtk_init(&argc, &argv);
 
@@ -57,8 +57,8 @@ int main(int argc, char *argv[]) {
         G_CALLBACK(gtk_main_quit), NULL);
 
 
-        g_signal_connect(G_OBJECT(imgMi), "button_press_event",
-             G_CALLBACK(button_press_callback), image);
+       /* g_signal_connect(G_OBJECT(imgMi), "button_press_event",
+             G_CALLBACK(button_press_callback), image);*/
 
   g_signal_connect(G_OBJECT(quitMi), "activate",
         G_CALLBACK(gtk_main_quit), NULL);
