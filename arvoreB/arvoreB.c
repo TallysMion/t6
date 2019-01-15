@@ -45,7 +45,7 @@ void printNode(Tree* tree, Node* nd);
 //testar se sizeof(Node) <= block
 int calcTam(int block){
     block -= 6*sizeof(int);
-    int result = block/(4*sizeof(int)+2*sizeof(double));
+    int result = block/(2*sizeof(int)+sizeof(double));
     return result;
 }
 
@@ -199,21 +199,33 @@ void* _busca(Tree* arvore, Node* folha, double valor, void* obj) {
 		return getObject(arvore->Data, folha->elementoData[indice]);
 	}
 	else {
-		for (int i = 0; i < folha->max_filhos; i++) {
-			if (folha->filhos[i] != -1) {
-				Node* temp = (Node*)malloc(sizeof(Node));
+		int i;
+		for (i = 0; i < folha->max_elementos; i++) {
+			if(folha->elementos[i] == -1) break;
+			if (folha->filhos[i] != -1 && valor <= folha->elementos[i]) {
+				Node* temp = inicializa_folha(arvore->blockSize);
 				ler_disco(arvore, folha->filhos[i], temp);
-                int res = busca_elemento(arvore, folha, valor, obj);
+                int res = busca_elemento(arvore, temp, valor, obj);
 				if (res >= 0) 
 				{
 					free(temp);
 					return getObject(arvore->Data, res);
 				}
                 return _busca(arvore, temp, valor, obj);
-				// if (res >= 0)
-				// 	return getObject(arvore->Data, res);
 				free(temp);
 			}
+		}
+		if (folha->filhos[i] != -1) {
+				Node* temp = inicializa_folha(arvore->blockSize);
+				ler_disco(arvore, folha->filhos[i], temp);
+                int res = busca_elemento(arvore, temp, valor, obj);
+				if (res >= 0) 
+				{
+					free(temp);
+					return getObject(arvore->Data, res);
+				}
+                return _busca(arvore, temp, valor, obj);
+				free(temp);
 		}
 	}
 	return NULL;
