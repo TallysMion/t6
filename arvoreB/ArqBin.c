@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h> 
 
-#include "Lista/lista.h"
+#include "../Lista/lista.h"
 
 
 //primeiro iteom -> long int
