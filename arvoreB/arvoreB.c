@@ -12,10 +12,10 @@ typedef struct No{
 	int max_elementos;
 	int total_filhos;
 	int max_filhos;
+    int minha_pos;
     double* elementos;
 	int* elementoData;
 	int* filhos;
-    int minha_pos;
 }Node;
 
 typedef struct{
@@ -71,18 +71,19 @@ Tree* BTREE_Carrega(char* bdName){
 //testar se sizeof(Node) <= block
 Node* inicializa_folha(int block) {
     int tam = calcTam(block);
-	Node* folha = (Node*)malloc(sizeof(Node));
+	Node* folha = (Node*)malloc(block);
 
 	folha->max_elementos = 2 * tam - 1;
 	folha->pai = -1;
-	folha->filhos       = (int*) malloc(sizeof(int) * 2 * tam);
-    folha->elementoData = (int*) malloc(sizeof(int)* 2 * tam -1);
-	folha->elementos    = (double*)    malloc(sizeof(double)*(2 * tam - 1));
-
 	folha->total_elementos = 0;
 	folha->total_filhos = 0;
 	folha->minha_pos = -1;
 	folha->max_filhos = 2 * tam;
+
+	folha->elementos    = (double*) folha 				+ 6*sizeof(int); 					//(double*)    malloc(sizeof(double)*(2 * tam - 1));
+    folha->elementoData = (int*) 	folha->elementos 	+ (sizeof(double)*(2 * tam - 1));  	//(int*)malloc(sizeof(int)* 2 * tam -1);
+	folha->filhos       = (int*) 	folha->elementoData + (sizeof(int)* 2 * tam -1);		//(int*) malloc(sizeof(int) * 2 * tam);
+
 
 	for (int i = 0; i < folha->max_elementos; i++){
 		folha->elementos[i] = -1;
@@ -91,6 +92,7 @@ Node* inicializa_folha(int block) {
 	for (int i = 0; i < folha->max_filhos; i++)
 		folha->filhos[i] = -1;
 
+	
 	return folha;
 }
 
@@ -142,10 +144,18 @@ int ler_disco(Tree* arvore, int seek, Node *folha)
 	if (fseek(arvore->arq, seek, SEEK_SET) == -1)
 		return 0;
 	// armazeno em um buffer
-	char *buf = (char*)malloc(sizeof(Node));
-	fread(buf, sizeof(Node), 1, arvore->arq);
-	// copio o buffer para a estrutura.. 
-	memcpy(folha, buf, sizeof(Node));
+	folha = inicializa_folha(arvore->blockSize);
+	
+	int fSize = sizeof(folha);
+	int eSize = sizeof(folha->elementos);
+	int dSize = sizeof(folha->elementoData);
+	int cSize = sizeof(folha->filhos); 
+	
+	fread(folha, 				fSize, 1, arvore->arq);
+	fread(folha->elementos, 	eSize, 1, arvore->arq);
+	fread(folha->elementoData, 	dSize, 1, arvore->arq);
+	fread(folha->filhos, 		cSize, 1, arvore->arq);
+	folha->minha_pos = seek;
 
 	return 1;
 }
@@ -165,7 +175,7 @@ int busca_elemento(Tree* arvore, Node* f, double valor, void* obj) {
 
 /* metodo para buscar em uma folha,
  sendo este recursivo e armazenado apenas um no na memoria
- O retorno, é o indice do elemento no data, usando compare para achar o elemento igual
+ O retorno, é o obj
  */
 void* _busca(Tree* arvore, Node* folha, double valor, void* obj) {	
 	int indice = busca_elemento(arvore, folha, valor, obj);
@@ -203,11 +213,20 @@ int escrever_disco(Tree* arvore, int seek, Node *folha)
 {
     //tem q andar o tamanho do header********************************
 	// Insiro o pointer na posição que eu passei e escrevo o nó
-	if (fseek(arvore->arq, arvore->headerSize + seek * sizeNode(arvore), SEEK_SET) == -1)
+	if (fseek(arvore->arq, seek, SEEK_SET) == -1)
 		return 0;
 	if (folha->minha_pos == -1)
 		folha->minha_pos = ftell(arvore->arq);
-	fwrite((void *)folha, sizeof(folha), 1, arvore->arq);
+	
+	int fSize = sizeof(folha);
+	int eSize = sizeof(folha->elementos);
+	int dSize = sizeof(folha->elementoData);
+	int cSize = sizeof(folha->filhos); 
+	
+	fwrite((void *)folha				, fSize, 1, arvore->arq);
+	fwrite((void *)folha->elementos		, eSize, 1, arvore->arq);
+	fwrite((void *)folha->elementoData	, dSize, 1, arvore->arq);
+	fwrite((void *)folha->filhos		, cSize, 1, arvore->arq);
 	
 	return 1;
 }
@@ -251,6 +270,7 @@ int add_filho(Node* pai, int seek) {
 	for (int i = 0; i < pai->max_filhos; i++) {
 		if (pai->filhos[i] == -1) {
 			pai->filhos[i] = seek;
+			pai->total_filhos++;
 			break;
 		}
 	}
@@ -276,63 +296,93 @@ int total_elementos(Node* f) {
 	return total;
 }
 
+//refazer
 int split(Tree* arvore, Node* pai, double valor, void* obj) {
+	//função que splita a raiz
+	double valores[pai->max_elementos+1];
+	int datas[pai->max_elementos+1];
+
+	//lista os elementos, incluindo o novo
+	for(int i=0; i < pai->max_elementos; i++){
+		valores[i] = pai->elementos[i];
+		datas[i] = pai->elementoData[i];
+	}
+	valores[pai->max_elementos] = valor;
+	datas[pai->max_elementos] = addObject(obj, arvore->Data);
+
+	for(int i=0; i <= pai->max_elementos; i++){
+		for(int j=0; j <= pai->max_elementos; j++){
+			if(valores[i] > valores[j]){
+				double valAux = valores[i];
+				int dataAux = datas[i];
+				valores[i] = valores[j];
+				datas[i] = datas[j];
+				valores[j] = valAux;
+				datas[j] = dataAux;
+			}
+		}
+	}
+
+
+	//0 até meio-1 -> filho1 -> filhos e elementos
+	int meio = pai->max_elementos/2;
+
 	Node* filho1 = inicializa_folha(arvore->blockSize);
 	Node* filho2 = inicializa_folha(arvore->blockSize);
 
-	int meio = (pai->max_elementos / 2);
-	int val_meio = pai->elementos[meio];
-    int val_meioData = pai->elementoData[meio];
+	//meio + 1 -> maxElementos -> filho2 -> filhos e elementos
+	filho1->total_elementos = 0;
+	for(int i=0; i < meio; i++){
+		filho1->elementos[i] = valores[i];
+		filho1->elementoData[i] = datas[i];
+		filho1->total_elementos++;
+	}
 
-	int val_meio2 = pai->elementos[meio + 1];
-    int val_meio2Data = pai->elementoData[meio + 1];
+	filho2->total_elementos = 0;
+	for(int i=meio+1; i <= pai->max_elementos; i++){
+		filho2->elementos[i-meio+1] = valores[i];
+		filho2->elementoData[i-meio+1] = datas[i];
+		filho2->total_elementos++;
+	}
 
-	for (int i = 0; i < pai->max_elementos; i++){
-		filho1->elementos[i] = pai->elementos[i];
-        filho1->elementoData[i] = pai->elementoData[i];
-    }
-
-	for (int i = 0; i < pai->max_filhos; i++){
+	for(int i = 0; i < meio; i++)
 		filho1->filhos[i] = pai->filhos[i];
-    }
 
-	filho1->elementos[meio] = valor;
-    int data = addObject(obj, arvore->Data);
-    filho1->elementoData[meio] = data;
-	filho1->elementos[meio + 1] = -1;
-	filho1->pai = pai->minha_pos;
-	filho1->total_elementos = pai->total_elementos - 1;
+	for(int i = meio+1; i < pai->max_filhos; i++)
+		filho2->filhos[i-meio+1] = pai->filhos[i];
 
-	filho2->pai = pai->minha_pos;
-	filho2->total_elementos = 1;
 
-	//memset(folha->elementos, 0x0, sizeof(folha->elementos));
-	for (int i = 0; i < pai->max_elementos; i++){
+	//raiz -> limpa filhos e elementos
+	for(int i = 0; i < pai->max_elementos; i++){
 		pai->elementos[i] = -1;
-        pai->elementoData[i] = -1;
-    }
-	for (int i = 0; i < pai->max_filhos; i++)
+		pai->elementoData[i] = -1;
+	}
+
+	for(int i = 0; i < pai->max_filhos; i++)
 		pai->filhos[i] = -1;
 
-	pai->total_elementos = 1;
-	void* val_meioObj  = getObject(arvore->Data, val_meioData);
-	void* val_meioObj2 = getObject(arvore->Data, val_meio2Data);
-	adicionar_elemento(arvore, pai, val_meio, val_meioObj);
-	adicionar_elemento(arvore, filho2, val_meio2, val_meioObj2);
-	ordenar(filho1);
-
-    //andar o tamanho do header e verificar escrita em arquivo
+	int pos;
+	//filho[0] = filho 1
+	filho1->pai = pai->minha_pos;
 	fseek(arvore->arq, 0, SEEK_END);
-	int pos = ftell(arvore->arq);
+	pos = ftell(arvore->arq);
 	escrever_disco(arvore, pos, filho1);
+	pai->filhos[0] = pos;
 
-	int pos2 = ftell(arvore->arq);
-	escrever_disco(arvore, pos2, filho2);
+	//filho[1] = filho 2
+	filho2->pai = pai->minha_pos;
+	// fseek(arvore->arq, 0, SEEK_END);
+	pos = ftell(arvore->arq);
+	escrever_disco(arvore, pos, filho2);
+	pai->filhos[1] = pos;
 
-	add_filho(pai, pos);
-	add_filho(pai, pos2);
+	//elemento[0] = meio e meio data
+	pai->elementos[0] = valores[meio];
+	pai->elementoData[0] = datas[meio];
 
+	//atualiza o arquivo
 	escrever_disco(arvore, pai->minha_pos, pai);
+
 	return 1;
 }
 
@@ -476,7 +526,7 @@ int inserir_filho(Tree* arvore, Node* folha, double valor, void* obj)
 			// insere nessa porra que ele nao tem nenhum filho msm
 			adicionar_elemento(arvore, temp, valor, obj);
 			ordenar(temp);
-			escrever_disco(arvore, folha->filhos[0], temp); // atualiza no disco
+			escrever_disco(arvore, temp->minha_pos, temp); // atualiza no disco
 		}
 	}
 
@@ -490,27 +540,32 @@ int BTREE_insere(Tree* arvore, double valor, void* obj) {
 
 		Node* folha = arvore->raiz;
 		adicionar_elemento(arvore, folha, valor, obj);
-		//folha->pai = 0; // posicao inicial desse cara..		
-		if (escrever_disco(arvore, 0, folha)) {
+		//folha->pai = 0; // posicao inicial desse cara..
+		fseek(arvore->arq, 0, SEEK_END);	
+		int pos = ftell(arvore->arq);
+		folha->minha_pos = pos;
+		if (escrever_disco(arvore, pos, folha)) {
 			//printf("ok escrita\n");
 		}
+		ler_disco(arvore, pos, folha);
 
 	}
 	else {
 		Node* f = arvore->raiz;
 		if (f->filhos[0] != -1) {
 			// se esse cara tiver filhos, devo inserir neles..
-			inserir_filho(arvore, arvore->raiz, valor, obj);
+			inserir_filho(arvore, f, valor, obj);
 		}
 		else {
 			if (total_elementos(f) == f->max_elementos) {
-				split(arvore, arvore->raiz, valor, obj);
+				split(arvore, f, valor, obj);
+
 			}
 			else {
 				// nao atingiu ainda o limite..
 				adicionar_elemento(arvore, f, valor, obj);
 				// re-escrevo ele no arquivo
-				escrever_disco(arvore, f->pai, arvore->raiz);
+				escrever_disco(arvore, f->minha_pos, arvore->raiz);
 
 			}
 		}
@@ -593,10 +648,37 @@ void BTREE_free(Tree* arvore){
 	fclose(arvore->arq);
 	free(arvore->Data);
 	if(arvore->raiz != NULL){
-		free(arvore->raiz->elementos);
-		free(arvore->raiz->elementoData);
-		free(arvore->raiz->filhos);
 		free(arvore->raiz);
 	}
 	free(arvore);
+}
+
+void printNode(Tree* tree, Node* nd){
+	printf("\nLocal: %d", nd->minha_pos);
+	
+	printf("\nElementos: \n");
+	for(int i = 0; i < nd->max_elementos; i++)
+		printf("| %lf  |", nd->elementos[i]);
+
+	printf("\nElementoData: \n");
+	for(int i = 0; i < nd->max_elementos; i++)
+		printf("| %d  |", nd->elementoData[i]);
+
+	printf("\nFilhos: \n");
+	for(int i = 0; i < nd->max_filhos; i++)
+		printf("| %d  |", nd->filhos[i]);
+
+	for(int i = 0; i < nd->max_filhos; i++){
+		if(nd->filhos[i] != -1){
+			Node* node = inicializa_folha(tree->blockSize);
+			ler_disco(tree, nd->filhos[i], node);
+			printNode(tree, node);
+		}
+	}
+	
+
+}
+void BTREE_PRINT(Tree* arvore){
+	if(arvore->raiz!=NULL)
+		printNode(arvore, arvore->raiz);
 }

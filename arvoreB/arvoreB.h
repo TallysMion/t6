@@ -33,4 +33,7 @@ Lista BTREE_getAll(Tree arvore); //depende do getAll do BinariFile
 void* BTREE_itensInsideArea(void* tree, void* refInicial, void* refFinal);
 
 */
+
+void BTREE_PRINT(void* arvore);
+
 #endif

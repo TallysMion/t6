@@ -68,7 +68,7 @@ int addObject(void *object, char* pathName){
     //add objeto
     long int offSet = (primeiroItem + c*(block + sizeof(mark)));
     qtd = fseek(arq, offSet, SEEK_SET);
-    printf("pos escrita = %li\n", ftell(arq));
+    // printf("pos escrita = %li\n", ftell(arq));
     qtd = fwrite(&full, sizeof(mark), 1,arq);   //marca pos. livre
     qtd = fwrite(object, block, 1, arq);
     if(c==indice){
@@ -78,6 +78,7 @@ int addObject(void *object, char* pathName){
         rewind(arq);
         fwrite(&next, sizeof(long int), 1,arq);
     }
+    fflush(arq);
     fclose(arq);
 
     return c;
