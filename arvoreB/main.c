@@ -19,7 +19,7 @@ double compare(void* a, void *b){
 
 int main(){
 
-    void* tree = BTREE_inicializa(100, "Teste.dat", sizeof(table), compare);
+    void* tree = BTREE_inicializa(60, "Teste.dat", sizeof(table), compare);
 
     table* obj0 = (table*) malloc(sizeof(table));
     table* obj1 = (table*) malloc(sizeof(table));
@@ -83,6 +83,16 @@ int main(){
 
     res = (table*) BTREE_busca(tree, obj5->x, obj5);    
     if(res!=NULL)printf("Função get\n%lf - %lf\n", res->x, res->y);
+
+    BTREE_PRINT(tree);
+
+    int del = BTREE_deletar(tree, obj3->x, obj3);
+    del?printf("\nDeletado com sucesso;\n"):printf("\nErro na Delecao;\n");
+
+    BTREE_PRINT(tree);
+
+    res = (table*) BTREE_busca(tree, obj4->x, obj4);    
+    res!=NULL?printf("Função get\n%lf - %lf\n", res->x, res->y):printf("\nObjeto não Encontrado");
 
     BTREE_free(tree);
 }

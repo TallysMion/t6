@@ -9,11 +9,11 @@ Tree BTREE_inicializa(int tam, char*bdName, int objSize, double (*compare)(void*
 // Busca um item na arvore
 void* BTREE_busca(Tree arvore, double valor, void* obj);
 
-//Remove um item da arvore
-int BTREE_deletar(Tree arvore, double valor, void* obj);
-
 //Inclui um item na arvore
 int BTREE_insere(Tree arvore, double valor, void* obj);
+
+//Remove um item da arvore
+int BTREE_deletar(Tree arvore, double valor, void* obj);
 
 //Carrega um Banco de Dados Existente
 Tree BTREE_Carrega(char* bdName);

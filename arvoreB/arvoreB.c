@@ -36,6 +36,11 @@ typedef struct{
     char* BFILE;
 }Header;
 
+typedef struct{
+	double key;
+	int data;
+}info;
+
 //prototip
 int ler_disco(Tree* arvore, int seek, Node *folha);
 void printNode(Tree* tree, Node* nd);
@@ -262,21 +267,19 @@ int escrever_disco(Tree* arvore, int seek, Node *folha)
 
 // ordena os elementos da folha
 void ordenar(Node* f) {
-	int trocas = 1;
-	while (trocas > 0) {
-		trocas = 0;
-		int i = 0;
-		while (i < f->max_elementos - 1) {
-			if (f->elementos[i] > f->elementos[i + 1] && f->elementos[i+1] != -1) {
-				int temp = f->elementos[i];
-                int tempData = f->elementoData[i];
-				f->elementos[i] = f->elementos[i + 1];
-                f->elementoData[i] = f->elementos[i+1];
-				f->elementos[i + 1] = temp;
-                f->elementos[i + 1] = tempData;
-				trocas++;
+	for(int i=0; i<f->max_elementos; i++){
+		for(int j=i; j<f->max_elementos; j++){
+			if((f->elementos[i] > f->elementos[j] && f->elementos[j] != -1) || (f->elementos[i] == -1 && f->elementos[j] != -1)){
+				double akey = f->elementos[i];
+				int aData = f->elementoData[i];
+				int aFilho = f->filhos[i];
+				f->elementos[i] = f->elementos[j];
+				f->elementoData[i] = f->elementoData[j];
+				f->filhos[i] = f->filhos[j];
+				f->elementos[j] = akey;
+				f->elementoData[j] = aData;
+				f->filhos[j] = aFilho;
 			}
-			i++;
 		}
 	}
 }
@@ -443,44 +446,108 @@ int retira_elemento(Tree* arvore, Node* folha, double elem, void* obj) {
                 folha->elementos[i] = -1;
                 deleteObject(arvore->Data, folha->elementoData[i]);
                 folha->elementoData[i] = -1;
-                return 1;
+				folha->total_elementos--;
+                return i;
             }
 		}
 	}
-	ordenar(folha);
-	return 0;
+	return -1;
+}
+
+info* searchRight(Tree* arvore, Node* folha){
+	for(int i = folha->max_elementos-1; i>=0; i--){
+		if(folha->elementos[i] != -1){
+			if(folha->filhos[i+1] != -1){
+				Node* nd = inicializa_folha(arvore->blockSize);
+				ler_disco(arvore, folha->filhos[i+1], nd);
+				return searchRight(arvore, nd);
+			}
+			info* result = (info*) malloc(sizeof(info));
+			result->key = folha->elementos[i];
+			result->data = folha->elementoData[i];
+			folha->elementos[i] = -1;
+			folha->elementos[i] = -1;
+			escrever_disco(arvore, folha->minha_pos, folha);
+			return result;
+		}
+	}
 }
 
 
 int _deletar(Tree* arvore, Node* folha, double valor, void* obj) {
 	if (busca_elemento(arvore, folha, valor, obj) != -1) {
 		int ctr = retira_elemento(arvore, folha, valor, obj);
-		if(ctr)	return 1;
+		if(ctr >= 0){
+			if(folha->filhos[ctr] != -1){
+				Node* nd = inicializa_folha(arvore->blockSize);
+				ler_disco(arvore, folha->filhos[ctr], nd);
+				info* infoData = searchRight(arvore, nd);
+				folha->elementos[ctr] = infoData->key;
+				folha->elementoData[ctr] = infoData->data;
+				escrever_disco(arvore, folha->minha_pos, folha);
+			}
+			return folha->minha_pos;
+		}
+		
 	}
 	else {
-		for (int i = 0; i < folha->max_filhos; i++) {
-			if (folha->filhos[i] != -1) {
-				Node* temp = (Node*)malloc(sizeof(Node));
+		int i;
+		for (i = 0; i < folha->max_elementos; i++) {
+			if(folha->elementos[i] == -1) break;
+			if (folha->filhos[i] != -1 && valor <= folha->elementos[i]) {
+				Node* temp = inicializa_folha(arvore->blockSize);
 				ler_disco(arvore, folha->filhos[i], temp);
-				if (busca_elemento(arvore, folha, valor, obj) != -1) 
+                int res = busca_elemento(arvore, temp, valor, obj);
+				if (res >= 0) 
 				{
-					int ctr = retira_elemento(arvore, folha, valor, obj);
-					if(ctr){
-						free(temp);
-						return 1;
+					int ctr = retira_elemento(arvore, temp, valor, obj);
+					if(ctr >= 0){
+						if(temp->filhos[ctr] != -1){
+							Node* nd = inicializa_folha(arvore->blockSize);
+							ler_disco(arvore, temp->filhos[ctr], nd);
+							info* infoData = searchRight(arvore, nd);
+							temp->elementos[ctr] = infoData->key;
+							temp->elementoData[ctr] = infoData->data;
+						}
+						escrever_disco(arvore, temp->minha_pos, temp);
+						return temp->minha_pos;
 					}
 				}
-				if (_deletar(arvore, temp, valor, obj) == 1)
-					return 1;
-				free(temp);
+                return _deletar(arvore, temp, valor, obj);
 			}
 		}
+		if (folha->filhos[i] != -1) {
+				Node* temp = inicializa_folha(arvore->blockSize);
+				ler_disco(arvore, folha->filhos[i], temp);
+                int res = busca_elemento(arvore, temp, valor, obj);
+				if (res >= 0) 
+				{
+					int ctr = retira_elemento(arvore, temp, valor, obj);
+					if(ctr >= 0){
+						if(temp->filhos[ctr] != -1){
+							Node* nd = inicializa_folha(arvore->blockSize);
+							ler_disco(arvore, temp->filhos[ctr], nd);
+							info* infoData = searchRight(arvore, nd);
+							temp->elementos[ctr] = infoData->key;
+							temp->elementoData[ctr] = infoData->data;
+						}
+						escrever_disco(arvore, temp->minha_pos, temp);
+						return temp->minha_pos;
+					}
+				}
+                return _deletar(arvore, temp, valor, obj);
+		}
 	}
-	return 0;	
+	return -1;	
 }
 
 int BTREE_deletar(Tree* arvore, double valor, void* obj) {
-	return _deletar(arvore, arvore->raiz, valor, obj);
+	int i = _deletar(arvore, arvore->raiz, valor, obj);
+	Node* nd = inicializa_folha(arvore->blockSize);
+	ler_disco(arvore, i, nd);
+	ordenar(nd);
+	escrever_disco(arvore, i, nd);
+	return i;
 }
 
 //Verificar -> split em um no inferior, 
