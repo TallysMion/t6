@@ -1129,7 +1129,7 @@ void closeQRY(Info* info){
     //configurar path e abrir arquivo
     path = (char*) calloc (255, sizeof(char));
     sprintf(path, "%s/%s", info->o, info->f);
-    if(*path == '/') path++;
+    // if(*path == '/') path++;
     aux = path;
     aux += strlen(path);
     while(*aux != '.')aux--;
@@ -2459,7 +2459,7 @@ void detectColision(char* text, Info* info){
     //configurar path e abrir arquivo
     path = (char*) calloc (255, sizeof(char));
     sprintf(path, "%s/%s", info->o, info->f);
-    if(*path == '/') path++;
+    // if(*path == '/') path++;
     aux = path;
     aux += strlen(path);
     while(*aux != '.')aux--;
@@ -2677,7 +2677,7 @@ void simpleRout(char* text, Info*info){
     }else{
         path = (char*) calloc (255, sizeof(char));
         sprintf(path, "%s/%s", info->o, info->f);
-        if(*path == '/') path++;
+        // if(*path == '/') path++;
         aux = path;
         aux += strlen(path);
         while(*aux != '.')aux--;
@@ -2945,7 +2945,7 @@ void multRout(char* text, Info*info){
     }else{
         path = (char*) calloc (255, sizeof(char));
         sprintf(path, "%s/%s", info->o, info->f);
-        if(*path == '/') path++;
+        // if(*path == '/') path++;
         aux = path;
         aux += strlen(path);
         while(*aux != '.')aux--;

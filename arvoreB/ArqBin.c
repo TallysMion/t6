@@ -18,21 +18,12 @@ static mark empty = 0;
 void newArq(char* pathName, int sizeBloco){
 
     FILE *arq;
-    char *size;
     int qtd;
-    long int zero;
-    zero = 0;
-
-    //size = malloc(sizeBloco*sizeof(char));
-    //sprintf(size, "%d", sizeBloco);
-
+    long int zero = 0;
     arq = fopen(pathName, "wb");
     qtd = fwrite(&zero, sizeof(long int), 1,arq); //escreve contador de objetos = 0
     qtd = fwrite(&sizeBloco, sizeof(int), 1,arq);   //escreve tamanho do bloco
-    //qtd = fwrite(" ", sizeof(char), 1,arq);
-    //qtd = fwrite("\n", sizeof(char), 1,arq);   //marca pos. livre
     primeiroItem = ftell(arq);
-    //printf("primeiro = %d\n", primeiroItem);
     qtd = fwrite(&empty, sizeof(mark), 1,arq);   //marca pos. livre
     fclose(arq);
 }
@@ -154,7 +145,6 @@ void deleteObject(char* pathName, int indice){
     arq = fopen(pathName, "r+b");
     fread(&qtd, sizeof(long int), 1, arq);
     fread(&block, sizeof(int), 1, arq); 
-    pos = fseek(arq, primeiroItem, 0);
     if(indice >= qtd || indice < 0) return;
 
     long int offSet = (primeiroItem + indice*(block + sizeof(mark)));

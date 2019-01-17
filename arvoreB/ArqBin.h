@@ -1,8 +1,6 @@
 #ifndef ARQBIN_H
 #define ARQBIN_H
 
-void leBin();
-
 void newArq(char* pathName, int sizeBloco); //cria arquivo vazio e escreve o header
 
 int addObject(void *object, char* pathName);	//escreve objeto no arquivo, retorna o indice do objeto ou null se o arquivo esta cheio

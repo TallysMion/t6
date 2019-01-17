@@ -320,7 +320,7 @@ Fila getCommandsForGEO(Info* info){
     result = create_Fila();
     path = (char*) calloc(200, sizeof(char));
     sprintf(path, "%s%s", format(info->e), format(info->f));
-    if(*path == '/')path++;
+    // if(*path == '/')path++;
     printf("%s\n",path);
     arq = fopen(path, "r");
     if(!arq){
@@ -351,7 +351,7 @@ Fila getCommandsForQRY(Info* info){
         return NULL;
     }
     sprintf(path, "%s%s", format(info->e), format(info->q));
-    if(*path == '/')path++;
+    // if(*path == '/')path++;
      printf("%s\n",path);
     arq = fopen(path, "r");
     if(!arq){
@@ -382,7 +382,7 @@ Fila getCommandsForEC(Info* info){
         return NULL;
     }
     sprintf(path, "%s%s", format(info->e), format(info->ec));
-    if(*path == '/')path++;
+    // if(*path == '/')path++;
      printf("%s\n",path);
     arq = fopen(path, "r");
     if(!arq){
@@ -413,7 +413,7 @@ Fila getCommandsForPM(Info* info){
         return NULL;
     }
     sprintf(path, "%s%s", format(info->e), format(info->pm));
-    if(*path == '/')path++;
+    // if(*path == '/')path++;
     printf("%s\n",path);
     arq = fopen(path, "r");
     if(!arq){
@@ -444,7 +444,7 @@ Fila getCommandsForVIA(Info* info){
         return NULL;
     }
     sprintf(path, "%s%s", format(info->e), format(info->via));
-    if(*path == '/')path++;
+    // if(*path == '/')path++;
     printf("%s\n",path);
     arq = fopen(path, "r");
     if(!arq){

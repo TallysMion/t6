@@ -280,7 +280,7 @@ int drawSufixo(char *text, Info *info){
 
     path = (char*) calloc (255, sizeof(char));
     sprintf(path, "%s/%s", info->o, info->f);
-    if(*path == '/') path++;
+    // if(*path == '/') path++;
     aux = path;
     aux += strlen(path);
     while(*aux != '.')aux--;
@@ -457,7 +457,7 @@ int close(Info *info){
 
     path = (char*) calloc (255, sizeof(char));
     sprintf(path, "%s/%s", info->o, info->f);
-    if(*path == '/') path++;
+    // if(*path == '/') path++;
     aux = path;
     aux += strlen(path);
     while(*aux != '.')aux--;

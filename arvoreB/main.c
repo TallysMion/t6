@@ -91,7 +91,7 @@ int main(){
 
     BTREE_PRINT(tree);
 
-    res = (table*) BTREE_busca(tree, obj4->x, obj4);    
+    res = (table*) BTREE_busca(tree, obj3->x, ob34);    
     res!=NULL?printf("Função get\n%lf - %lf\n", res->x, res->y):printf("\nObjeto não Encontrado");
 
     BTREE_free(tree);
