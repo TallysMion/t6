@@ -16,7 +16,7 @@ int BTREE_insere(Tree arvore, double valor, void* obj);
 int BTREE_deletar(Tree arvore, double valor, void* obj);
 
 //Carrega um Banco de Dados Existente
-Tree BTREE_Carrega(char* bdName);
+Tree* BTREE_Carrega(char* bdName, double (*compare)(void*, void*));
 
 //Limpa a memoria da BTREE
 void BTREE_free(Tree tree);
@@ -28,11 +28,11 @@ void* BTREE_getAll(Tree* arvore); //depende do getAll do BinariFile
 //se ctr != 0, permite retorno de item com dist = 0
 void* BTREE_closestNeibord(Tree tree, double ref, void* reference, int ctr);
 
-/*
-//Retorna uma lista de itens que estao entre as referencias
-void* BTREE_itensInsideArea(void* tree, void* refInicial, void* refFinal);
 
-*/
+//Retorna uma lista de itens que estao entre as referencias
+void* BTREE_itensInsideArea(void* tree, double valorInicial, void* refInicial,double valorFinal, void* refFinal);
+
+
 
 void BTREE_PRINT(void* arvore);
 

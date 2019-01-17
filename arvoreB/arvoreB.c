@@ -3,8 +3,7 @@
 #include <string.h>
 #include <math.h>
 #include "ArqBin.h"
-// #include "../Lista/lista.h"
-// #include "../Grafos/GrafoD.h"
+#include "../Lista/lista.h"
 
 typedef struct No{
     int pai;
@@ -20,7 +19,6 @@ typedef struct No{
 
 typedef struct{
     double (*compare)(void*, void*);
-    int size;
     int blockSize;
     Node* raiz;
     FILE* arq;
@@ -29,7 +27,6 @@ typedef struct{
 }Tree;
 
 typedef struct{
-    int size;
     int blockSize;
     int raiz;
     char* BFILE;
@@ -43,6 +40,7 @@ typedef struct{
 //prototip
 int ler_disco(Tree* arvore, int seek, Node *folha);
 void printNode(Tree* tree, Node* nd);
+Node* inicializa_folha(int block);
 
 //Funções Auxiliares
 
@@ -57,18 +55,23 @@ int calcTam(int block){
 
 
 Tree* BTREE_Carrega(char* bdName, double (*compare)(void*, void*)){
-	FILE* arq = fopen(bdName, "rb+");
+	FILE* arq = fopen(bdName, "r+b");
 	Header* hd = (Header*) malloc(sizeof(Header)); 
-	fread(hd, sizeof(Header), 1, arq);
+	hd->BFILE = malloc(55*sizeof(char));
+	fread(&hd->blockSize, sizeof(int), 1, arq);
+	fread(&hd->raiz, sizeof(int), 1, arq);
+	for(int i = 0; i < 55; i++){
+		fread(&hd->BFILE[i], sizeof(char), 1, arq);
+	}
 	fclose(arq);
 	Tree* result = (Tree*) malloc(sizeof(Tree));
 	result->compare = compare;
-	result->size = hd->size;
 	result->blockSize = hd->blockSize;
 	result->Data = hd->BFILE;
-	result->arq = fopen(bdName, "wb+");
-	result->raiz = (Node*) malloc(sizeof(Node));
+	result->arq = fopen(bdName, "r+b");
+	result->raiz = inicializa_folha(hd->blockSize);
 	ler_disco(result, hd->raiz, result->raiz);
+	result->headerSize = result->raiz->minha_pos;
 	return result;
 
 }
@@ -86,7 +89,7 @@ Node* inicializa_folha(int block) {
 	folha->max_filhos = 2 * tam;
 
 	folha->elementos    = (double*) malloc(sizeof(double)*(2 * tam - 1));
-    folha->elementoData = (int*) 	malloc(sizeof(int)* 2 * tam -1);
+    folha->elementoData = (int*) 	malloc(sizeof(int)* (2 * tam -1));
 	folha->filhos       = (int*) 	malloc(sizeof(int) * 2 * tam);
 
 
@@ -114,11 +117,10 @@ int sizeNode(Tree* tree){
 Tree* BTREE_inicializa(int tam, char*bdName, int objSize, double (*compare)(void*, void*)) {
 	Tree* arvore = (Tree*)malloc(sizeof(Tree));
     arvore->compare = compare;
-	arvore->size = 0;
     arvore->blockSize = tam;
 	arvore->raiz = NULL;
 	arvore->arq = fopen(bdName, "w+b");
-    char* dataPath = (char*) malloc(sizeof(char)*255);
+    char* dataPath = (char*) malloc(sizeof(char)*55);
     strcpy(dataPath, bdName);
 	for(int i=0; i<strlen(dataPath); i++) if(*(dataPath+i) == '.') *(dataPath+i) = 0;
     strcat(dataPath, "_Data.dat");
@@ -126,16 +128,17 @@ Tree* BTREE_inicializa(int tam, char*bdName, int objSize, double (*compare)(void
 	newArq(dataPath, objSize);
     
     Header *hd = (Header*)malloc(sizeof(Header));
-    hd->size = 0;
     hd->blockSize = tam;
     hd->raiz = -1;
     hd->BFILE = dataPath;
+    
+    fwrite(&hd->blockSize, sizeof(int), 1, arvore->arq);
+	fwrite(&hd->raiz, sizeof(int), 1, arvore->arq);
+	for(int i = 0; i<55; i++)
+		fwrite(&hd->BFILE[i], sizeof(char), 1, arvore->arq);
 	
 
-    
-    fwrite((void *)hd, sizeof(Header), 1, arvore->arq);
 	arvore->headerSize = ftell(arvore->arq);
-
 	fclose(arvore->arq);
 	arvore->arq = fopen(bdName, "r+b");
     return arvore;
@@ -165,6 +168,28 @@ int ler_disco(Tree* arvore, int seek, Node *folha)
 	
 	folha->minha_pos = seek;
 
+	return 1;
+}
+
+int escrever_disco(Tree* arvore, int seek, Node *folha)
+{
+    // Insiro o pointer na posição que eu passei e escrevo o nó
+	if (fseek(arvore->arq, seek, SEEK_SET) == -1)
+		return 0;
+	if (folha->minha_pos == -1)
+		folha->minha_pos = ftell(arvore->arq);
+	
+	int fSize = sizeof(folha);
+ 
+	
+	fwrite((void *)folha				, fSize, 1, arvore->arq);
+	for(int i=0; i < folha->max_elementos; i++)
+		fwrite(&folha->elementos[i], sizeof(double), 1, arvore->arq);
+	for(int i=0; i < folha->max_elementos; i++)
+		fwrite(&folha->elementoData[i], sizeof(int), 1, arvore->arq);
+	for(int i=0; i < folha->max_filhos; i++)
+		fwrite(&folha->filhos[i], sizeof(int), 1, arvore->arq);
+	
 	return 1;
 }
 
@@ -239,29 +264,7 @@ void* BTREE_busca(Tree* arvore, double valor, void* obj) {
 }
 
 
-//Precisa de Atenção e Verificar
-int escrever_disco(Tree* arvore, int seek, Node *folha)
-{
-    //tem q andar o tamanho do header********************************
-	// Insiro o pointer na posição que eu passei e escrevo o nó
-	if (fseek(arvore->arq, seek, SEEK_SET) == -1)
-		return 0;
-	if (folha->minha_pos == -1)
-		folha->minha_pos = ftell(arvore->arq);
-	
-	int fSize = sizeof(folha);
- 
-	
-	fwrite((void *)folha				, fSize, 1, arvore->arq);
-	for(int i=0; i < folha->max_elementos; i++)
-		fwrite(&folha->elementos[i], sizeof(double), 1, arvore->arq);
-	for(int i=0; i < folha->max_elementos; i++)
-		fwrite(&folha->elementoData[i], sizeof(int), 1, arvore->arq);
-	for(int i=0; i < folha->max_filhos; i++)
-		fwrite(&folha->filhos[i], sizeof(int), 1, arvore->arq);
-	
-	return 1;
-}
+
 
 // ordena os elementos da folha
 void ordenar(Node* f) {
@@ -277,6 +280,17 @@ void ordenar(Node* f) {
 				f->elementos[j] = akey;
 				f->elementoData[j] = aData;
 				f->filhos[j] = aFilho;
+			}
+		}
+	}
+	for(int i=0; i<f->max_filhos; i++){
+		if(f->filhos[i] == -1){
+			for(int j = i+1; j<f->max_filhos; j++){
+				if(f->filhos[j] != -1){
+					f->filhos[i] = f->filhos[j];
+					f->filhos[j] = -1;
+					break;
+				}
 			}
 		}
 	}
@@ -538,6 +552,8 @@ void merge(Tree* arvore, Node* folha){
 				esq->minha_pos = pai->minha_pos;
 			}
 
+			ordenar(pai);
+			ordenar(esq);
 			escrever_disco(arvore, pai->minha_pos, pai);
 			escrever_disco(arvore, esq->minha_pos, esq);
 			free(pai);
@@ -576,6 +592,9 @@ void merge(Tree* arvore, Node* folha){
 			}
 			folha->total_elementos = k-(meio);
 
+			ordenar(pai);
+			ordenar(esq);
+			ordenar(folha);
 			escrever_disco(arvore, pai->minha_pos, pai);
 			escrever_disco(arvore, esq->minha_pos, esq);
 			escrever_disco(arvore, folha->minha_pos, folha);
@@ -619,11 +638,13 @@ void merge(Tree* arvore, Node* folha){
 
 			pai->elementos[i] = -1;
 			pai->elementoData[i] = -1;
-			pai->filhos[i+1] = -1;
+			pai->filhos[i] = -1;
 			pai->total_elementos--;
 			if(pai->total_elementos == 0){
 				dir->minha_pos = pai->minha_pos;
 			}
+			ordenar(pai);
+			ordenar(dir);
 
 			escrever_disco(arvore, pai->minha_pos, pai);
 			escrever_disco(arvore, dir->minha_pos, dir);
@@ -663,6 +684,9 @@ void merge(Tree* arvore, Node* folha){
 			}
 			dir->total_elementos = k-(meio);
 
+			ordenar(pai);
+			ordenar(dir);
+			ordenar(folha);
 			escrever_disco(arvore, pai->minha_pos, pai);
 			escrever_disco(arvore, folha->minha_pos, folha);
 			escrever_disco(arvore, dir->minha_pos, dir);
@@ -908,6 +932,9 @@ int BTREE_insere(Tree* arvore, double valor, void* obj) {
 			//printf("ok escrita\n");
 		}
 		ler_disco(arvore, pos, folha);
+		rewind(arvore->arq);
+		fseek(arvore->arq, sizeof(int), SEEK_SET);
+		fwrite(&pos, sizeof(int), 1, arvore->arq);
 
 	}
 	else {
@@ -1045,4 +1072,37 @@ void BTREE_PRINT(Tree* arvore){
 	}
 }
 
-void* BTREE_getAll(Tree* arvore){ return getAll(arvore->Data);}
+Lista BTREE_getAll(Tree* arvore){ return getAll(arvore->Data);}
+
+void _Inside(Tree* tree,Node* folha,double valorInicial,void* refInicial,double valorFinal,void* refFinal,Lista ls){
+	for(int i=0; i<folha->max_elementos; i++){
+		if(folha->elementos[i] == -1) break;
+		void* obj = getObject(tree->Data, folha->elementoData[i]);
+		double left, right;
+		left = tree->compare(refInicial, obj);
+		right = tree->compare(refFinal, obj);
+		if(left*right <= 0){
+			Lista_insert(ls, obj);
+		}
+	}
+	int i;
+	for(i=0; i<folha->max_elementos; i++){
+		if(folha->elementos[i] == -1 || folha->filhos[i] == -1) break;
+		if(valorInicial <= folha->elementos[i] && folha->elementos[i] <= valorFinal){
+			Node *nd = inicializa_folha(tree->blockSize);
+			ler_disco(tree, folha->filhos[i], nd);
+			_Inside(tree, nd, valorInicial, refInicial, valorFinal, refFinal, ls);
+		}
+	}
+	if(folha->elementos[i-1] <= valorFinal && folha->filhos[i] != -1){
+			Node *nd = inicializa_folha(tree->blockSize);
+			ler_disco(tree, folha->filhos[i], nd);
+			_Inside(tree, nd, valorInicial, refInicial, valorFinal, refFinal, ls);
+	}
+}
+
+Lista BTREE_itensInsideArea(Tree* tree, double valorInicial, void* refInicial,double valorFinal, void* refFinal){
+	Lista ls = Lista_createLista();
+	_Inside(tree, tree->raiz, valorInicial, refInicial, valorFinal, refFinal, ls);
+	return ls;
+}
