@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "arvoreB.h"
 #include <math.h>
+#include "../Lista/lista.h"
 
 typedef struct{
     double x;
@@ -19,7 +20,7 @@ double compare(void* a, void *b){
 
 int main(){
 
-    void* tree = BTREE_inicializa(60, "Teste.dat", sizeof(table), compare);
+    void* tree = BTREE_inicializa(100, "Teste.dat", sizeof(table), compare);
 
     table* obj0 = (table*) malloc(sizeof(table));
     table* obj1 = (table*) malloc(sizeof(table));
@@ -37,24 +38,26 @@ int main(){
     table* objD = (table*) malloc(sizeof(table));
     table* objE = (table*) malloc(sizeof(table));
     table* objF = (table*) malloc(sizeof(table));
+    table* clos = (table*) malloc(sizeof(table));
     table* res;
 
-    obj0->x =  1; obj0->y =  1;
-    obj1->x =  9; obj1->y =  2;
-    obj2->x = 20; obj2->y =  3;
-    obj3->x =  8; obj3->y =  4;
-    obj4->x = 30; obj4->y =  5;
-    obj5->x = 70; obj5->y =  6;
-    obj6->x =  4; obj6->y =  7;
-    obj7->x =  4; obj7->y =  8;
-    obj8->x =  5; obj8->y =  9;
-    obj9->x = 60; obj9->y = 10;
-    objA->x = 11; objA->y = 11;
-    objB->x = 25; objB->y = 12;
-    objC->x = 34; objC->y = 13;
-    objD->x = 28; objD->y = 14;
-    objE->x = 12; objE->y = 15;
-    objF->x = 35; objF->y = 16;
+    obj0->x =  1; obj0->y =  1;//36.35
+    obj1->x =  9; obj1->y =  2;//29,20
+    obj2->x = 20; obj2->y =  3;//20,80
+    obj3->x =  8; obj3->y =  4;//28,84
+    obj4->x = 30; obj4->y =  5;//15,13
+    obj5->x = 70; obj5->y =  6;//40,49
+    obj6->x =  4; obj6->y =  7;//30,87
+    obj7->x =  4; obj7->y =  8;//30,46
+    obj8->x =  5; obj8->y =  9;//29,15
+    obj9->x = 60; obj9->y = 10;//29,73
+    objA->x = 11; objA->y = 11;//22,8
+    objB->x = 25; objB->y = 12;//10,63
+    objC->x = 34; objC->y = 13;//7,28
+    objD->x = 28; objD->y = 14;//7,21
+    objE->x = 12; objE->y = 15;//20,61
+    objF->x = 35; objF->y = 16;//5
+    clos->x = 32; clos->y = 20;
 
     BTREE_insere(tree, obj0->x, obj0);
     BTREE_insere(tree, obj1->x, obj1);
@@ -84,15 +87,33 @@ int main(){
     res = (table*) BTREE_busca(tree, obj5->x, obj5);    
     if(res!=NULL)printf("Função get\n%lf - %lf\n", res->x, res->y);
 
-    BTREE_PRINT(tree);
+    int del;
 
-    int del = BTREE_deletar(tree, obj3->x, obj3);
+    del = BTREE_deletar(tree, obj6->x, obj6);
     del?printf("\nDeletado com sucesso;\n"):printf("\nErro na Delecao;\n");
 
-    BTREE_PRINT(tree);
-
-    res = (table*) BTREE_busca(tree, obj3->x, ob34);    
+    res = (table*) BTREE_busca(tree, obj6->x, obj6);    
     res!=NULL?printf("Função get\n%lf - %lf\n", res->x, res->y):printf("\nObjeto não Encontrado");
+
+    del = BTREE_deletar(tree, obj7->x, obj7);
+    del?printf("\nDeletado com sucesso;\n"):printf("\nErro na Delecao;\n");
+
+    res = (table*) BTREE_busca(tree, obj7->x, obj7);    
+    res!=NULL?printf("Função get\n%lf - %lf\n", res->x, res->y):printf("\nObjeto não Encontrado");
+
+    printf("\n\nGetALL\n");
+    Lista ls = BTREE_getAll(tree);
+    void* p = Lista_getFirst(ls);
+    while(p){
+        res = (table*) Lista_get(ls, p);
+        res!=NULL?printf("Função get\n%lf - %lf\n", res->x, res->y):printf("\nObjeto não Encontrado");
+        p = Lista_getNext(ls, p);
+    }
+
+    res = (table*) BTREE_closestNeibord(tree, clos->x, clos, 0);
+    res!=NULL?printf("Função closestNeibord\n %lf - %lf -> %lf - %lf\n",clos->x, clos->y, res->x, res->y):printf("\nObjeto não Encontrado");
+
+    BTREE_PRINT(tree);
 
     BTREE_free(tree);
 }

@@ -29,7 +29,6 @@ typedef struct{
 }Tree;
 
 typedef struct{
-    double (*compare)(void*, void*);
     int size;
     int blockSize;
     int raiz;
@@ -57,13 +56,13 @@ int calcTam(int block){
 //Funções Estruturais
 
 
-Tree* BTREE_Carrega(char* bdName){
+Tree* BTREE_Carrega(char* bdName, double (*compare)(void*, void*)){
 	FILE* arq = fopen(bdName, "rb+");
 	Header* hd = (Header*) malloc(sizeof(Header)); 
 	fread(hd, sizeof(Header), 1, arq);
 	fclose(arq);
 	Tree* result = (Tree*) malloc(sizeof(Tree));
-	result->compare = hd->compare;
+	result->compare = compare;
 	result->size = hd->size;
 	result->blockSize = hd->blockSize;
 	result->Data = hd->BFILE;
@@ -127,7 +126,6 @@ Tree* BTREE_inicializa(int tam, char*bdName, int objSize, double (*compare)(void
 	newArq(dataPath, objSize);
     
     Header *hd = (Header*)malloc(sizeof(Header));
-    hd->compare = compare;
     hd->size = 0;
     hd->blockSize = tam;
     hd->raiz = -1;
@@ -473,6 +471,209 @@ info* searchRight(Tree* arvore, Node* folha){
 	}
 }
 
+void merge(Tree* arvore, Node* folha){
+	if(folha->total_elementos >= folha->max_elementos/2) return;
+
+	Node* pai = inicializa_folha(arvore->blockSize);
+	ler_disco(arvore, folha->pai, pai);
+
+	int i;
+	for(i=0; i<pai->max_filhos; i++)
+		if(pai->filhos[i] == folha->minha_pos) break;
+
+	Node* dir = inicializa_folha(arvore->blockSize);
+	if(i+i < pai->max_filhos && pai->filhos[i+1] != -1 ){
+		ler_disco(arvore, pai->filhos[i+1], dir);
+	}else{
+		free(dir);
+		dir = NULL;
+	}
+
+	Node* esq = inicializa_folha(arvore->blockSize);
+	if(i-1 >=0 && pai->filhos[i-1] != -1){
+		ler_disco(arvore, pai->filhos[i-1], esq);
+	}else{
+		free(esq);
+		esq = NULL;
+	}
+
+	if(dir == NULL){
+		double elem[folha->max_elementos*2];
+		int dats[folha->max_elementos*2];
+
+		int k=0;
+		for(int j=0; j<folha->max_elementos; j++){
+			if(folha->elementos[j] == -1) break;
+			elem[k] = folha->elementos[j];
+			dats[k] = folha->elementoData[j];
+			k++;
+		}
+
+		for(int j=0; j<esq->max_elementos; j++){
+			if(esq->elementos[j] == -1) break;
+			elem[k] = esq->elementos[j];
+			dats[k] = esq->elementoData[j];
+			k++;
+		}
+		elem[k] = pai->elementos[i-1];
+		dats[k] = pai->elementoData[i-1];
+
+		if(k+1 < esq->max_elementos){
+			for(int j=0; j<esq->max_elementos; j++){
+				esq->elementos[j] = -1;
+				esq->elementoData[j] = -1;
+			}
+			for(int j=0; j<=k; j++){
+				esq->elementos[j] = elem[j];
+				esq->elementoData[j] = dats[j];
+			}
+			esq->total_elementos = k;
+			ordenar(esq);
+
+			pai->elementos[i-1] = -1;
+			pai->elementoData[i-1] = -1;
+			pai->filhos[i] = -1;
+			pai->total_elementos--;
+			if(pai->total_elementos == 0){
+				esq->minha_pos = pai->minha_pos;
+			}
+
+			escrever_disco(arvore, pai->minha_pos, pai);
+			escrever_disco(arvore, esq->minha_pos, esq);
+			free(pai);
+			free(esq);
+		}else{
+
+			for(int m=0; m<=k; m++){
+				for(int n=m; n<=k; n++){
+					if(elem[m] > elem[n]){
+						double eAux = elem[m];
+						int dAux = dats[m];
+						elem[m] = elem[n];
+						dats[m] = dats[n];
+						elem[n] = eAux;
+						dats[n] = dAux;
+					}
+				}
+			}
+
+			int meio = k/2;
+			pai->elementos[i-1] = elem[meio];
+			pai->elementoData[i-1] = dats[meio];
+			for(int j=0; j<esq->max_elementos; j++){
+				esq->elementos[j] = -1;
+				esq->elementoData[j] = -1;
+			}
+			for(int j=0; j<meio; j++){
+				esq->elementos[j] = elem[j];
+				esq->elementoData[j] = dats[j];
+			}
+			esq->total_elementos = meio;
+
+			for(int j=(meio+1); j<=k; j++){
+				folha->elementos[j-(meio+1)] = elem[j];
+				folha->elementoData[j-(meio+1)] = dats[j];
+			}
+			folha->total_elementos = k-(meio);
+
+			escrever_disco(arvore, pai->minha_pos, pai);
+			escrever_disco(arvore, esq->minha_pos, esq);
+			escrever_disco(arvore, folha->minha_pos, folha);
+
+
+		}
+		return;
+	}
+	if(esq == NULL){
+		double elem[folha->max_elementos*2];
+		int dats[folha->max_elementos*2];
+
+		int k=0;
+		for(int j=0; j<folha->max_elementos; j++){
+			if(folha->elementos[j] == -1) break;
+			elem[k] = folha->elementos[j];
+			dats[k] = folha->elementoData[j];
+			k++;
+		}
+
+		for(int j=0; j<dir->max_elementos; j++){
+			if(dir->elementos[j] == -1) break;
+			elem[k] = dir->elementos[j];
+			dats[k] = dir->elementoData[j];
+			k++;
+		}
+		elem[k] = pai->elementos[i];
+		dats[k] = pai->elementoData[i];
+
+		if(k+1 < dir->max_elementos){
+			for(int j=0; j<dir->max_elementos; j++){
+				dir->elementos[j] = -1;
+				dir->elementoData[j] = -1;
+			}
+			for(int j=0; j<=k; j++){
+				dir->elementos[j] = elem[j];
+				dir->elementoData[j] = dats[j];
+			}
+			dir->total_elementos = k;
+			ordenar(dir);
+
+			pai->elementos[i] = -1;
+			pai->elementoData[i] = -1;
+			pai->filhos[i+1] = -1;
+			pai->total_elementos--;
+			if(pai->total_elementos == 0){
+				dir->minha_pos = pai->minha_pos;
+			}
+
+			escrever_disco(arvore, pai->minha_pos, pai);
+			escrever_disco(arvore, dir->minha_pos, dir);
+			free(pai);
+			free(dir);
+		}else{
+
+			for(int m=0; m<=k; m++){
+				for(int n=m; n<=k; n++){
+					if(elem[m] > elem[n]){
+						double eAux = elem[m];
+						int dAux = dats[m];
+						elem[m] = elem[n];
+						dats[m] = dats[n];
+						elem[n] = eAux;
+						dats[n] = dAux;
+					}
+				}
+			}
+
+			int meio = k/2;
+			pai->elementos[i] = elem[meio];
+			pai->elementoData[i] = dats[meio];
+
+			for(int j=0; j<meio; j++){
+				folha->elementos[j] = elem[j];
+				folha->elementoData[j] = dats[j];
+			}
+			folha->total_elementos = meio;
+			for(int j=0; j<dir->max_elementos; j++){
+				dir->elementos[j] = -1;
+				dir->elementoData[j] = -1;
+			}
+			for(int j=(meio+1); j<=k; j++){
+				dir->elementos[j-(meio+1)] = elem[j];
+				dir->elementoData[j-(meio+1)] = dats[j];
+			}
+			dir->total_elementos = k-(meio);
+
+			escrever_disco(arvore, pai->minha_pos, pai);
+			escrever_disco(arvore, folha->minha_pos, folha);
+			escrever_disco(arvore, dir->minha_pos, dir);
+
+
+		}
+		return;
+	}
+
+
+}
 
 int _deletar(Tree* arvore, Node* folha, double valor, void* obj) {
 	if (busca_elemento(arvore, folha, valor, obj) != -1) {
@@ -546,6 +747,10 @@ int BTREE_deletar(Tree* arvore, double valor, void* obj) {
 	Node* nd = inicializa_folha(arvore->blockSize);
 	ler_disco(arvore, i, nd);
 	ordenar(nd);
+	merge(arvore, nd);
+	if(nd->pai == arvore->raiz->minha_pos){
+		ler_disco(arvore, arvore->raiz->minha_pos, arvore->raiz);
+	}
 	escrever_disco(arvore, i, nd);
 	return i;
 }
@@ -732,8 +937,9 @@ int BTREE_insere(Tree* arvore, double valor, void* obj) {
 void _closestNeibord(Tree* tree, Node* no,double ref,void* reference,int ctr, double* minDist, void** minDistObj){
 	for(int i=0; i<no->max_elementos; i++){
 		if(no->elementos[i] != -1){
-			void* obj = getObject(tree->Data, tree->raiz->elementoData[i]);
-			double dist = abs(tree->compare(obj, minDistObj));
+			void* obj = getObject(tree->Data, no->elementoData[i]);
+			double dist = tree->compare(obj, reference);
+			if(dist < 0) dist = -dist;
 			if(dist < *minDist){
 				if(ctr != 0 || minDist != 0){
 					*minDist = dist;
@@ -772,7 +978,7 @@ void* BTREE_closestNeibord(Tree* tree, double ref, void* reference, int ctr){
 	if(tree->raiz == NULL)
 		return NULL;
 
-	if(tree->raiz->elementos[0] == -1)
+	if(tree->raiz->total_elementos == 0)
 		return NULL;
 
 
@@ -782,9 +988,9 @@ void* BTREE_closestNeibord(Tree* tree, double ref, void* reference, int ctr){
 	
 	int i = 0;
 	do{
-		if(tree->raiz->elementoData[i] != -1){
+		if(tree->raiz->elementos[i] != -1){
 			*minDistObj = getObject(tree->Data, tree->raiz->elementoData[i]);
-			*minDist = abs(tree->compare(reference, minDistObj));
+			*minDist = abs(tree->compare(reference, *minDistObj));
 		}
 		i++;
 	}while(*minDist==0 || ctr);
@@ -794,7 +1000,7 @@ void* BTREE_closestNeibord(Tree* tree, double ref, void* reference, int ctr){
 
 	_closestNeibord(tree, folha, ref, reference, ctr, minDist, minDistObj);
 
-	return minDistObj;
+	return *minDistObj;
 
 }
 
@@ -838,3 +1044,5 @@ void BTREE_PRINT(Tree* arvore){
 		printNode(arvore, arvore->raiz);
 	}
 }
+
+void* BTREE_getAll(Tree* arvore){ return getAll(arvore->Data);}
