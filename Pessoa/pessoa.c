@@ -24,17 +24,80 @@ typedef struct{
     Endereco* endereco;
 } Pessoa;
 
+void writerPessoaEnd(Pessoa* pes, int seek, void* arq){
+    if(pes->endereco == NULL) return;
+    fseek(arq, seek, SEEK_SET);
+    fwrite(&pes->endereco->tipo, sizeof(int), 1, arq);
+    for(int i=0; i<55; i++)
+        fwrite(&pes->endereco->cep[i], sizeof(char), 1, arq);
+    for(int i=0; i<55; i++)
+        fwrite(&pes->endereco->face[i], sizeof(char), 1, arq);
+    for(int i=0; i<55; i++)
+        fwrite(&pes->endereco->num[i], sizeof(char), 1, arq);
+    for(int i=0; i<55; i++)
+        fwrite(&pes->endereco->comp[i], sizeof(char), 1, arq);
+}
+
+//testar o caso da pessoa nao ter endereco
+void readerPessoaEnd(Pessoa* pes, int seek, void* arq){
+    fseek(arq, seek, SEEK_SET);
+    fread(&pes->endereco->tipo, sizeof(int), 1, arq);
+    for(int i=0; i<55; i++)
+        fread(&pes->endereco->cep[i], sizeof(char), 1, arq);
+    for(int i=0; i<55; i++)
+        fread(&pes->endereco->face[i], sizeof(char), 1, arq);
+    for(int i=0; i<55; i++)
+        fread(&pes->endereco->num[i], sizeof(char), 1, arq);
+    for(int i=0; i<55; i++)
+        fread(&pes->endereco->comp[i], sizeof(char), 1, arq);
+    pes->endereco->pessoa = pes;
+}
+int getSizePessoaEnd(){
+    return (sizeof(int) + 4*(55*sizeof(char)));
+}
+
+void writerPessoa(Pessoa* pes, int seek, void* arq){
+    fseek(arq, seek, SEEK_SET);
+    for(int i=0; i<55; i++)
+        fwrite(&pes->cpf[i], sizeof(char), 1, arq);
+    for(int i=0; i<55; i++)
+        fwrite(&pes->nome[i], sizeof(char), 1, arq);
+    for(int i=0; i<55; i++)
+        fwrite(&pes->sobrenome[i], sizeof(char), 1, arq);
+    for(int i=0; i<55; i++)
+        fwrite(&pes->sexo[i], sizeof(char), 1, arq);
+    for(int i=0; i<55; i++)
+        fwrite(&pes->nasc[i], sizeof(char), 1, arq);
+    writerPessoaEnd(pes, ftell(arq), arq);
+}
+void readerPessoa(Pessoa* pes, int seek, void* arq){
+    fseek(arq, seek, SEEK_SET);
+    for(int i=0; i<55; i++)
+        fread(&pes->cpf[i], sizeof(char), 1, arq);
+    for(int i=0; i<55; i++)
+        fread(&pes->nome[i], sizeof(char), 1, arq);
+    for(int i=0; i<55; i++)
+        fread(&pes->sobrenome[i], sizeof(char), 1, arq);
+    for(int i=0; i<55; i++)
+        fread(&pes->sexo[i], sizeof(char), 1, arq);
+    for(int i=0; i<55; i++)
+        fread(&pes->nasc[i], sizeof(char), 1, arq);
+    readerPessoaEnd(pes, ftell(arq), arq);
+}
+int getSizePessoa(){
+    return (5*(55*sizeof(char)) + getSizePessoaEnd());
+}
 
 //criar Estabelecimento
 void* Pessoa_create(char* cpf, char* nome, char* sobrenome, char* sexo, char* nasc){
     Pessoa* pessoa;
     pessoa = (Pessoa*) calloc(1, sizeof(Pessoa));
     
-    pessoa->cpf         = (char*) calloc(strlen(cpf)+2, sizeof(char));
-    pessoa->nome        = (char*) calloc(strlen(nome)+2, sizeof(char));
-    pessoa->sobrenome   = (char*) calloc(strlen(sobrenome)+2, sizeof(char));
-    pessoa->sexo        = (char*) calloc(strlen(sexo)+2, sizeof(char));
-    pessoa->nasc        = (char*) calloc(strlen(nasc)+2, sizeof(char));
+    pessoa->cpf         = (char*) calloc(55 , sizeof(char));
+    pessoa->nome        = (char*) calloc(55 , sizeof(char));
+    pessoa->sobrenome   = (char*) calloc(55 , sizeof(char));
+    pessoa->sexo        = (char*) calloc(55 , sizeof(char));
+    pessoa->nasc        = (char*) calloc(55 , sizeof(char));
     pessoa->endereco    = NULL;
 
     strcpy(pessoa->cpf, cpf);
@@ -55,10 +118,10 @@ void* Pessoa_SetEndereco(void* pes, char* cep, char* face, char* num, char* comp
         Endereco* end;
         end = (Endereco*) calloc(1, sizeof(Endereco));
         end->tipo = 1;
-        end->cep = (char*) calloc(strlen(cep )+2, sizeof(char));
-        end->face= (char*) calloc(strlen(face)+2, sizeof(char));
-        end->num = (char*) calloc(strlen(num )+2, sizeof(char));
-        end->comp= (char*) calloc(strlen(comp)+2, sizeof(char));
+        end->cep = (char*) calloc(55 , sizeof(char));
+        end->face= (char*) calloc(55, sizeof(char));
+        end->num = (char*) calloc(55 , sizeof(char));
+        end->comp= (char*) calloc(55 , sizeof(char));
         end->pessoa = pessoa;
         strcpy(end->cep, cep);
         strcpy(end->face, face);

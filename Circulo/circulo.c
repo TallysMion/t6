@@ -14,12 +14,46 @@ typedef struct cir{
     double y;
 }cir;
 
+void writerCirc(cir* circ, int seek, void* arq){
+    fseek(arq, seek, SEEK_SET);
+    fwrite(&circ->id, sizeof(int), 1, arq);
+    for(int i=0; i<55; i++)
+        fwrite(&circ->cor1[i], sizeof(char), 1, arq);
+    for(int i=0; i<55; i++)
+        fwrite(&circ->cor2[i], sizeof(char), 1, arq);
+    fwrite(&circ->r, sizeof(double), 1, arq);
+    fwrite(&circ->x, sizeof(double), 1, arq);
+    fwrite(&circ->y, sizeof(double), 1, arq);
+}
+void readerCirc(cir* circ, int seek, void* arq){
+    fseek(arq, seek, SEEK_SET);
+    fread(&circ->id, sizeof(int), 1, arq);
+    for(int i=0; i<55; i++)
+        fread(&circ->cor1[i], sizeof(char), 1, arq);
+    for(int i=0; i<55; i++)
+        fread(&circ->cor2[i], sizeof(char), 1, arq);
+    fread(&circ->r, sizeof(double), 1, arq);
+    fread(&circ->x, sizeof(double), 1, arq);
+    fread(&circ->y, sizeof(double), 1, arq);
+}
+int getSizeCirc(){
+    return (sizeof(int) + 2*(55*sizeof(char)) + 3*sizeof(double));
+}
+
+double compareCirc(cir* objA, cir* objB){
+    double result = sqrt(pow(objB->x - objA->x, 2) + pow(objB->y - objA->y, 2));
+    if(objB->x > objA->x && objB->y > objA->y){
+        return result;
+    }
+    return -result;
+}
+
 /*cria um objeto 'circulo' com as informações passadas*/
 circulo createCirculo(int id, char* cor1, char* cor2, double r, double x, double y){
     cir *result = NULL;
     result = (cir*) calloc(1, sizeof(cir));        
-    result->cor1 = (char*) calloc(strlen(cor1)+2, sizeof(char)); strcpy(result->cor1, cor1);
-    result->cor2 = (char*) calloc(strlen(cor2)+2, sizeof(char)); strcpy(result->cor2, cor2);
+    result->cor1 = (char*) calloc(55, sizeof(char)); strcpy(result->cor1, cor1);
+    result->cor2 = (char*) calloc(55, sizeof(char)); strcpy(result->cor2, cor2);
     result->r = r;
     result->x = x;
     result->y = y;

@@ -57,4 +57,16 @@ char* Estab_Tipo(Estab* estab);
 
 char* Estab_Name(Estab* estab);
 
+void writerEstab(void* estab, int seek, void* arq);
+void readerEstab(void* estab, int seek, void* arq);
+int getSizeEstab();
+
+void writerEstabType(void* tipo, int seek, void* arq);
+void readerEstabType(void* tipo, int seek, void* arq);
+int getSizeEstabType();
+
+void writerEstabEnd(void* estab, int seek, void* arq);
+void readerEstabEnd(void* estab, int seek, void* arq);
+int getSizeEstabEnd();
+
 #endif

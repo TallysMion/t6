@@ -3,6 +3,7 @@
 #include <string.h>
 #include "../Retangulo/retangulo.h"
 #include "../Anotacao/anotacao.h"
+#include <math.h>
 
 
 typedef struct{
@@ -13,12 +14,43 @@ typedef struct{
     double h;
 }carro;
 
+void writerCarro(carro* car, int seek, FILE* arq){
+    fseek(arq, seek, SEEK_SET);
+    for(int i=0; i<55; i++)
+        fwrite(&car->placa[i], sizeof(char), 1, arq);
+    fwrite(&car->x, sizeof(double), 1, arq);
+    fwrite(&car->y, sizeof(double), 1, arq);
+    fwrite(&car->w, sizeof(double), 1, arq);
+    fwrite(&car->h, sizeof(double), 1, arq);
+}
+
+void readerCarro(carro* car, int seek, void* arq){
+    fseek(arq, seek, SEEK_SET);
+    for(int i=0; i<55; i++)
+        fread(&car->placa[i], sizeof(char), 1, arq);
+    fread(&car->x, sizeof(double), 1, arq);
+    fread(&car->y, sizeof(double), 1, arq);
+    fread(&car->w, sizeof(double), 1, arq);
+    fread(&car->h, sizeof(double), 1, arq);
+}
+
+int getSizeCarro(){
+    return(4*sizeof(double) + 55*sizeof(char));
+}
+double compareCarro(carro* objA, carro* objB){
+    double result = sqrt(pow(objB->x - objA->x, 2) + pow(objB->y - objA->y, 2));
+    if(objB->x > objA->x && objB->y > objA->y){
+        return result;
+    }
+    return -result;
+}
+
 /*cria um objeto 'retangulo' com as informações passadas*/
 void* createCarro(char* placa, double x, double y, double w, double h){
     carro *result;
     result = (carro*) calloc(1, sizeof(carro));
 
-    result->placa = (char*) calloc(strlen(placa)+2, sizeof(char));
+    result->placa = (char*) calloc(55, sizeof(char));
     strcpy(result->placa, placa);
     result->x = x;
     result->y = y;
@@ -81,20 +113,6 @@ char* reportCarro(void* car){
     return result;
 }
 
-//Comparador de objeto
-int compareCarro(void* carA, void* carB, int dim){
-    carro *cA;
-    carro *cB;
-    cA = (carro*) carA;
-    cB = (carro*) carB;
-    dim = dim%2;
-    if(!strcmp(cA->placa, cB->placa)) return 0;
-    if (dim == 0){
-        return cA->x - cB->x;
-    }else{
-        return cA->y - cB->y;
-    }
-}
 
 //Cria codigo Hash
 int hashCodeCarro(void* car, int Modulo){

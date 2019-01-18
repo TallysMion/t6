@@ -24,13 +24,15 @@ void freeQuad(quadra quad);
 
 char* reportQuadra(void* quad);
 
-//Comparador de objeto
-int compareQuadra(void* hdA, void* hdB, int dim);
-
 //Cria codigo Hash
 int hashCodeQuadra(void* hdA, int Modulo);
 
 //Comparador para Hash
 int HashCompareQuadra(void* quad, void* id);
+
+void writerQuadra(void* quad, int seek, void* arq);
+void readerQuadra(void* quad, int seek, void* arq);
+int getSizeQuadra();
+double compareQuadra(void* objA, void* objB);
 
 #endif

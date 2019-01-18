@@ -4,7 +4,7 @@
 typedef void* Tree;
 
 // cria um banco de dados novo
-Tree BTREE_inicializa(int tam, char*bdName, int objSize, double (*compare)(void*, void*));
+Tree BTREE_inicializa(int tam, char*bdName, int objSize, double (*compare)(void*, void*), void (*writer)(void* obj, int seek, void* arq), void (*reader)(void* obj, int seek, void* arq));
 
 // Busca um item na arvore
 void* BTREE_busca(Tree arvore, double valor, void* obj);
@@ -16,7 +16,7 @@ int BTREE_insere(Tree arvore, double valor, void* obj);
 int BTREE_deletar(Tree arvore, double valor, void* obj);
 
 //Carrega um Banco de Dados Existente
-Tree* BTREE_Carrega(char* bdName, double (*compare)(void*, void*));
+Tree* BTREE_Carrega(char* bdName, double (*compare)(void*, void*), void (*writer)(void* obj, int seek, void* arq), void (*reader)(void* obj, int seek, void* arq));
 
 //Limpa a memoria da BTREE
 void BTREE_free(Tree tree);

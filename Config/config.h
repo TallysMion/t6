@@ -4,7 +4,7 @@
 /*imports*/
 #include "../Lista/lista.h"
 #include "../Fila/fila.h"
-#include "../KDTREE/kdtree.h"
+#include "../arvoreB/arvoreB.h"
 #include "../HashTable/hashtable.h"
 #include "../Grafos/GrafoD.h"
 
@@ -34,11 +34,11 @@ typedef struct database{
     int maxDrawerSize;
     Lista   *Drawer;
 
-    KDT         HidrantesTree;
-    KDT         SemaforosTree;
-    KDT         QuadrasTree;
-    KDT         RadioBaseTree;
-    KDT         carroTree;
+    Tree         HidrantesTree;
+    Tree         SemaforosTree;
+    Tree         QuadrasTree;
+    Tree         RadioBaseTree;
+    Tree         carroTree;
 
     HashTable   carroHash;
     HashTable   Reg;
@@ -64,6 +64,8 @@ typedef struct Info{
     char *ec;
     char *pm;
     char *via;
+    char *bdPath;
+    int criar;
 
     int size;
 

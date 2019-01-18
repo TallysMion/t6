@@ -3,9 +3,10 @@
 #include <string.h>
 #include "../Lista/lista.h"
 #include "../Fila/fila.h"
-#include "../KDTREE/kdtree.h"
+#include "../arvoreB/arvoreB.h"
 #include "../HashTable/hashtable.h"
 #include "../Grafos/GrafoD.h"
+#include "../ArqBin/ArqBin.h"
 
 #include "../Estabelecimento/estabelecimento.h"
 #include "../Hidrante/hidrante.h"
@@ -15,8 +16,10 @@
 #include "../Semaforo/semaforo.h"
 #include "../Registrador/registrador.h"
 #include "../Carro/carro.h"
+#include "../Item/item.h"
 
 #define MODULOHASH 15
+#define BLOCKSIZE 2048
 
 /*entrutura das informações base do programa*/
 typedef struct config{
@@ -41,25 +44,25 @@ typedef struct config{
 typedef struct database{
     void*** ar0;
     int maxDrawerSize;
-    Lista   *Drawer;
+    Lista   *Drawer;                        //BD
 
-    KDT         HidrantesTree;
-    KDT         SemaforosTree;
-    KDT         QuadrasTree;
-    KDT         RadioBaseTree;
-    KDT         carroTree;
+    Tree         HidrantesTree;              //BD
+    Tree         SemaforosTree;              //BD
+    Tree         QuadrasTree;                //BD
+    Tree         RadioBaseTree;              //BD
+    Tree         carroTree;                  //BD
 
-    HashTable   carroHash;
-    HashTable   Reg;
-    HashTable   EstabelecimentoType;
-    HashTable   *EstabHash; /*id*/
-    HashTable   *enderecoPessoa; /*cep*/
-    HashTable   *HidrantesHash; /*id*/
-    HashTable   *SemaforosHash; /*id*/ 
-    HashTable   *RadioBaseHash; /*id*/
-    HashTable   *PessoaCepHash; /*cpf*/
-    HashTable   *cepQuadraHash; /*cep*/
-    HashTable   *enderecoEstab; /*cep*/
+    HashTable   carroHash;                  //BD
+    HashTable   Reg;                        //BD
+    HashTable   EstabelecimentoType;        //BD
+    HashTable   *EstabHash; /*id*/          //BD
+    HashTable   *enderecoPessoa; /*cep*/    //BD
+    HashTable   *HidrantesHash; /*id*/      //BD
+    HashTable   *SemaforosHash; /*id*/      //BD
+    HashTable   *RadioBaseHash; /*id*/      //BD
+    HashTable   *PessoaCepHash; /*cpf*/     //BD
+    HashTable   *cepQuadraHash; /*cep*/     //BD
+    HashTable   *enderecoEstab; /*cep*/     //BD
 
     GrafoD      grafo;
 
@@ -73,6 +76,8 @@ typedef struct Info{
     char *ec;
     char *pm;
     char *via;
+    char *bdPath;
+    int criar;
 
     int size;
 
@@ -123,7 +128,7 @@ Info* configIn(int argc, const char *argv[]){
     result->bd->ar0 = NULL;
 
     result->size = 1000;
-
+    result->criar = 0;
     for(i=0; i<argc; i++){
         char* aux;
         aux = (char*) calloc(strlen(argv[i])+1, sizeof(char));
@@ -163,6 +168,15 @@ Info* configIn(int argc, const char *argv[]){
             result->via = (char*) calloc(strlen(argv[i+1]) + 2, sizeof(char));
             strcpy(result->via, argv[i+1]);
             i++; continue;
+        }
+        if(!strcmp(aux, "-bd")){
+            result->bdPath = (char*) calloc(strlen(argv[i+1]) + 2, sizeof(char));
+            strcpy(result->bdPath, argv[i+1]);
+            i++; continue;
+        }
+        if(!strcmp(aux, "-criar")){
+            result->criar = 1;
+            continue;
         }
         free(aux);
     }
@@ -211,33 +225,181 @@ Info* configIn(int argc, const char *argv[]){
 
     result->conf->x = 0;
     result->conf->y = 0;
+    //criar ou carregar
     
     //LISTAS
-    result->bd->Drawer  = Lista_createLista();
+    char* tempPath = malloc(55 * sizeof(char));
+    if(result->criar){
+        result->bd->Drawer  = Lista_createLista();
 
-    //KDTREE
-    //void*  KDT_create(int (*compare)(void*, void*, int), int dimension);
-    result->bd->HidrantesTree       = KDT_create(compareHidrante , 2, freeHidr);
-    result->bd->SemaforosTree       = KDT_create(compareSemaforo , 2, freeSemaf);
-    result->bd->QuadrasTree         = KDT_create(compareQuadra   , 2, freeQuad);
-    result->bd->RadioBaseTree       = KDT_create(compareRadioB   , 2, freeRadioB);
-    result->bd->carroTree           = KDT_create(compareCarro    , 2, freeCarro);
-
-
-    //HASHTABLE
-    result->bd->Reg     = create_hashtable(MODULOHASH, HashCompareRegistrador, hashCodeRegistrador);
-    //HashTable create_hashtable(int modulo, int (*compare)(void*, char*), int hash(void*, int));
-    result->bd->carroHash               = create_hashtable(MODULOHASH, HashCompareCarro, hashCodeCarro);
-    result->bd->HidrantesHash           = NULL;//    = create_hashtable(MODULOHASH, HashCompareHidrante,     hashCodeHidrante);
-    result->bd->SemaforosHash           = NULL;//    = create_hashtable(MODULOHASH, HashCompareSemaf,        hashCodeSemaforo);
-    result->bd->RadioBaseHash           = NULL;//    = create_hashtable(MODULOHASH, HashCompareRadioB,       hashCodeRadioB);
-    result->bd->cepQuadraHash           = NULL;//    = create_hashtable(MODULOHASH, HashCompareQuadra,       hashCodeQuadra);
+        //KDTREE
+        //void*  KDT_create(int (*compare)(void*, void*, int), int dimension);
+        
+        strcpy(tempPath, result->bdPath); strcat(tempPath, "_Hidr");
+        result->bd->HidrantesTree       = BTREE_inicializa(BLOCKSIZE, tempPath, getSizeHidr(), compareHidr, writerHidr, readerHidr);
     
-    result->bd->EstabelecimentoType     = NULL;//= create_hashtable(MODULOHASH, Estab_Type_HashCompare,  Estab_Type_HashCode);
-    result->bd->PessoaCepHash           = NULL;//= create_hashtable(MODULOHASH, Pessoa_HashCompare,      Pessoa_HashCode);
-    result->bd->EstabHash               = NULL;//= create_hashtable(MODULOHASH, Estab_HashCompare,       Estab_HashCode);
-    result->bd->enderecoEstab           = NULL;//= create_hashtable(MODULOHASH, Estab_Ende_HashCompare,  Estab_Ende_HashCode);
-    result->bd->enderecoPessoa          = NULL;//= create_hashtable(MODULOHASH, Pessoa_Ende_HashCompare, Pessoa_Ende_HashCode);
+        strcpy(tempPath, result->bdPath); strcat(tempPath, "_Semaf");
+        result->bd->SemaforosTree       = BTREE_inicializa(BLOCKSIZE, tempPath, getSizeSemaf(), compareSemaf, writerSemaf, readerSemaf);
+        
+        strcpy(tempPath, result->bdPath); strcat(tempPath, "_Quad");
+        result->bd->QuadrasTree         = BTREE_inicializa(BLOCKSIZE, tempPath, getSizeQuadra(), compareQuadra, writerQuadra, readerQuadra);
+        
+        strcpy(tempPath, result->bdPath); strcat(tempPath, "_RB");
+        result->bd->RadioBaseTree       = BTREE_inicializa(BLOCKSIZE, tempPath, getSizeRadioB(), compareRadioB, writerRadioB, readerRadioB);
+        
+        strcpy(tempPath, result->bdPath); strcat(tempPath, "_Car");
+        result->bd->carroTree           = BTREE_inicializa(BLOCKSIZE, tempPath, getSizeCarro(), compareCarro, writerCarro, readerCarro);
+
+
+        //HASHTABLE
+        result->bd->Reg     = create_hashtable(MODULOHASH, HashCompareRegistrador, hashCodeRegistrador);
+        //HashTable create_hashtable(int modulo, int (*compare)(void*, char*), int hash(void*, int));
+        result->bd->carroHash               = create_hashtable(MODULOHASH, HashCompareCarro, hashCodeCarro);
+        result->bd->HidrantesHash           = NULL;//    = create_hashtable(MODULOHASH, HashCompareHidrante,     hashCodeHidrante);
+        result->bd->SemaforosHash           = NULL;//    = create_hashtable(MODULOHASH, HashCompareSemaf,        hashCodeSemaforo);
+        result->bd->RadioBaseHash           = NULL;//    = create_hashtable(MODULOHASH, HashCompareRadioB,       hashCodeRadioB);
+        result->bd->cepQuadraHash           = NULL;//    = create_hashtable(MODULOHASH, HashCompareQuadra,       hashCodeQuadra);
+        
+        result->bd->EstabelecimentoType     = NULL;//= create_hashtable(MODULOHASH, Estab_Type_HashCompare,  Estab_Type_HashCode);
+        result->bd->PessoaCepHash           = NULL;//= create_hashtable(MODULOHASH, Pessoa_HashCompare,      Pessoa_HashCode);
+        result->bd->EstabHash               = NULL;//= create_hashtable(MODULOHASH, Estab_HashCompare,       Estab_HashCode);
+        result->bd->enderecoEstab           = NULL;//= create_hashtable(MODULOHASH, Estab_Ende_HashCompare,  Estab_Ende_HashCode);
+        result->bd->enderecoPessoa          = NULL;//= create_hashtable(MODULOHASH, Pessoa_Ende_HashCompare, Pessoa_Ende_HashCode);
+        result->bd->maxDrawerSize   = 1000;
+    }else{
+        strcpy(tempPath, result->bdPath); strcat(tempPath, "_Drawer");
+        result->bd->Drawer  = getAll(tempPath, readerItem);
+
+        strcpy(tempPath, result->bdPath); strcat(tempPath, "_DSize");  
+        fread(&result->bd->maxDrawerSize, sizeof(int), 1, fopen(tempPath, "r+b"));
+
+        strcpy(tempPath, result->bdPath); strcat(tempPath, "_Hidr");
+        result->bd->HidrantesTree       = BTREE_Carrega(tempPath, compareHidr, writerHidr, readerHidr);
+        
+        strcpy(tempPath, result->bdPath); strcat(tempPath, "_Semaf");
+        result->bd->SemaforosTree       = BTREE_Carrega(tempPath, compareSemaf, writerSemaf, readerSemaf);
+        
+        strcpy(tempPath, result->bdPath); strcat(tempPath, "_Quad");
+        result->bd->QuadrasTree         = BTREE_Carrega(tempPath, compareQuadra, writerQuadra, readerQuadra);
+        
+        strcpy(tempPath, result->bdPath); strcat(tempPath, "_RB");
+        result->bd->RadioBaseTree       = BTREE_Carrega(tempPath, compareRadioB, writerRadioB, readerRadioB);
+        
+        strcpy(tempPath, result->bdPath); strcat(tempPath, "_Car");
+        result->bd->carroTree           = BTREE_Carrega(tempPath, compareCarro, writerCarro, readerCarro);
+
+
+        //VERIFICAR COMO FAZER O CARREGAMENTO DAS HASHTABLE -> POSSO BUSCAR TODOS OS ITENS DE UM ARQBIN
+        //Verificar se o arquivo da hash existe antes de (criar ou inserir)
+        //HASHTABLE
+        Lista ls;
+        void* p;
+
+        result->bd->Reg     = create_hashtable(MODULOHASH, HashCompareRegistrador, hashCodeRegistrador);
+        strcpy(tempPath, result->bdPath); strcat(tempPath, "_Reg");
+        ls = getAll(tempPath, readerReg);
+        p = Lista_getFirst(ls);
+        while(p){
+            insert_hashtable(result->bd->Reg, Lista_get(ls, p));
+            p = Lista_getNext(ls, p);
+        }
+        
+        result->bd->carroHash               = create_hashtable(MODULOHASH, HashCompareCarro, hashCodeCarro);
+        strcpy(tempPath, result->bdPath); strcat(tempPath, "_CarH");
+        ls = getAll(tempPath, readerReg);
+        p = Lista_getFirst(ls);
+        while(p){
+            insert_hashtable(result->bd->carroHash, Lista_get(ls, p));
+            p = Lista_getNext(ls, p);
+        }
+
+        result->bd->HidrantesHash           = create_hashtable(MODULOHASH, HashCompareHidrante,     hashCodeHidrante);
+        strcpy(tempPath, result->bdPath); strcat(tempPath, "_HidrH");
+        ls = getAll(tempPath, readerReg);
+        if(ls!=NULL){
+            p = Lista_getFirst(ls);
+            while(p){
+                insert_hashtable(result->bd->HidrantesHash, Lista_get(ls, p));
+                p = Lista_getNext(ls, p);
+            }
+        }
+
+        result->bd->SemaforosHash           = create_hashtable(MODULOHASH, HashCompareSemaf,        hashCodeSemaforo);
+        strcpy(tempPath, result->bdPath); strcat(tempPath, "_SemafH");
+        ls = getAll(tempPath, readerReg);
+        if(ls!=NULL){
+            p = Lista_getFirst(ls);
+            while(p){
+                insert_hashtable(result->bd->SemaforosHash, Lista_get(ls, p));
+                p = Lista_getNext(ls, p);
+            }
+        }
+        
+        result->bd->RadioBaseHash           = create_hashtable(MODULOHASH, HashCompareRadioB,       hashCodeRadioB);
+        strcpy(tempPath, result->bdPath); strcat(tempPath, "_RBH");
+        ls = getAll(tempPath, readerReg);
+        if(ls!=NULL){
+            p = Lista_getFirst(ls);
+            while(p){
+                insert_hashtable(result->bd->RadioBaseHash, Lista_get(ls, p));
+                p = Lista_getNext(ls, p);
+            }
+        }
+        
+        result->bd->cepQuadraHash           = create_hashtable(MODULOHASH, HashCompareQuadra,       hashCodeQuadra);
+        strcpy(tempPath, result->bdPath); strcat(tempPath, "_QuadH");
+        ls = getAll(tempPath, readerReg);
+        if(ls!=NULL){
+            p = Lista_getFirst(ls);
+            while(p){
+                insert_hashtable(result->bd->cepQuadraHash, Lista_get(ls, p));
+                p = Lista_getNext(ls, p);
+            }
+        }
+
+        result->bd->EstabelecimentoType     = create_hashtable(MODULOHASH, Estab_Type_HashCompare,  Estab_Type_HashCode);
+        strcpy(tempPath, result->bdPath); strcat(tempPath, "_EstabTH");
+        ls = getAll(tempPath, readerReg);
+        if(ls!=NULL){
+            p = Lista_getFirst(ls);
+            while(p){
+                insert_hashtable(result->bd->EstabelecimentoType, Lista_get(ls, p));
+                p = Lista_getNext(ls, p);
+            }
+        }
+
+        result->bd->enderecoPessoa          = create_hashtable(MODULOHASH, Pessoa_Ende_HashCompare, Pessoa_Ende_HashCode);
+        
+        result->bd->PessoaCepHash           = create_hashtable(MODULOHASH, Pessoa_HashCompare,      Pessoa_HashCode);
+        strcpy(tempPath, result->bdPath); strcat(tempPath, "_PessH");
+        ls = getAll(tempPath, readerReg);
+        if(ls!=NULL){
+            p = Lista_getFirst(ls);
+            while(p){
+                insert_hashtable(result->bd->PessoaCepHash, Lista_get(ls, p));
+                void* aux = Pessoa_getEndereco(Lista_get(ls, p));
+                if(aux)
+                    insert_hashtable(result->bd->enderecoPessoa, aux);
+                p = Lista_getNext(ls, p);
+            }
+        }
+        result->bd->enderecoEstab           = create_hashtable(MODULOHASH, Estab_Ende_HashCompare,  Estab_Ende_HashCode);
+
+        result->bd->EstabHash               = create_hashtable(MODULOHASH, Estab_HashCompare,       Estab_HashCode);
+        strcpy(tempPath, result->bdPath); strcat(tempPath, "_EstabH");
+        ls = getAll(tempPath, readerReg);
+        if(ls!=NULL){
+            p = Lista_getFirst(ls);
+            while(p){
+                insert_hashtable(result->bd->EstabHash, Lista_get(ls, p));
+                void* aux = Estab_getEndereco(Lista_get(ls, p));
+                if(aux)
+                    insert_hashtable(result->bd->enderecoEstab, aux);
+                p = Lista_getNext(ls, p);
+            }
+        }       
+
+    }
 
     //FILAS
     result->notsGeo     = create_Fila();
@@ -251,11 +413,6 @@ Info* configIn(int argc, const char *argv[]){
     result->respEC      = create_Fila();
     result->respPM      = create_Fila();
     result->respVia     = create_Fila();
-
-
-    result->bd->maxDrawerSize   = 1000;
-
-
 
     if(result->e == NULL){
         result->e = (char*)calloc(1,sizeof(char));
@@ -466,23 +623,133 @@ Fila getCommandsForVIA(Info* info){
 
 /*atualizar*/
 void freeConfig(Info *info){
-
+    Lista ls;
+    void* p;
+    char* tempPath = malloc(55 * sizeof(char));
+    //escrever listas e hashs nos arquivos antes de dar free
+    
+    if(info->bd->cepQuadraHash != NULL){
+        strcpy(tempPath, info->bdPath); strcat(tempPath, "_QuadH");
+        newArq(tempPath, getSizeQuadra());
+        ls = getAll_hashtable(info->bd->cepQuadraHash);
+        p = Lista_getFirst(ls);
+        while(p){
+            addObject(Lista_get(ls,p), tempPath, writerQuadra);
+            p = Lista_getNext(ls, p);
+        }
+    }
     free_hashtable(info->bd->cepQuadraHash);
+    
+    if(info->bd->HidrantesHash != NULL){
+        strcpy(tempPath, info->bdPath); strcat(tempPath, "_HidrH");
+        newArq(tempPath, getSizeHidr());
+        ls = getAll_hashtable(info->bd->HidrantesHash);
+        p = Lista_getFirst(ls);
+        while(p){
+            addObject(Lista_get(ls,p), tempPath, writerHidr);
+            p = Lista_getNext(ls, p);
+        }
+    }
     free_hashtable(info->bd->HidrantesHash);
+    
+    if(info->bd->PessoaCepHash != NULL){
+        strcpy(tempPath, info->bdPath); strcat(tempPath, "_PessH");
+        newArq(tempPath, getSizePessoa());
+        ls = getAll_hashtable(info->bd->PessoaCepHash);
+        p = Lista_getFirst(ls);
+        while(p){
+            addObject(Lista_get(ls,p), tempPath, writerPessoa);
+            p = Lista_getNext(ls, p);
+        }
+    }
     free_hashtable(info->bd->PessoaCepHash);
+    
+    if(info->bd->RadioBaseHash != NULL){
+        strcpy(tempPath, info->bdPath); strcat(tempPath, "_RBH");
+        newArq(tempPath, getSizeRadioB());
+        ls = getAll_hashtable(info->bd->RadioBaseHash);
+        p = Lista_getFirst(ls);
+        while(p){
+            addObject(Lista_get(ls,p), tempPath, writerRadioB);
+            p = Lista_getNext(ls, p);
+        }
+    }
     free_hashtable(info->bd->RadioBaseHash);
-    free_hashtable(info->bd->SemaforosHash);
+    
+    if(info->bd->SemaforosHash != NULL){
+        strcpy(tempPath, info->bdPath); strcat(tempPath, "_SemafH");
+        newArq(tempPath, getSizeSemaf());
+        ls = getAll_hashtable(info->bd->SemaforosHash);
+        p = Lista_getFirst(ls);
+        while(p){
+            addObject(Lista_get(ls,p), tempPath, writerSemaf);
+            p = Lista_getNext(ls, p);
+        }
+    }    
+    free_hashtable(info->bd->SemaforosHash);    
+    
+    
+    if(info->bd->EstabelecimentoType != NULL){
+        strcpy(tempPath, info->bdPath); strcat(tempPath, "_EstabTH");
+        newArq(tempPath, getSizeEstabType());
+        ls = getAll_hashtable(info->bd->EstabelecimentoType);
+        p = Lista_getFirst(ls);
+        while(p){
+            addObject(Lista_get(ls,p), tempPath, writerEstabType);
+            p = Lista_getNext(ls, p);
+        }
+    }   
+    free_hashtable(info->bd->EstabelecimentoType);
+    
+    if(info->bd->EstabHash != NULL){
+        strcpy(tempPath, info->bdPath); strcat(tempPath, "_EstabH");
+        newArq(tempPath, getSizeEstab());
+        ls = getAll_hashtable(info->bd->EstabHash);
+        p = Lista_getFirst(ls);
+        while(p){
+            addObject(Lista_get(ls,p), tempPath, writerEstab);
+            p = Lista_getNext(ls, p);
+        }
+    } 
+    free_hashtable(info->bd->EstabHash);
+    
+    if(info->bd->Reg != NULL){
+        strcpy(tempPath, info->bdPath); strcat(tempPath, "_PessEH");
+        newArq(tempPath, getSizeReg());
+        ls = getAll_hashtable(info->bd->Reg);
+        p = Lista_getFirst(ls);
+        while(p){
+            addObject(Lista_get(ls,p), tempPath, writerReg);
+            p = Lista_getNext(ls, p);
+        }
+    } 
+    free_hashtable(info->bd->Reg);
+    
+    if(info->bd->Reg != NULL){
+        strcpy(tempPath, info->bdPath); strcat(tempPath, "_Drawer");
+        newArq(tempPath, getSizeItem());
+        ls =  info->bd->Drawer;
+        p = Lista_getFirst(ls);
+        while(p){
+            addObject(Lista_get(ls,p), tempPath, writerItem);
+            p = Lista_getNext(ls, p);
+        }
+    } 
+    freeLista(info->bd->Drawer);
+    
+    strcpy(tempPath, info->bdPath); strcat(tempPath, "_DSize");  
+    fwrite(&info->bd->maxDrawerSize, sizeof(int), 1, fopen(tempPath, "w+b"));
+    //maxDrawer
+    
     free_hashtable(info->bd->enderecoEstab);
     free_hashtable(info->bd->enderecoPessoa);
-    free_hashtable(info->bd->EstabelecimentoType);
-    free_hashtable(info->bd->EstabHash);
-    free_hashtable(info->bd->Reg);
-    freeKDTree(info->bd->HidrantesTree);
-    freeKDTree(info->bd->QuadrasTree);
-    freeKDTree(info->bd->RadioBaseTree);
-    freeKDTree(info->bd->SemaforosTree);
+    
+    
+    BTREE_free(info->bd->HidrantesTree);
+    BTREE_free(info->bd->QuadrasTree);
+    BTREE_free(info->bd->RadioBaseTree);
+    BTREE_free(info->bd->SemaforosTree);
     freeGrafoD(info->bd->grafo);
-    freeLista(info->bd->Drawer);
     free(info->bd);
 
     free(info->conf->cfillHidr);

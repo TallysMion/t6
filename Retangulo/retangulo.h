@@ -41,4 +41,8 @@ char* getCorRec(retangulo rect);
 /*Libera Memoria*/
 double freeRec(retangulo rect);
 
+void writerRec(void* rect, int seek, void* arq);
+void readerRec(void* rect, int seek, void* arq);
+int getSizeRec();
+double compareRec(void* objA, void* objB);
 #endif

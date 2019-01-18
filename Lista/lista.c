@@ -307,6 +307,7 @@ void Lista_insertAll(void* lista, void* lista2){
 
 
 void freeLista(void* lista){
+    if(lista == NULL) return;
     Item *a, *p;
     Lista* ls;
     ls = (Lista*) lista;

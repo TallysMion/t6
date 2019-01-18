@@ -9,6 +9,8 @@
 #define CENTER 1
 
 
+
+
 typedef struct{
     char* id;
     char* cor1;
@@ -18,13 +20,50 @@ typedef struct{
 }RadioB;
 typedef void* cicle;
 
+void writerRadioB(RadioB* rb, int seek, void* arq){
+    fseek(arq, seek, SEEK_SET);
+    for(int i=0; i<55; i++)
+        fwrite(&rb->id[i], sizeof(char), 1, arq);
+    for(int i=0; i<55; i++)
+        fwrite(&rb->cor1[i], sizeof(char), 1, arq);
+    for(int i=0; i<55; i++)
+        fwrite(&rb->cor2[i], sizeof(char), 1, arq);
+    fwrite(&rb->x, sizeof(double), 1, arq);
+    fwrite(&rb->y, sizeof(double), 1, arq);
+}
+
+void readerRadioB(RadioB* rb, int seek, void* arq){
+    fseek(arq, seek, SEEK_SET);
+    for(int i=0; i<55; i++)
+        fread(&rb->id[i], sizeof(char), 1, arq);
+    for(int i=0; i<55; i++)
+        fread(&rb->cor1[i], sizeof(char), 1, arq);
+    for(int i=0; i<55; i++)
+        fread(&rb->cor2[i], sizeof(char), 1, arq);
+    fread(&rb->x, sizeof(double), 1, arq);
+    fread(&rb->y, sizeof(double), 1, arq);
+}
+
+int getSizeRadioB(){
+    return (3*(55*sizeof(char)) + 2* sizeof(double));
+}
+
+double compareRadioB(RadioB* objA, RadioB* objB){
+    double result = sqrt(pow(objB->x - objA->x, 2) + pow(objB->y - objA->y, 2));
+    if(objB->x > objA->x && objB->y > objA->y){
+        return result;
+    }
+    return -result;
+}
+
+
 /*cria um objeto 'retangulo' com as informações passadas*/
 void* createRadioB(char* id, char* cor1, char* cor2,double x, double y){
     RadioB* rb;
     rb = (RadioB*) calloc(1, sizeof(RadioB));
-    rb->id   = (char*) calloc(155, sizeof(char));
-    rb->cor1 = (char*) calloc(155, sizeof(char));
-    rb->cor2 = (char*) calloc(155, sizeof(char));
+    rb->id   = (char*) calloc(55, sizeof(char));
+    rb->cor1 = (char*) calloc(55, sizeof(char));
+    rb->cor2 = (char*) calloc(55, sizeof(char));
 
     strcpy(rb->id  , id);
     strcpy(rb->cor1, cor1);
@@ -104,19 +143,6 @@ char* reportRadioB(void* raB){
     return result;
 }
 
-//Comparador de objeto
-int compareRadioB(void* hdA, void* hdB, int dim){
-    RadioB *qdA, *qdB;
-    qdA = (RadioB*) hdA;
-    qdB = (RadioB*) hdB;
-    dim = dim%2;
-    if(!strcmp(qdA->id, qdB->id)) return 0;
-    if (dim == 0){
-        return qdA->x - qdB->x;
-    }else{
-        return qdA->y - qdB->y;
-    }
-}
 
 //Cria codigo Hash
 int hashCodeRadioB(void* hdA, int Modulo){

@@ -3,7 +3,7 @@
 #include <string.h>
 #include "../../Fila/fila.h"
 #include "../../Grafos/GrafoD.h"
-#include "../../KDTREE/kdtree.h"
+#include "../../arvoreB/arvoreB.h"
 #include "../../Registrador/registrador.h"
 #include "../../Config/config.h"
 #include "comandsQry.h"

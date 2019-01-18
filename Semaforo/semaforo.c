@@ -16,6 +16,41 @@ typedef struct{
     double y;
 }Semaforo;
 
+void writerSemaf(Semaforo* semaf, int seek, void* arq){
+    fseek(arq, seek, SEEK_SET);
+    for(int i=0; i<55; i++)
+        fwrite(&semaf->id[i], sizeof(char), 1, arq);
+    for(int i=0; i<55; i++)
+        fwrite(&semaf->cor1[i], sizeof(char), 1, arq);
+    for(int i=0; i<55; i++)
+        fwrite(&semaf->cor2[i], sizeof(char), 1, arq);
+    fwrite(&semaf->x, sizeof(double), 1, arq);
+    fwrite(&semaf->y, sizeof(double), 1, arq);
+}
+void readerSemaf(Semaforo* semaf, int seek, void* arq){
+    fseek(arq, seek, SEEK_SET);
+    for(int i=0; i<55; i++)
+        fread(&semaf->id[i], sizeof(char), 1, arq);
+    for(int i=0; i<55; i++)
+        fread(&semaf->cor1[i], sizeof(char), 1, arq);
+    for(int i=0; i<55; i++)
+        fread(&semaf->cor2[i], sizeof(char), 1, arq);
+    fread(&semaf->x, sizeof(double), 1, arq);
+    fread(&semaf->y, sizeof(double), 1, arq);
+}
+
+int getSizeSemaf(){
+    return (3*(55*sizeof(char)) + 2* sizeof(double));
+}
+
+double compareSemaf(Semaforo* objA, Semaforo* objB){
+        double result = sqrt(pow(objB->x - objA->x, 2) + pow(objB->y - objA->y, 2));
+    if(objB->x > objA->x && objB->y > objA->y){
+        return result;
+    }
+    return -result;
+}
+
 
 /*cria um objeto 'retangulo' com as informações passadas*/
 void* createSemaforo(char* id, char* cor1, char* cor2,double x, double y){

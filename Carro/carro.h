@@ -20,13 +20,13 @@ void freeCarro(carro car);
 
 char* reportCarro(void* car);
 
-//Comparador de objeto
-int compareCarro(void* carA, void* carB, int dim);
-
-//Cria codigo Hash
 int hashCodeCarro(void* car, int Modulo);
-
-//Comparador para hash
 int HashCompareCarro(void* carA, void* carB);
+
+void writerCarro(void* car, int seek, void* arq);
+void readerCarro(void* car, int seek, void* arq);
+int getSizeCarro();
+double compareCarro(void* carA, void* carB);
+
 
 #endif

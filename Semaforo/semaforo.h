@@ -32,4 +32,9 @@ int hashCodeSemaforo(void* hdA, int Modulo);
 //Comparação para hashTable
 int HashCompareSemaf(void* semaf, void* id);
 
+void writerSemaf(void* semaf, int seek, void* arq);
+void readerSemaf(void* semaf, int seek, void* arq);
+int getSizeSemaf();
+double compareSemaf(void* objA, void* objB);
+
 #endif

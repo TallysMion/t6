@@ -32,4 +32,9 @@ int hashCodeHidrante(void* hdA, int Modulo);
 //Comparador para hash
 int HashCompareHidrante(void* hid, void* id);
 
+void writerHidr(void* hidr, int seek, void* arq);
+void readerHidr(void* hidr, int seek, void* arq);
+int getSizeHidr();
+double compareHidr(void* objA, void* objB);
+
 #endif

@@ -8,6 +8,26 @@ typedef struct {
     void* value;
 }Reg;
 
+void writerReg(Reg* reg, int seek, void* arq){
+    fseek(arq, seek, SEEK_SET);
+    for(int i=0; i<55; i++)
+        fwrite(&reg->id[i], sizeof(char), 1, arq);
+    double* v = (double*) reg->value;
+    fwrite(&v[0], sizeof(double), 1, arq);
+    fwrite(&v[1], sizeof(double), 1, arq);
+}
+void readerReg(Reg* reg, int seek, void* arq){
+    fseek(arq, seek, SEEK_SET);
+    for(int i=0; i<55; i++)
+        fread(&reg->id[i], sizeof(char), 1, arq);
+    double* v = (double*) reg->value;
+    fread(&v[0], sizeof(double), 1, arq);
+    fread(&v[1], sizeof(double), 1, arq);
+}
+int getSizeReg(){
+    return (55*sizeof(char) + 2* sizeof(double));
+}
+
 //Cria uma estrutura de registrador
 void* create_Reg(char* id, void* value){
     Reg* rg;

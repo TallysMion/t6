@@ -13,7 +13,7 @@
 #include "../../Hidrante/hidrante.h"
 #include "../../Pessoa/pessoa.h"
 #include "../../Estabelecimento/estabelecimento.h"
-#include "../../KDTREE/kdtree.h"
+#include "../../arvoreB/arvoreB.h"
 #include "../../HashTable/hashtable.h"
 #include "../../Registrador/registrador.h"
 #include "../../Carro/carro.h"
@@ -2289,7 +2289,7 @@ void theClosestEstab(char* text, Info* info){
     idB  = (char*) calloc(55, sizeof(char));
     sscanf(aux, "%s %s %s", idA, tipo, idB);
     Lista estabs = getAll_hashtable(info->bd->EstabHash);
-    KDT estabskdt = KDT_create(Estab_compare, 2, Estab_Free);
+    Tree estabskdt = KDT_create(Estab_compare, 2, Estab_Free);
 
     void *temp, *auxEstab;
     temp = Lista_getFirst(estabs);

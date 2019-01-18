@@ -34,4 +34,12 @@ void* Pessoa_IdentEndereco(char* cep);
 char* Pessoa_relatorio(void* pessoa);
 double* Pessoa_getCordGeo(void* pessoa, void* info);
 
+void writerPessoa(void* pes, int seek, void* arq);
+void readerPessoa(void* pes, int seek, void* arq);
+int getSizePessoa();
+
+void writerPessoaEnd(void* pes, int seek, void* arq);
+void readerPessoaEnd(void* pes, int seek, void* arq);
+int getSizePessoaEnd();
+
 #endif

@@ -14,6 +14,43 @@ typedef struct rec{
     double y;
 }rec;
 
+void writerRec(rec* rect, int seek, void* arq){
+    fseek(arq, seek, SEEK_SET);
+    fwrite(&rect->id, sizeof(int), 1, arq);
+    for(int i=0; i<55; i++)
+        fwrite(&rect->cor1[i], sizeof(char), 1, arq);
+    for(int i=0; i<55; i++)
+        fwrite(&rect->cor2[i], sizeof(char), 1, arq);
+    fwrite(&rect->w, sizeof(double), 1, arq);
+    fwrite(&rect->h, sizeof(double), 1, arq);
+    fwrite(&rect->x, sizeof(double), 1, arq);
+    fwrite(&rect->y, sizeof(double), 1, arq);
+}
+void readerRec(rec* rect, int seek, void* arq){
+    fseek(arq, seek, SEEK_SET);
+    fread(&rect->id, sizeof(int), 1, arq);
+    for(int i=0; i<55; i++)
+        fread(&rect->cor1[i], sizeof(char), 1, arq);
+    for(int i=0; i<55; i++)
+        fread(&rect->cor2[i], sizeof(char), 1, arq);
+    fread(&rect->w, sizeof(double), 1, arq);
+    fread(&rect->h, sizeof(double), 1, arq);
+    fread(&rect->x, sizeof(double), 1, arq);
+    fread(&rect->y, sizeof(double), 1, arq);
+}
+int getSizeRec(){
+    return (sizeof(int) + 2*(55*sizeof(char)) + 4*sizeof(double));
+}
+
+double compareCirc(rec* objA, rec* objB){
+    double result = sqrt(pow(objB->x - objA->x, 2) + pow(objB->y - objA->y, 2));
+    if(objB->x > objA->x && objB->y > objA->y){
+        return result;
+    }
+    return -result;
+}
+
+
 /*cria um objeto 'retangulo' com as informações passadas*/
 retangulo createRetangulo(int id, char* cor1, char* cor2, double w, double h, double x, double y){
     rec *result = NULL;

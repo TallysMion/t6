@@ -16,6 +16,44 @@ typedef struct{
     double h;
 } Quadra;
 
+void writerQuadra(Quadra* quad, int seek, void* arq){
+    fseek(arq, seek, SEEK_SET);
+    for(int i=0; i<5; i++)
+        fwrite(&quad->cep[i], sizeof(char), 1, arq);
+    for(int i=0; i<5; i++)
+        fwrite(&quad->cor1[i], sizeof(char), 1, arq);
+    for(int i=0; i<5; i++)
+        fwrite(&quad->cor2[i], sizeof(char), 1, arq);
+    fwrite(&quad->x, sizeof(double), 1, arq);
+    fwrite(&quad->y, sizeof(double), 1, arq);
+    fwrite(&quad->w, sizeof(double), 1, arq);
+    fwrite(&quad->h, sizeof(double), 1, arq);
+}
+void readerQuadra(Quadra* quad, int seek, void* arq){
+    fseek(arq, seek, SEEK_SET);
+    for(int i=0; i<5; i++)
+        fread(&quad->cep[i], sizeof(char), 1, arq);
+    for(int i=0; i<5; i++)
+        fread(&quad->cor1[i], sizeof(char), 1, arq);
+    for(int i=0; i<5; i++)
+        fread(&quad->cor2[i], sizeof(char), 1, arq);
+    fread(&quad->x, sizeof(double), 1, arq);
+    fread(&quad->y, sizeof(double), 1, arq);
+    fread(&quad->w, sizeof(double), 1, arq);
+    fread(&quad->h, sizeof(double), 1, arq);
+}
+int getSizeQuadra(){
+    return (3*(55*sizeof(char)) + 4* sizeof(double));
+}
+
+double compareQuadra(Quadra* objA, Quadra* objB){
+    double result = sqrt(pow(objB->x - objA->x, 2) + pow(objB->y - objA->y, 2));
+    if(objB->x > objA->x && objB->y > objA->y){
+        return result;
+    }
+    return -result;
+}
+
 /*Retorna H*/
 void* getRecQuad(void* quad){
     Quadra *qd;
@@ -27,11 +65,11 @@ void* getRecQuad(void* quad){
 void* createQuadra(char* cep, char* cor1, char* cor2,double w, double h, double x, double y){
     Quadra *qd;
     qd = (Quadra*) calloc(1, sizeof(Quadra));
-    qd->cep = (char*) calloc(155, sizeof(char));
+    qd->cep = (char*) calloc(55, sizeof(char));
     strcpy(qd->cep, cep);
-    qd->cor1 = (char*) calloc(155, sizeof(char));
+    qd->cor1 = (char*) calloc(55, sizeof(char));
     strcpy(qd->cor1, cor1);
-    qd->cor2 = (char*) calloc(155, sizeof(char));
+    qd->cor2 = (char*) calloc(55, sizeof(char));
     strcpy(qd->cor2, cor2);
     qd->h = h;
     qd->w = w;
@@ -103,19 +141,6 @@ char* reportQuadra(void* quad){
     return result;
 }
 
-//Comparador de objeto
-int compareQuadra(void* hdA, void* hdB, int dim){
-    Quadra *qdA, *qdB;
-    qdA = (Quadra*) hdA;
-    qdB = (Quadra*) hdB;
-    dim = dim%2;
-    if(!strcmp(qdA->cep, qdB->cep)) return 0;
-    if (dim == 0){
-        return qdA->x - qdB->x;
-    }else{
-        return qdA->y - qdB->y;
-    }
-}
 
 //Cria codigo Hash
 int hashCodeQuadra(void* hdA, int Modulo){

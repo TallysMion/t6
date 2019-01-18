@@ -40,4 +40,8 @@ double Item_Xf(Item i);
 /*retorna o yf do item*/
 double Item_Yf(Item i);
 
+void writerItem(void* hidr, int seek, void* arq);
+void readerItem(void* hidr, int seek, void* arq);
+int getSizeItem();
+
 #endif

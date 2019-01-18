@@ -15,16 +15,50 @@ typedef struct{
     double y;
 } Hidrante;
 
+void writerHidr(Hidrante* hidr, int seek, void* arq){
+    fseek(arq, seek, SEEK_SET);
+    for(int i=0; i<55; i++)
+        fwrite(&hidr->id[i], sizeof(char), 1, arq);
+    for(int i=0; i<55; i++)
+        fwrite(&hidr->cor1[i], sizeof(char), 1, arq);
+    for(int i=0; i<55; i++)
+        fwrite(&hidr->cor2[i], sizeof(char), 1, arq);
+    fwrite(&hidr->x, sizeof(double), 1, arq);
+    fwrite(&hidr->y, sizeof(double), 1, arq);
+}
+void readerHidr(Hidrante* hidr, int seek, void* arq){
+    fseek(arq, seek, SEEK_SET);
+    for(int i=0; i<55; i++)
+        fread(&hidr->id[i], sizeof(char), 1, arq);
+    for(int i=0; i<55; i++)
+        fread(&hidr->cor1[i], sizeof(char), 1, arq);
+    for(int i=0; i<55; i++)
+        fread(&hidr->cor2[i], sizeof(char), 1, arq);
+    fread(&hidr->x, sizeof(double), 1, arq);
+    fread(&hidr->y, sizeof(double), 1, arq);
+}
+
+int getSizeHidr(){
+    return (3*(55*sizeof(char)) + 2*sizeof(double));
+}
+
+double compareHidr(Hidrante* objA, Hidrante* objB){
+    double result = sqrt(pow(objB->x - objA->x, 2) + pow(objB->y - objA->y, 2));
+    if(objB->x > objA->x && objB->y > objA->y){
+        return result;
+    }
+    return -result;
+}
 
 /*cria um objeto 'retangulo' com as informações passadas*/
 void* createHidrante(char* id, char* cor1, char* cor2,double x, double y){
    Hidrante *hid;
    hid = (Hidrante*) calloc(1,sizeof(Hidrante));
-   hid->id = (char*) calloc(155, sizeof(char));
+   hid->id = (char*) calloc(55, sizeof(char));
    strcpy(hid->id, id);
-   hid->cor1 = (char*) calloc(155, sizeof(char));
+   hid->cor1 = (char*) calloc(55, sizeof(char));
    strcpy(hid->cor1, cor1);
-   hid->cor2 = (char*) calloc(155, sizeof(char));
+   hid->cor2 = (char*) calloc(55, sizeof(char));
    strcpy(hid->cor2, cor2);
    hid->x = x;
    hid->y = y;

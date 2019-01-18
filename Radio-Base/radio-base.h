@@ -24,13 +24,15 @@ void freeRadioB(radioB rb);
 
 char* reportRadioB(void* rb);
 
-//Comparador de objeto
-int compareRadioB(void* hdA, void* hdB, int dim);
-
 //Cria codigo Hash
 int hashCodeRadioB(void* hdA, int Modulo);
 
 //Comparador para RadioB
 int HashCompareRadioB(void* rb, void* id);
+
+void writerRadioB(void* rb, int seek, void* arq);
+void readerRadioB(void* rb, int seek, void* arq);
+int getSizeRadioB();
+double compareRadioB(void* objA, void* objB);
 
 #endif

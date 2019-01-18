@@ -29,6 +29,96 @@ typedef struct{
     double* cord;
 } Estab;
 
+void writerEstab(Estab* estab, int seek, void* arq);
+void readerEstab(Estab* estab, int seek, void* arq);
+int getSizeEstab();
+
+void writerEstabType(type* tipo, int seek, void* arq);
+void readerEstabType(type* tipo, int seek, void* arq);
+int getSizeEstabType();
+
+void writerEstabEnd(Estab* estab, int seek, void* arq);
+void readerEstabEnd(Estab* estab, int seek, void* arq);
+int getSizeEstabEnd();
+
+void writerEstab(Estab* estab, int seek, void* arq){
+    fseek(arq, seek, SEEK_SET);
+    for(int i=0; i<55; i++)
+        fwrite(&estab->cnpj[i], sizeof(char), 1, arq);
+    writerEstabType(estab->tipo, ftell(arq), arq);
+    writerEstabEnd(estab, ftell(arq), arq);
+    for(int i=0; i<55; i++)
+        fwrite(&estab->nome[i], sizeof(char), 1, arq);
+    fwrite(&estab->cord[0], sizeof(double), 1, arq);
+    fwrite(&estab->cord[1], sizeof(double), 1, arq);
+}
+
+void readerEstab(Estab* estab, int seek, void* arq){
+    fseek(arq, seek, SEEK_SET);
+    for(int i=0; i<55; i++)
+        fread(&estab->cnpj[i], sizeof(char), 1, arq);
+    readerEstabType(estab->tipo, ftell(arq), arq);
+    readerEstabEnd(estab, ftell(arq), arq);
+    for(int i=0; i<55; i++)
+        fread(&estab->nome[i], sizeof(char), 1, arq);
+    fread(&estab->cord[0], sizeof(double), 1, arq);
+    fread(&estab->cord[1], sizeof(double), 1, arq);
+}
+int getSizeEstab(){
+    return (2*(55*sizeof(char)) + 2*sizeof(double) + getSizeEstabEnd() + getSizeEstabType());
+}
+
+void writerEstabType(type* tipo, int seek, void* arq){
+    fseek(arq, seek, SEEK_SET);
+    for(int i=0; i<55; i++)
+        fwrite(&tipo->cod[i], sizeof(char), 1, arq);
+    for(int i=0; i<55; i++)
+        fwrite(&tipo->info[i], sizeof(char), 1, arq);    
+}
+void readerEstabType(type* tipo, int seek, void* arq){
+    fseek(arq, seek, SEEK_SET);
+    for(int i=0; i<55; i++)
+        fread(&tipo->cod[i], sizeof(char), 1, arq);
+    for(int i=0; i<55; i++)
+        fread(&tipo->info[i], sizeof(char), 1, arq);   
+}
+int getSizeEstabType(){
+    return (2*(55*sizeof(char)));
+}
+
+void writerEstabEnd(Estab* estab, int seek, void* arq){
+    if(estab->ende == NULL) return;
+    fseek(arq, seek, SEEK_SET);
+    fwrite(&estab->ende->tipo, sizeof(int), 1, arq);
+    for(int i=0; i<55; i++)
+        fwrite(&estab->ende->cep[i], sizeof(char), 1, arq);
+    for(int i=0; i<55; i++)
+        fwrite(&estab->ende->face[i], sizeof(char), 1, arq);
+    for(int i=0; i<55; i++)
+        fwrite(&estab->ende->num[i], sizeof(char), 1, arq);
+    for(int i=0; i<55; i++)
+        fwrite(&estab->ende->comp[i], sizeof(char), 1, arq);
+}
+
+//testar o caso do estab n ter endereco
+void readerEstabEnd(Estab* estab, int seek, void* arq){
+    fseek(arq, seek, SEEK_SET);
+    fread(&estab->ende->tipo, sizeof(int), 1, arq);
+    for(int i=0; i<55; i++)
+        fread(&estab->ende->cep[i], sizeof(char), 1, arq);
+    for(int i=0; i<55; i++)
+        fread(&estab->ende->face[i], sizeof(char), 1, arq);
+    for(int i=0; i<55; i++)
+        fread(&estab->ende->num[i], sizeof(char), 1, arq);
+    for(int i=0; i<55; i++)
+        fread(&estab->ende->comp[i], sizeof(char), 1, arq);
+
+    estab->ende->estab = estab;
+}
+int getSizeEstabEnd(){
+    return(sizeof(int) + 4*(55*sizeof(char)));
+}
+
 
 double* calcCord(void* estab, Info* info){
     Estab* est;
@@ -91,16 +181,16 @@ Estab* Estab_create(Info* info, char* cnpj, void* tip, char* cep, char* face, ch
     end = (Endereco*) calloc(1, sizeof(Endereco));
 
     end->tipo    = 0;
-    end->cep     = (char*) calloc(strlen(cep)+2  , sizeof(char*));
-    end->face    = (char*) calloc(strlen(face)+2 , sizeof(char*));
-    end->num     = (char*) calloc(strlen(num)+2  , sizeof(char*));
+    end->cep     = (char*) calloc(55 , sizeof(char*));
+    end->face    = (char*) calloc(55 , sizeof(char*));
+    end->num     = (char*) calloc(55 , sizeof(char*));
     end->comp    = NULL;
     
     type* tipo;
     tipo = (type*) tip;
 
-    result->cnpj    = (char*) calloc(strlen(cnpj)+2 , sizeof(char*));
-    result->nome    = (char*) calloc(strlen(nome)+2 , sizeof(char*));
+    result->cnpj    = (char*) calloc(55 , sizeof(char*));
+    result->nome    = (char*) calloc(55 , sizeof(char*));
 
     strcpy(result->cnpj, cnpj);
     strcpy(end->cep, cep);
@@ -128,8 +218,8 @@ void* Estab_getEndereco(void* estab){
 type* Estab_createType(char* cod, char* info){
     type* tipo;
     tipo = (type*) calloc(1, sizeof(type));
-    tipo->cod = (char*) calloc(strlen(cod)+2, sizeof(char));
-    tipo->info =(char*) calloc(strlen(info)+2, sizeof(char));
+    tipo->cod = (char*) calloc(55, sizeof(char));
+    tipo->info =(char*) calloc(55, sizeof(char));
     strcpy(tipo->cod,cod);
     strcpy(tipo->info,info);
     return (void*) tipo;
@@ -143,9 +233,9 @@ void* Estab_changeEndereco(Info* info, void* estab,  char* cep, char* face, char
     free(est->ende->face);
     free(est->ende->num);
 
-    est->ende->cep    = (char*) calloc(strlen(cep)+2 , sizeof(char*));
-    est->ende->face    = (char*) calloc(strlen(face)+2 , sizeof(char*));
-    est->ende->num     = (char*) calloc(strlen(num)+2  , sizeof(char*));
+    est->ende->cep    = (char*) calloc(55   , sizeof(char*));
+    est->ende->face    = (char*) calloc(55  , sizeof(char*));
+    est->ende->num     = (char*) calloc(55  , sizeof(char*));
 
     strcpy(est->ende->cep, cep);
     strcpy(est->ende->face, face);

@@ -14,27 +14,29 @@ int main(int argc, const char *argv[]){
     Fila comandos;    
     info = configIn(argc, argv);    
 
-    comandos = getCommandsForGEO(info);    
-    if(comandos){
-        inicGEO(info, lenghFila(comandos));
-        startGEO(comandos, info);
-    }else{
-        printf("Arquivo .geo (obrigatorio) nao encontrado\n");
-        return -1;
+    if(info->criar){
+        comandos = getCommandsForGEO(info);    
+        if(comandos){
+            inicGEO(info, lenghFila(comandos));
+            startGEO(comandos, info);
+        }else{
+            printf("Arquivo .geo (obrigatorio) nao encontrado\n");
+            return -1;
+        }
+        printf(".geo Concluido\n");
+        comandos = getCommandsForEC(info); 
+        if(comandos){
+            inicEC(info, lenghFila(comandos));
+            startEc(comandos, info);
+        }
+        printf(".ec Concluido\n");
+        comandos = getCommandsForPM(info); 
+        if(comandos){
+            inicPM(info, lenghFila(comandos));
+            startPm(comandos, info);
+        }
+        printf(".pm Concluido\n");
     }
-    printf(".geo Concluido\n");
-    comandos = getCommandsForEC(info); 
-    if(comandos){
-        inicEC(info, lenghFila(comandos));
-        startEc(comandos, info);
-    }
-    printf(".ec Concluido\n");
-    comandos = getCommandsForPM(info); 
-    if(comandos){
-        inicPM(info, lenghFila(comandos));
-        startPm(comandos, info);
-    }
-    printf(".pm Concluido\n");
     comandos = getCommandsForVIA(info);
     if(comandos){
         inicVIA(info, lenghFila(comandos));

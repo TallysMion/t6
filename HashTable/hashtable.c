@@ -110,6 +110,7 @@ Lista getAll_hashtable(void* hash){
 
 //apaga a hashtable
 void free_hashtable(void* hash){
+    if(hash == NULL) return;
         HashTable* table;
     table = (HashTable*) hash;
     Lista list = Lista_createLista();

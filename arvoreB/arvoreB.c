@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
-#include "ArqBin.h"
+#include "../ArqBin/ArqBin.h"
 #include "../Lista/lista.h"
 
 typedef struct No{
@@ -24,6 +24,8 @@ typedef struct{
     FILE* arq;
     char* Data;
 	long int headerSize;
+	void (*writer)(void* obj, int seek, void* arq);
+	void (*reader)(void* obj, int seek, void* arq);
 }Tree;
 
 typedef struct{
@@ -54,7 +56,7 @@ int calcTam(int block){
 //Funções Estruturais
 
 
-Tree* BTREE_Carrega(char* bdName, double (*compare)(void*, void*)){
+Tree* BTREE_Carrega(char* bdName, double (*compare)(void*, void*), void (*writer)(void* obj, int seek, void* arq), void (*reader)(void* obj, int seek, void* arq)){
 	FILE* arq = fopen(bdName, "r+b");
 	Header* hd = (Header*) malloc(sizeof(Header)); 
 	hd->BFILE = malloc(55*sizeof(char));
@@ -70,6 +72,8 @@ Tree* BTREE_Carrega(char* bdName, double (*compare)(void*, void*)){
 	result->Data = hd->BFILE;
 	result->arq = fopen(bdName, "r+b");
 	result->raiz = inicializa_folha(hd->blockSize);
+	result->writer = writer;
+	result->reader = reader;
 	ler_disco(result, hd->raiz, result->raiz);
 	result->headerSize = result->raiz->minha_pos;
 	return result;
@@ -114,12 +118,14 @@ int sizeNode(Tree* tree){
 //compare compara a distancia entre os objetos retorna 0 se o elemento for igual, 
 // negativo se estiver antes e positivo se estiver depois do obj comparado
 // o primeiro é o objeto de referencia, o segundo o da  celula
-Tree* BTREE_inicializa(int tam, char*bdName, int objSize, double (*compare)(void*, void*)) {
+Tree* BTREE_inicializa(int tam, char*bdName, int objSize, double (*compare)(void*, void*), void (*writer)(void* obj, int seek, void* arq), void (*reader)(void* obj, int seek, void* arq)) {
 	Tree* arvore = (Tree*)malloc(sizeof(Tree));
     arvore->compare = compare;
     arvore->blockSize = tam;
 	arvore->raiz = NULL;
 	arvore->arq = fopen(bdName, "w+b");
+	arvore->writer = writer;
+	arvore->reader = reader;
     char* dataPath = (char*) malloc(sizeof(char)*55);
     strcpy(dataPath, bdName);
 	for(int i=0; i<strlen(dataPath); i++) if(*(dataPath+i) == '.') *(dataPath+i) = 0;
@@ -197,7 +203,7 @@ int escrever_disco(Tree* arvore, int seek, Node *folha)
 int busca_elemento(Tree* arvore, Node* f, double valor, void* obj) {
 	for (int i = 0; i < f->max_elementos; i++) {
 		if (f->elementos[i] == valor) {
-            void* ob = getObject(arvore->Data, f->elementoData[i]);
+            void* ob = getObject(arvore->Data, f->elementoData[i], arvore->reader);
             if(arvore->compare(ob, obj)==0)
 			return f->elementoData[i];
 		}
@@ -224,7 +230,7 @@ int busca_indice(Tree* arvore, Node* f, double valor, double obj) {
 void* _busca(Tree* arvore, Node* folha, double valor, void* obj) {	
 	int indice = busca_elemento(arvore, folha, valor, obj);
     if (indice >= 0) {
-		return getObject(arvore->Data, folha->elementoData[indice]);
+		return getObject(arvore->Data, folha->elementoData[indice], arvore->reader);
 	}
 	else {
 		int i;
@@ -237,7 +243,7 @@ void* _busca(Tree* arvore, Node* folha, double valor, void* obj) {
 				if (res >= 0) 
 				{
 					free(temp);
-					return getObject(arvore->Data, res);
+					return getObject(arvore->Data, res, arvore->reader);
 				}
                 return _busca(arvore, temp, valor, obj);
 				free(temp);
@@ -250,7 +256,7 @@ void* _busca(Tree* arvore, Node* folha, double valor, void* obj) {
 				if (res >= 0) 
 				{
 					free(temp);
-					return getObject(arvore->Data, res);
+					return getObject(arvore->Data, res, arvore->reader);
 				}
                 return _busca(arvore, temp, valor, obj);
 				free(temp);
@@ -453,7 +459,7 @@ int split(Tree* arvore, Node* pai, double valor, int obj) {
 int retira_elemento(Tree* arvore, Node* folha, double elem, void* obj) {
 	for (int i = 0; i < folha->max_elementos; i++) {
 		if (folha->elementos[i] == elem) {
-            void* ob = getObject(arvore->Data, folha->elementoData[i]);
+            void* ob = getObject(arvore->Data, folha->elementoData[i], arvore->reader);
             if(arvore->compare(ob, obj) == 0){
                 folha->elementos[i] = -1;
                 deleteObject(arvore->Data, folha->elementoData[i]);
@@ -917,7 +923,7 @@ int inserir_filho(Tree* arvore, Node* folha, double valor, double obj)
 }
 
 int BTREE_insere(Tree* arvore, double valor, void* obj) {
-	int data = addObject(obj, arvore->Data);
+	int data = addObject(obj, arvore->Data, arvore->reader);
 	if (arvore->raiz == NULL) {
 		// Primeira folha a ser inserida na arvore..
 		arvore->raiz = inicializa_folha(arvore->blockSize);
@@ -935,7 +941,6 @@ int BTREE_insere(Tree* arvore, double valor, void* obj) {
 		rewind(arvore->arq);
 		fseek(arvore->arq, sizeof(int), SEEK_SET);
 		fwrite(&pos, sizeof(int), 1, arvore->arq);
-
 	}
 	else {
 		Node* f = arvore->raiz;
@@ -964,7 +969,7 @@ int BTREE_insere(Tree* arvore, double valor, void* obj) {
 void _closestNeibord(Tree* tree, Node* no,double ref,void* reference,int ctr, double* minDist, void** minDistObj){
 	for(int i=0; i<no->max_elementos; i++){
 		if(no->elementos[i] != -1){
-			void* obj = getObject(tree->Data, no->elementoData[i]);
+			void* obj = getObject(tree->Data, no->elementoData[i], tree->reader);
 			double dist = tree->compare(obj, reference);
 			if(dist < 0) dist = -dist;
 			if(dist < *minDist){
@@ -1016,7 +1021,7 @@ void* BTREE_closestNeibord(Tree* tree, double ref, void* reference, int ctr){
 	int i = 0;
 	do{
 		if(tree->raiz->elementos[i] != -1){
-			*minDistObj = getObject(tree->Data, tree->raiz->elementoData[i]);
+			*minDistObj = getObject(tree->Data, tree->raiz->elementoData[i], tree->reader);
 			*minDist = abs(tree->compare(reference, *minDistObj));
 		}
 		i++;
@@ -1072,16 +1077,17 @@ void BTREE_PRINT(Tree* arvore){
 	}
 }
 
-Lista BTREE_getAll(Tree* arvore){ return getAll(arvore->Data);}
+Lista BTREE_getAll(Tree* arvore){ return getAll(arvore->Data, arvore->reader);}
 
 void _Inside(Tree* tree,Node* folha,double valorInicial,void* refInicial,double valorFinal,void* refFinal,Lista ls){
 	for(int i=0; i<folha->max_elementos; i++){
 		if(folha->elementos[i] == -1) break;
-		void* obj = getObject(tree->Data, folha->elementoData[i]);
+		void* obj = getObject(tree->Data, folha->elementoData[i], tree->reader);
 		double left, right;
 		left = tree->compare(refInicial, obj);
-		right = tree->compare(refFinal, obj);
-		if(left*right <= 0){
+		right = tree->compare(obj, refFinal);
+		//Verificar se o teste esta  funcionando
+		if(left >= 0 && right>=0){
 			Lista_insert(ls, obj);
 		}
 	}

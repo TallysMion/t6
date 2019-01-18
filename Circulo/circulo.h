@@ -37,4 +37,9 @@ char* getCorCirc(circulo circ);
 /*libera a memoria ocupada pelo circulo*/
 void freeCirculo(circulo circ);
 
+void writerCirc(void* circ, int seek, void* arq);
+void readerCirc(void* circ, int seek, void* arq);
+int getSizeCirc();
+double compareCirc(void* objA, void* objB);
+
 #endif

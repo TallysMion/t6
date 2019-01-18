@@ -13,6 +13,26 @@ typedef struct{
     int type;
 }Item;
 
+void writerItem(Item* it, int seek, void* arq){
+    fseek(arq, seek, SEEK_SET);
+    fwrite(&it->type, sizeof(int), 1, arq);
+    if(it->type == RETANGULO)
+        writerRec(it->value, ftell(arq), arq);
+    if(it->type == CIRCULO)
+        writerCirc(it->value, ftell(arq), arq);
+}
+void readerItem(Item* it, int seek, void* arq){
+    fseek(arq, seek, SEEK_SET);
+    fread(&it->type, sizeof(int), 1, arq);
+    if(it->type == RETANGULO)
+        readerRec(it->value, ftell(arq), arq);
+    if(it->type == CIRCULO)
+        readerCirc(it->value, ftell(arq), arq);
+}
+int getSizeItem(){
+    return (sizeof(int) + getSizeRec());
+}
+
 /*cria um item com essas informações*/
 void* createItem(void* value,int type){
     Item *it;
