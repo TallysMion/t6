@@ -1,0 +1,47 @@
+@xy R5 432.500000 332.500000
+R5  <-- (Cord: [432.500000 , 332.500000])
+@xy R6 778.500000 598.500000
+R6  <-- (Cord: [778.500000 , 598.500000])
+p? p 02-c D R5 R6 green
+dc engav--2
+Carros Colididos -> br.AAA1A08 / br.AAA7A27
+Carros Colididos -> br.AAA1A36 / br.AAA7A27
+Carros Colididos -> br.AAA4A20 / br.AAA7A27
+Carros Colididos -> br.AAA4A64 / br.AAA7A27
+Carros Colididos -> br.AAA5A92 / br.AAA7A27
+Carros Colididos -> br.AAA7A27 / br.AAA7A28
+Carros Colididos -> br.AAA7A28 / br.AAA7A27
+@xy R5 432.500000 332.500000
+R5  <-- (Cord: [432.500000 , 332.500000])
+@xy R6 778.500000 598.500000
+R6  <-- (Cord: [778.500000 , 598.500000])
+p? p 02-c D R5 R6 green
+rau br.AAA6A61
+Removido -> br.AAA6A61 (617.500000 ,332.110000)
+rau br.AAA6A72
+Removido -> br.AAA6A72 (462.190000 ,457.500000)
+rau br.AAA6A83
+Removido -> br.AAA6A83 (482.500000 ,379.760000)
+rau br.AAA6A94
+Removido -> br.AAA6A94 (535.300000 ,362.500000)
+rau br.AAA7A05
+Removido -> br.AAA7A05 (752.500000 ,125.880000)
+rau br.AAA7A16
+Removido -> br.AAA7A16 (671.700000 ,552.500000)
+rau br.AAA7A27
+Removido -> br.AAA7A27 (212.500000 ,229.700000)
+rau br.AAA7A38
+Removido -> br.AAA7A38 (325.960000 ,457.500000)
+rau br.AAA7A49
+Removido -> br.AAA7A49 (752.500000 ,244.000000)
+rau br.AAA7A60
+Removido -> br.AAA7A60 (292.730000 ,172.500000)
+dc engav--2
+Carros Colididos -> br.AAA1A08 / br.AAA7A28
+Carros Colididos -> br.AAA1A36 / br.AAA7A28
+Carros Colididos -> br.AAA5A92 / br.AAA7A28
+@xy R5 432.500000 332.500000
+R5  <-- (Cord: [432.500000 , 332.500000])
+@xy R6 778.500000 598.500000
+R6  <-- (Cord: [778.500000 , 598.500000])
+p? p 02-c D R5 R6 green

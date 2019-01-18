@@ -12,7 +12,12 @@ int main(int argc, const char *argv[]){
     //configurações
     Info *info;
     Fila comandos;    
-    info = configIn(argc, argv);    
+    info = configIn(argc, argv);   
+    if(info->q){
+        printf("\n\n\n\n=======================================================\n");
+        printf("Execução do qry -> %s", info->q);
+        printf("\n=======================================================\n\n\n\n");
+    }
 
     if(info->criar){
         comandos = getCommandsForGEO(info);    

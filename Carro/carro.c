@@ -37,6 +37,14 @@ void readerCarro(carro* car, int seek, void* arq){
 int getSizeCarro(){
     return(4*sizeof(double) + 55*sizeof(char));
 }
+
+void* allocarCarro(){
+    carro *result;
+    result = (carro*) calloc(1, sizeof(carro));
+    result->placa = (char*) calloc(55, sizeof(char));
+    return result;
+}
+
 double compareCarro(carro* objA, carro* objB){
     double result = sqrt(pow(objB->x - objA->x, 2) + pow(objB->y - objA->y, 2));
     if(objB->x > objA->x && objB->y > objA->y){

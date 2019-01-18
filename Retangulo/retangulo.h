@@ -45,4 +45,5 @@ void writerRec(void* rect, int seek, void* arq);
 void readerRec(void* rect, int seek, void* arq);
 int getSizeRec();
 double compareRec(void* objA, void* objB);
+void* allocarRec();
 #endif

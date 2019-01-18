@@ -96,8 +96,6 @@ void writerEstabEnd(Estab* estab, int seek, void* arq){
         fwrite(&estab->ende->face[i], sizeof(char), 1, arq);
     for(int i=0; i<55; i++)
         fwrite(&estab->ende->num[i], sizeof(char), 1, arq);
-    for(int i=0; i<55; i++)
-        fwrite(&estab->ende->comp[i], sizeof(char), 1, arq);
 }
 
 //testar o caso do estab n ter endereco
@@ -110,8 +108,6 @@ void readerEstabEnd(Estab* estab, int seek, void* arq){
         fread(&estab->ende->face[i], sizeof(char), 1, arq);
     for(int i=0; i<55; i++)
         fread(&estab->ende->num[i], sizeof(char), 1, arq);
-    for(int i=0; i<55; i++)
-        fread(&estab->ende->comp[i], sizeof(char), 1, arq);
 
     estab->ende->estab = estab;
 }
@@ -172,6 +168,34 @@ Estab* createEstabCord(double x,double y){
     return (void*) result;
 }
 
+void* allocarEstab(){
+    Estab* result;
+    result = (Estab*) calloc(1, sizeof(Estab));
+    Endereco* end;
+    end = (Endereco*) calloc(1, sizeof(Endereco));
+    end->tipo    = 0;
+    end->cep     = (char*) calloc(55 , sizeof(char*));
+    end->face    = (char*) calloc(55 , sizeof(char*));
+    end->num     = (char*) calloc(55 , sizeof(char*));
+    end->comp    = NULL;
+    end->estab = result;
+    
+    type* tipo;
+    tipo = calloc(1, sizeof(type));
+    tipo->cod = (char*) calloc(55 , sizeof(char*));
+    tipo->info= (char*) calloc(55 , sizeof(char*));
+
+    result->cnpj    = (char*) calloc(55 , sizeof(char*));
+    result->nome    = (char*) calloc(55 , sizeof(char*));
+
+    result->tipo = tipo;
+    result->ende = end;
+    result->ende->estab = result;
+    result->cord = (double*) calloc(2, sizeof(double));
+    
+    return result;
+
+}
 //criar Estabelecimento
 Estab* Estab_create(Info* info, char* cnpj, void* tip, char* cep, char* face, char* num, char* nome){
     Estab* result;
@@ -399,7 +423,7 @@ char* Estab_getTipoCod(void* estab){
     if(est->tipo == NULL){
         return NULL;
     }
-    if(est->cord == NULL){
+    if(est->tipo->cod == NULL){
         return NULL;
     }
     return est->tipo->cod;
@@ -415,4 +439,10 @@ char* Estab_Name(void* estab){
     Estab* est;
     est = (Estab*) estab;
     return est->nome;
+}
+
+void* Estab_getType(void* estab){
+    Estab* est;
+    est = (Estab*) estab;
+    return est->tipo;
 }

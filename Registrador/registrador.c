@@ -28,6 +28,14 @@ int getSizeReg(){
     return (55*sizeof(char) + 2* sizeof(double));
 }
 
+void* allocarReg(){
+    Reg* rg;
+    rg = (Reg*) calloc(1, sizeof(Reg));
+    rg->id = (char*) calloc(55, sizeof(char));
+    rg->value = calloc(2, sizeof(double));
+    return (void*) rg;
+}
+
 //Cria uma estrutura de registrador
 void* create_Reg(char* id, void* value){
     Reg* rg;

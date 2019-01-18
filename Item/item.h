@@ -43,5 +43,6 @@ double Item_Yf(Item i);
 void writerItem(void* hidr, int seek, void* arq);
 void readerItem(void* hidr, int seek, void* arq);
 int getSizeItem();
+void* allocarItem();
 
 #endif

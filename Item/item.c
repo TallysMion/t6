@@ -33,6 +33,13 @@ int getSizeItem(){
     return (sizeof(int) + getSizeRec());
 }
 
+void* allocarItem(){
+    Item *it;
+    it = (Item*) calloc(1, sizeof(Item));
+    it->value = allocarRec();
+    return (void*) it;
+}
+
 /*cria um item com essas informações*/
 void* createItem(void* value,int type){
     Item *it;

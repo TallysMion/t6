@@ -1,0 +1,37 @@
+@e? R3 b04.4 N 10
+R3  <--  b04.4 N nº 10.000000 - (Cord: [500.000000 , 450.000000])
+@tp? R9 assl R3
+Nenhum Estabelecimento desse tipo encontrado
+p? p 03-c D R9 R3 cyan
+Registrador Inicial não encontrado
+dc engav--2
+Carros Colididos -> br.AAA0A54 / br.AAA6A50
+Carros Colididos -> br.AAA0A00 / br.AAA6A50
+Carros Colididos -> br.AAA3A50 / br.AAA6A50
+Carros Colididos -> br.AAA3A74 / br.AAA6A50
+Carros Colididos -> br.AAA3A84 / br.AAA6A50
+Carros Colididos -> br.AAA5A08 / br.AAA6A51
+Carros Colididos -> br.AAA6A50 / br.AAA6A51
+Carros Colididos -> br.AAA6A51 / br.AAA6A50
+@e? R3 b04.4 N 10
+R3  <--  b04.4 N nº 10.000000 - (Cord: [500.000000 , 450.000000])
+@tp? R9 assl R3
+Nenhum Estabelecimento desse tipo encontrado
+p? p 03-c D R9 R3 cyan
+Registrador Inicial não encontrado
+rau br.AAA6A50
+Removido -> br.AAA6A50 (752.500000 ,124.730000)
+dc engav--2rem
+Carros Colididos -> br.AAA0A54 / br.AAA6A51
+Carros Colididos -> br.AAA0A00 / br.AAA6A51
+Carros Colididos -> br.AAA2A64 / br.AAA6A51
+Carros Colididos -> br.AAA3A50 / br.AAA6A51
+Carros Colididos -> br.AAA3A74 / br.AAA6A51
+Carros Colididos -> br.AAA3A84 / br.AAA6A51
+Carros Colididos -> br.AAA5A08 / br.AAA6A51
+@e? R3 b04.4 N 10
+R3  <--  b04.4 N nº 10.000000 - (Cord: [500.000000 , 450.000000])
+@tp? R9 assl R3
+Nenhum Estabelecimento desse tipo encontrado
+p? p 03-c D R9 R3 cyan
+Registrador Inicial não encontrado

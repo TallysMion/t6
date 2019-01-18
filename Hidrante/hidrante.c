@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 #include "../Circulo/circulo.h"
 #include "../Anotacao/anotacao.h"
 
@@ -40,6 +41,15 @@ void readerHidr(Hidrante* hidr, int seek, void* arq){
 
 int getSizeHidr(){
     return (3*(55*sizeof(char)) + 2*sizeof(double));
+}
+
+void* allocarHidr(){
+    Hidrante *hid;
+    hid = (Hidrante*) calloc(1,sizeof(Hidrante));
+    hid->id = (char*) calloc(55, sizeof(char));
+    hid->cor1 = (char*) calloc(55, sizeof(char));
+    hid->cor2 = (char*) calloc(55, sizeof(char));
+    return hid;
 }
 
 double compareHidr(Hidrante* objA, Hidrante* objB){

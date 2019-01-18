@@ -88,6 +88,24 @@ int getSizePessoa(){
     return (5*(55*sizeof(char)) + getSizePessoaEnd());
 }
 
+void* allocarPessoa(){
+    Pessoa* pessoa;
+    pessoa = (Pessoa*) calloc(1, sizeof(Pessoa));    
+    pessoa->cpf         = (char*) calloc(55 , sizeof(char));
+    pessoa->nome        = (char*) calloc(55 , sizeof(char));
+    pessoa->sobrenome   = (char*) calloc(55 , sizeof(char));
+    pessoa->sexo        = (char*) calloc(55 , sizeof(char));
+    pessoa->nasc        = (char*) calloc(55 , sizeof(char));
+    pessoa->endereco    = (Endereco*) calloc(1,sizeof(Endereco));
+    pessoa->endereco->cep = (char*) calloc(55 , sizeof(char));
+    pessoa->endereco->comp = (char*) calloc(55 , sizeof(char));
+    pessoa->endereco->face = (char*) calloc(55 , sizeof(char));
+    pessoa->endereco->num = (char*) calloc(55 , sizeof(char));
+    pessoa->endereco->pessoa = pessoa;
+    return (void*) pessoa;
+
+}
+
 //criar Estabelecimento
 void* Pessoa_create(char* cpf, char* nome, char* sobrenome, char* sexo, char* nasc){
     Pessoa* pessoa;
@@ -257,7 +275,7 @@ double* Pessoa_getCordGeo(void* pessoa, Info* info){
     double num;
     pes = (Pessoa*) pessoa;
     double* result;
-    if(pes->endereco == NULL){
+    if(pes->endereco == NULL || !strcmp(pes->endereco->cep, "")){
         return NULL;
     }
     quadra temp = createQuadra(pes->endereco->cep, "", "", 0, 0, 0, 0);

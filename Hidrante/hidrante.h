@@ -36,5 +36,6 @@ void writerHidr(void* hidr, int seek, void* arq);
 void readerHidr(void* hidr, int seek, void* arq);
 int getSizeHidr();
 double compareHidr(void* objA, void* objB);
+void* allocarHidr();
 
 #endif

@@ -1,0 +1,6 @@
+@m? R2 000.000.421-96
+Pessoa Não Possui Endereco
+@tp? R8 conf R2
+registrador nao encontrado
+p? t D R8 R2
+Registrador Inicial não encontrado

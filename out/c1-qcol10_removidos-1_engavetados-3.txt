@@ -1,0 +1,31 @@
+dc engav--3
+Carros Colididos -> br.AAA0A77 / br.AAA5B03
+Carros Colididos -> br.AAA3A45 / br.AAA5B03
+Carros Colididos -> br.AAA5A93 / br.AAA5B04
+Carros Colididos -> br.AAA5B03 / br.AAA5B04
+Carros Colididos -> br.AAA5B04 / br.AAA5B03
+Carros Colididos -> br.AAA5B14 / br.AAA5B03
+rau br.AAA4B40
+Removido -> br.AAA4B40 (752.500000 ,152.590000)
+rau br.AAA4B61
+Removido -> br.AAA4B61 (511.680000 ,172.500000)
+rau br.AAA4B82
+Removido -> br.AAA4B82 (347.500000 ,309.190000)
+rau br.AAA5B03
+Removido -> br.AAA5B03 (237.660000 ,552.500000)
+rau br.AAA5B24
+Removido -> br.AAA5B24 (752.500000 ,384.350000)
+rau br.AAA5B45
+Removido -> br.AAA5B45 (516.710000 ,362.500000)
+rau br.AAA5B66
+Removido -> br.AAA5B66 (617.500000 ,413.460000)
+rau br.AAA5B87
+Removido -> br.AAA5B87 (596.200000 ,552.500000)
+rau br.AAA6B08
+Removido -> br.AAA6B08 (617.500000 ,143.270000)
+rau br.AAA6B29
+Removido -> br.AAA6B29 (591.780000 ,362.500000)
+dc engav--3rem
+Carros Colididos -> br.AAA0A77 / br.AAA5B04
+Carros Colididos -> br.AAA3A45 / br.AAA5B04
+Carros Colididos -> br.AAA5A93 / br.AAA5B04

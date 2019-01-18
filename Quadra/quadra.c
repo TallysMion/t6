@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 #include "../Retangulo/retangulo.h"
 #include "../Anotacao/anotacao.h"
 
@@ -18,32 +19,41 @@ typedef struct{
 
 void writerQuadra(Quadra* quad, int seek, void* arq){
     fseek(arq, seek, SEEK_SET);
-    for(int i=0; i<5; i++)
-        fwrite(&quad->cep[i], sizeof(char), 1, arq);
-    for(int i=0; i<5; i++)
-        fwrite(&quad->cor1[i], sizeof(char), 1, arq);
-    for(int i=0; i<5; i++)
-        fwrite(&quad->cor2[i], sizeof(char), 1, arq);
     fwrite(&quad->x, sizeof(double), 1, arq);
     fwrite(&quad->y, sizeof(double), 1, arq);
     fwrite(&quad->w, sizeof(double), 1, arq);
     fwrite(&quad->h, sizeof(double), 1, arq);
+    for(int i=0; i<55; i++)
+        fwrite(&quad->cep[i], sizeof(char), 1, arq);
+    for(int i=0; i<55; i++)
+        fwrite(&quad->cor1[i], sizeof(char), 1, arq);
+    for(int i=0; i<55; i++)
+        fwrite(&quad->cor2[i], sizeof(char), 1, arq);
 }
 void readerQuadra(Quadra* quad, int seek, void* arq){
     fseek(arq, seek, SEEK_SET);
-    for(int i=0; i<5; i++)
-        fread(&quad->cep[i], sizeof(char), 1, arq);
-    for(int i=0; i<5; i++)
-        fread(&quad->cor1[i], sizeof(char), 1, arq);
-    for(int i=0; i<5; i++)
-        fread(&quad->cor2[i], sizeof(char), 1, arq);
     fread(&quad->x, sizeof(double), 1, arq);
     fread(&quad->y, sizeof(double), 1, arq);
     fread(&quad->w, sizeof(double), 1, arq);
     fread(&quad->h, sizeof(double), 1, arq);
+    for(int i=0; i<55; i++)
+        fread(&quad->cep[i], sizeof(char), 1, arq);
+    for(int i=0; i<55; i++)
+        fread(&quad->cor1[i], sizeof(char), 1, arq);
+    for(int i=0; i<55; i++)
+        fread(&quad->cor2[i], sizeof(char), 1, arq);
 }
 int getSizeQuadra(){
     return (3*(55*sizeof(char)) + 4* sizeof(double));
+}
+
+void* allocarQuadra(){
+    Quadra *qd;
+    qd = (Quadra*) calloc(1, sizeof(Quadra));
+    qd->cep = (char*) calloc(55, sizeof(char));
+    qd->cor1 = (char*) calloc(55, sizeof(char));
+    qd->cor2 = (char*) calloc(55, sizeof(char));
+    return qd;
 }
 
 double compareQuadra(Quadra* objA, Quadra* objB){

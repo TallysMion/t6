@@ -17,6 +17,7 @@
 #include "../../HashTable/hashtable.h"
 #include "../../Registrador/registrador.h"
 #include "../../Carro/carro.h"
+#include "../../KDTREE/kdtree.h"
 
 
 /*Reporta quadras e equipamentos dentro do retanguo*/
@@ -36,7 +37,7 @@ void reportRec(char* text,Info *info){
         sscanf(aux, "%lf %lf %lf %lf", &x, &y, &w, &h);
 
         /*info->quadras*/
-        Lista quadras = KDT_getAll(info->bd->QuadrasTree);
+        Lista quadras = BTREE_getAll(info->bd->QuadrasTree);
         t=Lista_getFirst(quadras);
         while(1){
             i = Lista_get(quadras,t);
@@ -65,7 +66,7 @@ void reportRec(char* text,Info *info){
 
         /*hidrantes*/
 
-        Lista hidrantes = KDT_getAll(info->bd->HidrantesTree);
+        Lista hidrantes = BTREE_getAll(info->bd->HidrantesTree);
         t=Lista_getFirst(hidrantes);
         while(1){
             i = Lista_get(hidrantes,t);
@@ -93,7 +94,7 @@ void reportRec(char* text,Info *info){
 
         /*info->radio-base*/
 
-        Lista radios = KDT_getAll(info->bd->RadioBaseTree);
+        Lista radios = BTREE_getAll(info->bd->RadioBaseTree);
         t=Lista_getFirst(radios);
         while(1){
             i = Lista_get(radios,t);
@@ -121,7 +122,7 @@ void reportRec(char* text,Info *info){
 
         /*info->semaforo*/
 
-        Lista semaforos = KDT_getAll(info->bd->SemaforosTree);
+        Lista semaforos = BTREE_getAll(info->bd->SemaforosTree);
         t=Lista_getFirst(semaforos);
         while(1){
             i = Lista_get(semaforos,t);
@@ -172,7 +173,7 @@ void reportCirc(char* text,Info* info){
 
         /*info->quadras*/
 
-        Lista quadras = KDT_getAll(info->bd->QuadrasTree);
+        Lista quadras = BTREE_getAll(info->bd->QuadrasTree);
         t=Lista_getFirst(quadras);
         while(1){
             i = Lista_get(quadras,t);
@@ -208,7 +209,7 @@ void reportCirc(char* text,Info* info){
 
         /*hidrantes*/
 
-        Lista hidrantes = KDT_getAll(info->bd->HidrantesTree);
+        Lista hidrantes = BTREE_getAll(info->bd->HidrantesTree);
         t=Lista_getFirst(hidrantes);
         while(1){
             i = Lista_get(hidrantes,t);
@@ -239,7 +240,7 @@ void reportCirc(char* text,Info* info){
 
         /*info->radio-base*/
 
-        Lista radios = KDT_getAll(info->bd->RadioBaseTree);
+        Lista radios = BTREE_getAll(info->bd->RadioBaseTree);
         t=Lista_getFirst(radios);
         while(1){
             i = Lista_get(radios,t);
@@ -269,7 +270,7 @@ void reportCirc(char* text,Info* info){
 
         /*info->semaforo*/
 
-        Lista semaforos = KDT_getAll(info->bd->SemaforosTree);
+        Lista semaforos = BTREE_getAll(info->bd->SemaforosTree);
         t=Lista_getFirst(semaforos);
         while(1){
             i = Lista_get(semaforos,t);
@@ -324,7 +325,7 @@ void deleteQuadrasRec(char* text,Info* info){
 
 
         /*info->quadras*/
-        Lista quadras = KDT_getAll(info->bd->QuadrasTree);
+        Lista quadras = BTREE_getAll(info->bd->QuadrasTree);
         t=Lista_getFirst(quadras);
         printf("/n/n___  %d  ___\n\n",Lista_lenght(quadras));
         while(1){
@@ -345,7 +346,7 @@ void deleteQuadrasRec(char* text,Info* info){
                     insert_Fila(info->respQRY, temp1);
 
                     void* temp = Lista_getNext(quadras, t);
-                    KDT_remove(info->bd->QuadrasTree, it);
+                    BTREE_deletar(info->bd->QuadrasTree,getXRec(getRecQuad(it)), it);
                     remove_hashtable(info->bd->cepQuadraHash, it);
                     Lista_remove(quadras, t);
                     t = temp;  
@@ -400,7 +401,7 @@ void deleteUrbamEqRec(char* text,Info* info){
 
 
         /*hidrantes*/
-        Lista hidrantes = KDT_getAll(info->bd->HidrantesTree);
+        Lista hidrantes = BTREE_getAll(info->bd->HidrantesTree);
         Lista_lenght(hidrantes);
         t=Lista_getFirst(hidrantes);
         while(hd){
@@ -421,7 +422,7 @@ void deleteUrbamEqRec(char* text,Info* info){
                     insert_Fila(info->respQRY, temp2);
                     void* temp = Lista_getNext(hidrantes, t);
                     Lista_remove(hidrantes, t);
-                    KDT_remove(info->bd->HidrantesTree, it);
+                    BTREE_deletar(info->bd->HidrantesTree, getXCirc(getCircHidr(it)), it);
                     remove_hashtable(info->bd->HidrantesHash, it);
                     t = temp;  
                 }else{
@@ -434,7 +435,7 @@ void deleteUrbamEqRec(char* text,Info* info){
 
         /*info->radio-base*/
 
-        Lista radios = KDT_getAll(info->bd->RadioBaseTree);
+        Lista radios = BTREE_getAll(info->bd->RadioBaseTree);
         t=Lista_getFirst(radios);
         while(rb){
             i = Lista_get(radios,t);
@@ -454,7 +455,7 @@ void deleteUrbamEqRec(char* text,Info* info){
                     insert_Fila(info->respQRY, temp2);
                     void* temp = Lista_getNext(radios, t);
                     Lista_remove(radios, t);
-                    KDT_remove(info->bd->RadioBaseTree, it);
+                    BTREE_deletar(info->bd->RadioBaseTree, getXCirc(getCircRadioB(it)), it);
                     remove_hashtable(info->bd->RadioBaseHash, it);
                     t = temp;  
                 }else{
@@ -467,7 +468,7 @@ void deleteUrbamEqRec(char* text,Info* info){
 
         /*info->semaforo*/
 
-        Lista semaforos = KDT_getAll(info->bd->SemaforosTree);
+        Lista semaforos = BTREE_getAll(info->bd->SemaforosTree);
         t=Lista_getFirst(semaforos);
         while(sm){
             i = Lista_get(semaforos,t);
@@ -487,7 +488,7 @@ void deleteUrbamEqRec(char* text,Info* info){
                     insert_Fila(info->respQRY, temp2);
                     void* temp = Lista_getNext(semaforos, t);
                     Lista_remove(semaforos, t);
-                    KDT_remove(info->bd->SemaforosTree, it);
+                    BTREE_deletar(info->bd->SemaforosTree, getXCirc(circ), it);
                     remove_hashtable(info->bd->SemaforosHash, it);
                     t = temp;  
                 }else{
@@ -528,7 +529,7 @@ void deleteQuadrasCirc(char* text,Info* info){
 
         /*info->quadras*/
 
-        Lista quadras = KDT_getAll(info->bd->QuadrasTree);
+        Lista quadras = BTREE_getAll(info->bd->QuadrasTree);
         t=Lista_getFirst(quadras);
         while(1){
             i = Lista_get(quadras,t);
@@ -554,7 +555,7 @@ void deleteQuadrasCirc(char* text,Info* info){
                     insert_Fila(info->respQRY, temp1);
                     void* temp = Lista_getNext(quadras, t);
                     Lista_remove(quadras, t);
-                    KDT_remove(info->bd->QuadrasTree, it);
+                    BTREE_deletar(info->bd->QuadrasTree, xi, it);
                     remove_hashtable(info->bd->cepQuadraHash, it);
                     t = temp;                    
                 }else{
@@ -608,7 +609,7 @@ void deleteUrbamEqCirc(char* text,Info* info){
 
         /*hidrantes*/
 
-        Lista hidrantes = KDT_getAll(info->bd->HidrantesTree);
+        Lista hidrantes = BTREE_getAll(info->bd->HidrantesTree);
         t=Lista_getFirst(hidrantes);
         while(hd){
             i = Lista_get(hidrantes,t);
@@ -630,7 +631,7 @@ void deleteUrbamEqCirc(char* text,Info* info){
                     insert_Fila(info->respQRY, temp2);
                     void* temp = Lista_getNext(hidrantes, t);
                     Lista_remove(hidrantes, t);
-                    KDT_remove(info->bd->HidrantesTree, it);
+                    BTREE_deletar(info->bd->HidrantesTree, getXCirc(circ), it);
                     remove_hashtable(info->bd->HidrantesHash, it);
                     t = temp;  
                 }else{
@@ -644,7 +645,7 @@ void deleteUrbamEqCirc(char* text,Info* info){
 
         /*info->radio-base*/
 
-        Lista radios = KDT_getAll(info->bd->RadioBaseTree);
+        Lista radios = BTREE_getAll(info->bd->RadioBaseTree);
         t=Lista_getFirst(radios);
         while(rb){
             i = Lista_get(radios,t);
@@ -666,7 +667,7 @@ void deleteUrbamEqCirc(char* text,Info* info){
                     insert_Fila(info->respQRY, temp2);
                     void* temp = Lista_getNext(radios, t);
                     Lista_remove(radios, t);
-                    KDT_remove(info->bd->RadioBaseTree, it);
+                    BTREE_deletar(info->bd->RadioBaseTree, getXCirc(circ), it);
                     remove_hashtable(info->bd->RadioBaseHash, it);
                     t = temp;  
                 }else{
@@ -680,7 +681,7 @@ void deleteUrbamEqCirc(char* text,Info* info){
 
         /*info->semaforo*/
 
-        Lista semaforos = KDT_getAll(info->bd->SemaforosTree);
+        Lista semaforos = BTREE_getAll(info->bd->SemaforosTree);
         t=Lista_getFirst(semaforos);
         while(sm){
             i = Lista_get(semaforos,t);
@@ -702,7 +703,7 @@ void deleteUrbamEqCirc(char* text,Info* info){
                     insert_Fila(info->respQRY, temp2);
                     void* temp = Lista_getNext(semaforos, t);
                     Lista_remove(semaforos, t);
-                    KDT_remove(info->bd->SemaforosTree, it);
+                    BTREE_deletar(info->bd->SemaforosTree, getXCirc(circ), it);
                     remove_hashtable(info->bd->SemaforosHash, it);
                     t = temp;  
                 }else{
@@ -736,7 +737,7 @@ void colorChange(char* text,Info* info){
 
             /*info->quadras*/
 
-        Lista quadras = KDT_getAll(info->bd->QuadrasTree);
+        Lista quadras = BTREE_getAll(info->bd->QuadrasTree);
         t=Lista_getFirst(quadras);
         while(1){
             i = Lista_get(quadras,t);
@@ -759,7 +760,7 @@ void colorChange(char* text,Info* info){
 
         /*hidrantes*/
 
-        Lista hidrantes = KDT_getAll(info->bd->HidrantesTree);
+        Lista hidrantes = BTREE_getAll(info->bd->HidrantesTree);
         t=Lista_getFirst(hidrantes);
         while(1){
             i = Lista_get(hidrantes,t);
@@ -787,7 +788,7 @@ void colorChange(char* text,Info* info){
 
         /*info->radio-base*/
 
-        Lista radios = KDT_getAll(info->bd->RadioBaseTree);
+        Lista radios = BTREE_getAll(info->bd->RadioBaseTree);
         t=Lista_getFirst(radios);
         while(1){
             i = Lista_get(radios,t);
@@ -815,7 +816,7 @@ void colorChange(char* text,Info* info){
 
         /*info->semaforo*/
 
-        Lista semaforos = KDT_getAll(info->bd->SemaforosTree);
+        Lista semaforos = BTREE_getAll(info->bd->SemaforosTree);
         t=Lista_getFirst(semaforos);    
         while(1){
             i = Lista_get(semaforos,t);
@@ -866,7 +867,7 @@ void equipOnCepOrId(char* text,Info* info){
 
     /*hidrantes*/
 
-        Lista hidrantes = KDT_getAll(info->bd->HidrantesTree);
+        Lista hidrantes = BTREE_getAll(info->bd->HidrantesTree);
         t=Lista_getFirst(hidrantes);
         while(1){
             i = Lista_get(hidrantes,t);
@@ -893,7 +894,7 @@ void equipOnCepOrId(char* text,Info* info){
 
         /*info->radio-base*/
 
-        Lista radios = KDT_getAll(info->bd->RadioBaseTree);
+        Lista radios = BTREE_getAll(info->bd->RadioBaseTree);
         t=Lista_getFirst(radios);
         while(1){
             i = Lista_get(radios,t);
@@ -919,7 +920,7 @@ void equipOnCepOrId(char* text,Info* info){
 
         /*info->semaforo*/
 
-        Lista semaforos = KDT_getAll(info->bd->SemaforosTree);
+        Lista semaforos = BTREE_getAll(info->bd->SemaforosTree);
         t=Lista_getFirst(semaforos);
         while(1){
             i = Lista_get(semaforos,t);
@@ -948,7 +949,7 @@ void equipOnCepOrId(char* text,Info* info){
 
         void* rt;
         rt = NULL;
-        Lista quadras = KDT_getAll(info->bd->QuadrasTree);
+        Lista quadras = BTREE_getAll(info->bd->QuadrasTree);
         t=Lista_getFirst(quadras);
         while(1){
             i = Lista_get(quadras,t);
@@ -1065,7 +1066,7 @@ void equipOnCepOrId(char* text,Info* info){
 
 /*encontra as radio-base mais proximas, e informa id's e distancia*/
 void closestRBase(char* text,Info* info){
-    Lista radios = KDT_getAll(info->bd->RadioBaseTree);
+    Lista radios = BTREE_getAll(info->bd->RadioBaseTree);
     insert_Fila(info->respQRY, "crb?\n");
 
     void *t, *i;
@@ -1076,7 +1077,7 @@ void closestRBase(char* text,Info* info){
     while(1){
         i = Lista_get(radios,t);
         if(i){
-            itTemp = closestNeibord(info->bd->RadioBaseTree, i);
+            itTemp = BTREE_closestNeibord(info->bd->RadioBaseTree, getXCirc(getCircRadioB(i)), i, 0);
             double a;
             double b;
             a = getXCirc(getCircRadioB(i)) - getXCirc(getCircRadioB(itTemp));
@@ -1185,7 +1186,7 @@ void closeQRY(Info* info){
     info->notsQRY = auxF;
 
     //imprimir quadras
-    Lista quadras = KDT_getAll(info->bd->QuadrasTree);
+    Lista quadras = BTREE_getAll(info->bd->QuadrasTree);
     t=Lista_getFirst(quadras);
     while(1){
         temp = Lista_get(quadras,t);
@@ -1200,7 +1201,7 @@ void closeQRY(Info* info){
     }
 
     //imprimir semaforos
-    Lista semaforos = KDT_getAll(info->bd->SemaforosTree);
+    Lista semaforos = BTREE_getAll(info->bd->SemaforosTree);
     t=Lista_getFirst(semaforos);
     while(1){
         temp = Lista_get(semaforos,t);
@@ -1215,7 +1216,7 @@ void closeQRY(Info* info){
     }
 
     //imprimir hidrantes
-    Lista hidrantes = KDT_getAll(info->bd->HidrantesTree);
+    Lista hidrantes = BTREE_getAll(info->bd->HidrantesTree);
     t=Lista_getFirst(hidrantes);
     while(1){
         temp = Lista_get(hidrantes,t);
@@ -1230,7 +1231,7 @@ void closeQRY(Info* info){
     }
 
     //imprimir torres-base
-    Lista radios = KDT_getAll(info->bd->RadioBaseTree);
+    Lista radios = BTREE_getAll(info->bd->RadioBaseTree);
     t=Lista_getFirst(radios);
     while(1){
         temp = Lista_get(radios,t);
@@ -1245,7 +1246,7 @@ void closeQRY(Info* info){
     }
 
     //imprimir carros
-    Lista carros = KDT_getAll(info->bd->carroTree);
+    Lista carros = BTREE_getAll(info->bd->carroTree);
     t=Lista_getFirst(carros);
     while(1){
         temp = Lista_get(carros,t);
@@ -1341,7 +1342,7 @@ void whoIsInThisArea(char* text, Info* info){
     sscanf(aux, "%lf %lf %lf %lf", &x, &y, &w, &h);
 
     /*info->quadras*/
-    Lista quadras = KDT_getAll(info->bd->QuadrasTree);
+    Lista quadras = BTREE_getAll(info->bd->QuadrasTree);
     t=Lista_getFirst(quadras);
     while(1){
         i = Lista_get(quadras,t);
@@ -1542,7 +1543,7 @@ void whatHaveInThisArea(char* text, Info* info){
     }
 
     /*info->quadras*/
-    Lista quadras = KDT_getAll(info->bd->QuadrasTree);
+    Lista quadras = BTREE_getAll(info->bd->QuadrasTree);
     t=Lista_getFirst(quadras);
     while(1){
         i = Lista_get(quadras,t);
@@ -1654,7 +1655,7 @@ void whatHaveInThisArea_typeOrder(char* text, Info* info){
     sscanf(aux, "%lf %lf %lf %lf",&x, &y, &w, &h);
 
     /*info->quadras*/
-    Lista quadras = KDT_getAll(info->bd->QuadrasTree);
+    Lista quadras = BTREE_getAll(info->bd->QuadrasTree);
     t=Lista_getFirst(quadras);
     Lista estabs;
     estabs = Lista_createLista();
@@ -1719,7 +1720,7 @@ void closestHidrant(char* text, Info* info){
     insert_Fila(info->notsQRY, nt);
 
     void* hidr = createHidrante("", "", "", x, y);
-    void* hd = closestNeibord(info->bd->HidrantesTree, hidr);
+    void* hd = BTREE_closestNeibord(info->bd->HidrantesTree, x, hidr, 0);
     free(hidr);
     nt = createNotacao("RED", x*(-1), y*(-1), getXCirc(getCircHidr(hd))*(-1), getYCirc(getCircHidr(hd))*(-1), "");
     insert_Fila(info->notsQRY, nt);
@@ -1756,7 +1757,8 @@ void closestHidrantFromRB(char* text, Info* info){
         return;
     }
 
-    hd = closestNeibord(info->bd->HidrantesTree, rb);
+    hd = BTREE_closestNeibord(info->bd->HidrantesTree, getXCirc(getCircRadioB(rb)), rb, 0);
+    
 
     nt = createNotacao("RED", getXCirc(getCircRadioB(rb))*(-1), getYCirc(getCircRadioB(rb))*(-1),getXCirc(getCircHidr(hd))*(-1), getYCirc(getCircHidr(hd))*(-1), "");
     a = getXCirc(getCircRadioB(rb)) - getXCirc(getCircHidr(hd));
@@ -1904,7 +1906,7 @@ void desapropriar(char* text, Info* info){
 
     //apagar quadra e tudo que esta nela, estabelecimentos e desapropriar pessoas(não matar)
     //apaga quadras
-    Lista quadras = KDT_getAll(info->bd->QuadrasTree);
+    Lista quadras = BTREE_getAll(info->bd->QuadrasTree);
     i=Lista_getFirst(quadras);
     while(1){
         void* cont = Lista_get(quadras,i);
@@ -1974,7 +1976,7 @@ void desapropriar(char* text, Info* info){
                 insert_Fila(info->respQRY, temp1);
 
                 void* temp = Lista_getNext(quadras, i);
-                KDT_remove(info->bd->QuadrasTree, it);
+                BTREE_deletar(info->bd->QuadrasTree, getXRec(getRecQuad(it)), it);
                 remove_hashtable(info->bd->cepQuadraHash, it);
                 Lista_remove(quadras, i);
                 i = temp;
@@ -1989,7 +1991,7 @@ void desapropriar(char* text, Info* info){
     freeLista(quadras);
 
     //apaga hidrantes
-    Lista hidrantes = KDT_getAll(info->bd->HidrantesTree);
+    Lista hidrantes = BTREE_getAll(info->bd->HidrantesTree);
     t=Lista_getFirst(hidrantes);
     while(1){
         i = Lista_get(hidrantes,t);
@@ -2010,7 +2012,7 @@ void desapropriar(char* text, Info* info){
                 insert_Fila(info->respQRY, temp2);
                 void* temp = Lista_getNext(hidrantes, t);
                 Lista_remove(hidrantes, t);
-                KDT_remove(info->bd->HidrantesTree, it);
+                BTREE_deletar(info->bd->HidrantesTree, getXCirc(getCircHidr(it)), it);
                 remove_hashtable(info->bd->HidrantesHash, it);
                 t = temp; 
             }else{
@@ -2023,7 +2025,7 @@ void desapropriar(char* text, Info* info){
     freeLista(hidrantes);
 
     //apaga radioB
-    Lista radios = KDT_getAll(info->bd->RadioBaseTree);
+    Lista radios = BTREE_getAll(info->bd->RadioBaseTree);
     t=Lista_getFirst(radios);
     while(1){
         i = Lista_get(radios,t);
@@ -2043,7 +2045,7 @@ void desapropriar(char* text, Info* info){
                 insert_Fila(info->respQRY, temp2);
                 void* temp = Lista_getNext(radios, t);
                 Lista_remove(radios, t);
-                KDT_remove(info->bd->RadioBaseTree, it);
+                BTREE_deletar(info->bd->RadioBaseTree, getXCirc(getCircRadioB(it)), it);
                 remove_hashtable(info->bd->RadioBaseHash, it);
                 t = temp; 
             }else{
@@ -2056,7 +2058,7 @@ void desapropriar(char* text, Info* info){
     freeLista(radios);
 
     //apaga semaforos
-    Lista semaforos = KDT_getAll(info->bd->SemaforosTree);
+    Lista semaforos = BTREE_getAll(info->bd->SemaforosTree);
     t=Lista_getFirst(semaforos);
     while(1){
         i = Lista_get(semaforos,t);
@@ -2076,7 +2078,7 @@ void desapropriar(char* text, Info* info){
                 insert_Fila(info->respQRY, temp2);
                 void* temp = Lista_getNext(semaforos, t);
                 Lista_remove(semaforos, t);
-                KDT_remove(info->bd->SemaforosTree, it);
+                BTREE_deletar(info->bd->SemaforosTree, getXCirc(getCircSemaf(it)), it);
                 remove_hashtable(info->bd->SemaforosHash, it);
                 t = temp;  
             }else{
@@ -2361,7 +2363,7 @@ void create_Carro(char* text, Info* info){
     carro car = createCarro(placa, x, y, w, h);
     free(placa);
 
-    KDT_insert(info->bd->carroTree, car);
+    BTREE_insere(info->bd->carroTree, x, car);
     insert_hashtable(info->bd->carroHash, car);
 
 }
@@ -2383,8 +2385,8 @@ void remove_Carro(char* text, Info* info){
     void* rec = getRecCarro(car);
     sprintf(aux, "Removido -> %s (%lf ,%lf)\n", placa, getXRec(rec), getYRec(rec));
     insert_Fila(info->respQRY, aux);
-    freeRec(rec);    
-    KDT_remove(info->bd->carroTree, car);
+    freeRec(rec);  
+    BTREE_deletar(info->bd->carroTree, getXRec(getRecCarro(car)), car);
     remove_hashtable(info->bd->carroHash, car);
     //freeCarro(car);
     free(placa);
@@ -2405,14 +2407,14 @@ void detectColision(char* text, Info* info){
     char *result;
 
     //while para carros{
-    Lista cars = KDT_getAll(info->bd->carroTree);
+    Lista cars = BTREE_getAll(info->bd->carroTree);
     void* posic = Lista_getFirst(cars);
     while(1){
         void*item = Lista_get(cars, posic);
         if(item){
 
             //detecta se esse carro esta colidido
-            void* closestCar = closestNeibord(info->bd->carroTree, item);
+            void* closestCar = BTREE_closestNeibord(info->bd->carroTree, getXRec(getRecCarro(item)), item, 0);
             Item ij = createItem(getRecCarro(item), 0);
             Item ik = createItem(getRecCarro(closestCar), 0);
             if(Item_overlap(ij, ik) != 1 || item == closestCar){
@@ -2525,7 +2527,7 @@ void detectColision(char* text, Info* info){
     free(acidentes);
 
     //imprimir quadras
-    Lista quadras = KDT_getAll(info->bd->QuadrasTree);
+    Lista quadras = BTREE_getAll(info->bd->QuadrasTree);
     t=Lista_getFirst(quadras);
     while(1){
         temp = Lista_get(quadras,t);
@@ -2537,7 +2539,7 @@ void detectColision(char* text, Info* info){
     }
 
     //imprimir semaforos
-    Lista semaforos = KDT_getAll(info->bd->SemaforosTree);
+    Lista semaforos = BTREE_getAll(info->bd->SemaforosTree);
     t=Lista_getFirst(semaforos);
     while(1){
         temp = Lista_get(semaforos,t);
@@ -2549,7 +2551,7 @@ void detectColision(char* text, Info* info){
     }
 
     //imprimir hidrantes
-    Lista hidrantes = KDT_getAll(info->bd->HidrantesTree);
+    Lista hidrantes = BTREE_getAll(info->bd->HidrantesTree);
     t=Lista_getFirst(hidrantes);
     while(1){
         temp = Lista_get(hidrantes,t);
@@ -2561,7 +2563,7 @@ void detectColision(char* text, Info* info){
     }
 
     //imprimir torres-base
-    Lista radios = KDT_getAll(info->bd->RadioBaseTree);
+    Lista radios = BTREE_getAll(info->bd->RadioBaseTree);
     t=Lista_getFirst(radios);
     while(1){
         temp = Lista_get(radios,t);
@@ -2573,7 +2575,7 @@ void detectColision(char* text, Info* info){
     }
 
     //imprimir carros
-    Lista carros = KDT_getAll(info->bd->carroTree);
+    Lista carros = BTREE_getAll(info->bd->carroTree);
     t=Lista_getFirst(carros);
     while(1){
         temp = Lista_get(carros,t);
@@ -2749,7 +2751,7 @@ void simpleRout(char* text, Info*info){
 
 
         //imprimir quadras
-        Lista quadras = KDT_getAll(info->bd->QuadrasTree);
+        Lista quadras = BTREE_getAll(info->bd->QuadrasTree);
         t=Lista_getFirst(quadras);
         while(1){
             temp = Lista_get(quadras,t);
@@ -2761,7 +2763,7 @@ void simpleRout(char* text, Info*info){
         }
 
         //imprimir semaforos
-        Lista semaforos = KDT_getAll(info->bd->SemaforosTree);
+        Lista semaforos = BTREE_getAll(info->bd->SemaforosTree);
         t=Lista_getFirst(semaforos);
         while(1){
             temp = Lista_get(semaforos,t);
@@ -2773,7 +2775,7 @@ void simpleRout(char* text, Info*info){
         }
 
         //imprimir hidrantes
-        Lista hidrantes = KDT_getAll(info->bd->HidrantesTree);
+        Lista hidrantes = BTREE_getAll(info->bd->HidrantesTree);
         t=Lista_getFirst(hidrantes);
         while(1){
             temp = Lista_get(hidrantes,t);
@@ -2785,7 +2787,7 @@ void simpleRout(char* text, Info*info){
         }
 
         //imprimir torres-base
-        Lista radios = KDT_getAll(info->bd->RadioBaseTree);
+        Lista radios = BTREE_getAll(info->bd->RadioBaseTree);
         t=Lista_getFirst(radios);
         while(1){
             temp = Lista_get(radios,t);
@@ -2797,7 +2799,7 @@ void simpleRout(char* text, Info*info){
         }
 
         //imprimir carros
-        Lista carros = KDT_getAll(info->bd->carroTree);
+        Lista carros = BTREE_getAll(info->bd->carroTree);
         t=Lista_getFirst(carros);
         while(1){
             temp = Lista_get(carros,t);
@@ -3032,7 +3034,7 @@ void multRout(char* text, Info*info){
 
 
         //imprimir quadras
-        Lista quadras = KDT_getAll(info->bd->QuadrasTree);
+        Lista quadras = BTREE_getAll(info->bd->QuadrasTree);
         t=Lista_getFirst(quadras);
         while(1){
             temp = Lista_get(quadras,t);
@@ -3044,7 +3046,7 @@ void multRout(char* text, Info*info){
         }
 
         //imprimir semaforos
-        Lista semaforos = KDT_getAll(info->bd->SemaforosTree);
+        Lista semaforos = BTREE_getAll(info->bd->SemaforosTree);
         t=Lista_getFirst(semaforos);
         while(1){
             temp = Lista_get(semaforos,t);
@@ -3056,7 +3058,7 @@ void multRout(char* text, Info*info){
         }
 
         //imprimir hidrantes
-        Lista hidrantes = KDT_getAll(info->bd->HidrantesTree);
+        Lista hidrantes = BTREE_getAll(info->bd->HidrantesTree);
         t=Lista_getFirst(hidrantes);
         while(1){
             temp = Lista_get(hidrantes,t);
@@ -3068,7 +3070,7 @@ void multRout(char* text, Info*info){
         }
 
         //imprimir torres-base
-        Lista radios = KDT_getAll(info->bd->RadioBaseTree);
+        Lista radios = BTREE_getAll(info->bd->RadioBaseTree);
         t=Lista_getFirst(radios);
         while(1){
             temp = Lista_get(radios,t);
@@ -3080,7 +3082,7 @@ void multRout(char* text, Info*info){
         }
 
         //imprimir carros
-        Lista carros = KDT_getAll(info->bd->carroTree);
+        Lista carros = BTREE_getAll(info->bd->carroTree);
         t=Lista_getFirst(carros);
         while(1){
             temp = Lista_get(carros,t);

@@ -69,4 +69,7 @@ void writerEstabEnd(void* estab, int seek, void* arq);
 void readerEstabEnd(void* estab, int seek, void* arq);
 int getSizeEstabEnd();
 
+void* allocarEstab();
+void* Estab_getType(void* estab);
+
 #endif

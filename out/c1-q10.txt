@@ -1,0 +1,6 @@
+@e? R3 b04.4 N 10
+R3  <--  b04.4 N nº 10.000000 - (Cord: [500.000000 , 450.000000])
+@tp? R9 assl R3
+Nenhum Estabelecimento desse tipo encontrado
+p? p 03-c D R9 R3 cyan
+Registrador Inicial não encontrado

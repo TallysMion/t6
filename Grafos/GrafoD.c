@@ -65,20 +65,29 @@ void freeVerticeV(void* v){
 }
 
 
-void freeGrafoD(void* grafo){
-    Grafo *g;
-    g = (Grafo*)grafo;
-    if(g == NULL)
-    return;
-    if(g->vertices != NULL)
-    freeKDTree(g->vertices);
-    if(g->left != NULL)
-    free_hashtable(g->left);
-    if(g->right != NULL)
-    free_hashtable(g->right);
-    if(g->ID != NULL)
-    free_hashtable(g->ID);
-    free(g);
+void freeGrafoD(void* grafo, void*** ar0){
+    if(grafo == NULL) return;
+    Grafo *gr; gr = (Grafo*)grafo;
+
+    if(ar0!=NULL){
+        Lista vertices;
+        vertices = KDT_getAll(gr->vertices);
+        int size = Lista_lenght(vertices);
+        freeLista(vertices);
+        for(int i=0; i<size; i++)
+            free(ar0[i]);
+        free(ar0);
+    }
+    
+    if(gr->vertices != NULL)
+    freeKDTree(gr->vertices);
+    if(gr->left != NULL)
+    free_hashtable(gr->left);
+    if(gr->right != NULL)
+    free_hashtable(gr->right);
+    if(gr->ID != NULL)
+    free_hashtable(gr->ID);
+    free(gr);
 }
 
 //compara "xy" grafo
@@ -723,11 +732,19 @@ void dijkstraA(ArestaP*** arestas, int inicial, int final, int qtd, int mod, Lis
     void *list;
 
     VerticeV* vFinal[qtd];
+    int vsize = Lista_lenght(vertices);
     void* Posic = Lista_getFirst(vertices);
     while(Posic){
         VerticeV* aux = (VerticeV*) Lista_get(vertices, Posic);
         if(aux->disable == 0){
             vFinal[aux->idDijkstra] = aux;
+        }else{
+            if(aux->idDijkstra >= 0){
+                for(int i=0; i<vsize; i++){
+                    arestas[i][aux->idDijkstra] = NULL;
+                    arestas[aux->idDijkstra][i] = NULL;
+                }
+            }
         }
         Posic = Lista_getNext(vertices, Posic);
     }

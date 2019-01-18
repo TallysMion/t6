@@ -36,5 +36,6 @@ void writerSemaf(void* semaf, int seek, void* arq);
 void readerSemaf(void* semaf, int seek, void* arq);
 int getSizeSemaf();
 double compareSemaf(void* objA, void* objB);
+void* allocarSemaf();
 
 #endif

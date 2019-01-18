@@ -34,5 +34,6 @@ void writerRadioB(void* rb, int seek, void* arq);
 void readerRadioB(void* rb, int seek, void* arq);
 int getSizeRadioB();
 double compareRadioB(void* objA, void* objB);
+void* allocarRadioB();
 
 #endif

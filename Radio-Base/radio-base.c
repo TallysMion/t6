@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 #include "../Circulo/circulo.h"
 #include "../Anotacao/anotacao.h"
 
@@ -46,6 +47,15 @@ void readerRadioB(RadioB* rb, int seek, void* arq){
 
 int getSizeRadioB(){
     return (3*(55*sizeof(char)) + 2* sizeof(double));
+}
+
+void* allocarRadioB(){
+    RadioB* rb;
+    rb = (RadioB*) calloc(1, sizeof(RadioB));
+    rb->id   = (char*) calloc(55, sizeof(char));
+    rb->cor1 = (char*) calloc(55, sizeof(char));
+    rb->cor2 = (char*) calloc(55, sizeof(char));
+    return rb;
 }
 
 double compareRadioB(RadioB* objA, RadioB* objB){

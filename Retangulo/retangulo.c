@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <math.h>
 #include <string.h>
 
 typedef void* retangulo;
@@ -42,7 +43,7 @@ int getSizeRec(){
     return (sizeof(int) + 2*(55*sizeof(char)) + 4*sizeof(double));
 }
 
-double compareCirc(rec* objA, rec* objB){
+double compareRec(rec* objA, rec* objB){
     double result = sqrt(pow(objB->x - objA->x, 2) + pow(objB->y - objA->y, 2));
     if(objB->x > objA->x && objB->y > objA->y){
         return result;
@@ -50,13 +51,21 @@ double compareCirc(rec* objA, rec* objB){
     return -result;
 }
 
+void* allocarRec(){
+    rec *result = NULL;
+    result = (rec*) calloc(1, sizeof(rec));        
+    result->cor1 = (char*) calloc(55 , sizeof(char));
+    result->cor2 = (char*) calloc(55 , sizeof(char));
+    return (retangulo) result;
+}
+
 
 /*cria um objeto 'retangulo' com as informações passadas*/
 retangulo createRetangulo(int id, char* cor1, char* cor2, double w, double h, double x, double y){
     rec *result = NULL;
     result = (rec*) calloc(1, sizeof(rec));        
-    result->cor1 = (char*) calloc(strlen(cor1)+2, sizeof(char)); strcpy(result->cor1, cor1);
-    result->cor2 = (char*) calloc(strlen(cor2)+2, sizeof(char)); strcpy(result->cor2, cor2);
+    result->cor1 = (char*) calloc(55 , sizeof(char)); strcpy(result->cor1, cor1);
+    result->cor2 = (char*) calloc(55 , sizeof(char)); strcpy(result->cor2, cor2);
     result->w = w;
     result->h = h;
     result->x = x;

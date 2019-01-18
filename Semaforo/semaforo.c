@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 #include "../Circulo/circulo.h"
 #include "../Anotacao/anotacao.h"
 
@@ -41,6 +42,15 @@ void readerSemaf(Semaforo* semaf, int seek, void* arq){
 
 int getSizeSemaf(){
     return (3*(55*sizeof(char)) + 2* sizeof(double));
+}
+
+void* allocarSemaf(){
+    Semaforo* sm;
+    sm = (Semaforo*) calloc(1, sizeof(Semaforo));
+    sm->id   = (char*) calloc(155, sizeof(char));
+    sm->cor1 = (char*) calloc(155, sizeof(char));
+    sm->cor2 = (char*) calloc(155, sizeof(char));
+    return sm;
 }
 
 double compareSemaf(Semaforo* objA, Semaforo* objB){

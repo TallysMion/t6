@@ -38,7 +38,7 @@ int compareH_ID(void* itemA, Vertice itemB);
 int hashFunction(void *String, int n);
 
 //da Free no grafo
-void freeGrafoD(void* grafo);
+void freeGrafoD(void* grafo, void***table);
 
 //retorna o nome da rua da resta passada
 void *getRua(void *aresta);

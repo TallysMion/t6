@@ -34,5 +34,6 @@ void writerQuadra(void* quad, int seek, void* arq);
 void readerQuadra(void* quad, int seek, void* arq);
 int getSizeQuadra();
 double compareQuadra(void* objA, void* objB);
+void* allocarQuadra();
 
 #endif

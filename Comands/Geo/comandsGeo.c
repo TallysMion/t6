@@ -378,7 +378,7 @@ int drawSufixo(char *text, Info *info){
 
 
         //imprimir quadras
-    Lista quadras = KDT_getAll(info->bd->QuadrasTree);
+    Lista quadras = BTREE_getAll(info->bd->QuadrasTree);
     t=Lista_getFirst(quadras);
     while(1){
         temp = Lista_get(quadras,t);
@@ -393,7 +393,7 @@ int drawSufixo(char *text, Info *info){
     }
 
     //imprimir semaforos
-    Lista semaforos = KDT_getAll(info->bd->SemaforosTree);
+    Lista semaforos = BTREE_getAll(info->bd->SemaforosTree);
     t=Lista_getFirst(semaforos);
     while(1){
         temp = Lista_get(semaforos,t);
@@ -408,7 +408,7 @@ int drawSufixo(char *text, Info *info){
     }
 
     //imprimir hidrantes
-    Lista hidrantes = KDT_getAll(info->bd->HidrantesTree);
+    Lista hidrantes = BTREE_getAll(info->bd->HidrantesTree);
     t=Lista_getFirst(hidrantes);
     while(1){
         temp = Lista_get(hidrantes,t);
@@ -423,7 +423,7 @@ int drawSufixo(char *text, Info *info){
     }
 
     //imprimir torres-base
-    Lista radios = KDT_getAll(info->bd->RadioBaseTree);
+    Lista radios = BTREE_getAll(info->bd->RadioBaseTree);
     t=Lista_getFirst(radios);
     while(1){
         temp = Lista_get(radios,t);
@@ -491,7 +491,7 @@ int close(Info *info){
 
 
     //imprimir quadras
-    Lista quadras = KDT_getAll(info->bd->QuadrasTree);
+    Lista quadras = BTREE_getAll(info->bd->QuadrasTree);
     t=Lista_getFirst(quadras);
     do{
         temp = Lista_get(quadras,t);
@@ -504,7 +504,7 @@ int close(Info *info){
 
 
     //imprimir semaforos
-    Lista semaforos = KDT_getAll(info->bd->SemaforosTree);
+    Lista semaforos = BTREE_getAll(info->bd->SemaforosTree);
     t=Lista_getFirst(semaforos);
     while(t){
         temp = Lista_get(semaforos,t);
@@ -520,7 +520,7 @@ int close(Info *info){
     
 
     //imprimir hidrantes
-    Lista hidrantes = KDT_getAll(info->bd->HidrantesTree);
+    Lista hidrantes = BTREE_getAll(info->bd->HidrantesTree);
     t=Lista_getFirst(hidrantes);
     while(t){
         temp = Lista_get(hidrantes,t);
@@ -536,7 +536,7 @@ int close(Info *info){
 
 
     //imprimir torres-base
-    Lista radios = KDT_getAll(info->bd->RadioBaseTree);
+    Lista radios = BTREE_getAll(info->bd->RadioBaseTree);
     t=Lista_getFirst(radios);
     while(t){
         temp = Lista_get(radios,t);
@@ -593,7 +593,7 @@ int drawQuad(char *text, Info *info){
     sscanf(aux, "%s %lf %lf %lf %lf", cep, &x, &y, &w, &h);
     
     quad = createQuadra(cep, info->conf->cstrkQuad, info->conf->cfillQuad, w, h, x, y);
-    KDT_insert(info->bd->QuadrasTree, quad);
+    BTREE_insere(info->bd->QuadrasTree, getXRec(getRecQuad(quad)), quad);
     insert_hashtable(info->bd->cepQuadraHash, quad);
     free(cep);
 
@@ -617,7 +617,7 @@ int drawHidr(char *text, Info *info){
     sscanf(aux, "%s %lf %lf", id, &x, &y);
     
     hidr = createHidrante(id, info->conf->cstrkHidr, info->conf->cfillHidr, x, y);
-    KDT_insert(info->bd->HidrantesTree, hidr);
+    BTREE_insere(info->bd->HidrantesTree, getXCirc(getCircHidr(hidr)), hidr);
     insert_hashtable(info->bd->HidrantesHash, hidr);
     free(id);
     if(x+5 > info->conf->x) { info->conf->x = x+5;}
@@ -639,7 +639,7 @@ int drawSemaf(char *text, Info *info){
     sscanf(aux, "%s %lf %lf", id, &x, &y);
     
     semaf = createSemaforo(id, info->conf->cstrkSemaf, info->conf->cfillSemaf, x, y);
-    KDT_insert(info->bd->SemaforosTree, semaf);
+    BTREE_insere(info->bd->SemaforosTree, getXCirc(getCircSemaf(semaf)), semaf);
     insert_hashtable(info->bd->SemaforosHash, semaf);
     free(id);
     if(x+5 > info->conf->x) { info->conf->x = x+5;}
@@ -661,7 +661,7 @@ int drawRBase(char *text, Info *info){
     sscanf(aux, "%s %lf %lf", id, &x, &y);
     
     rb = createRadioB(id, info->conf->cstrkRBase, info->conf->cfillRBase, x, y);
-    KDT_insert(info->bd->RadioBaseTree, rb);
+    BTREE_insere(info->bd->RadioBaseTree, getXCirc(getCircRadioB(rb)), rb);
     insert_hashtable(info->bd->RadioBaseHash, rb);
     free(id);
     if(x+5 > info->conf->x) { info->conf->x = x+5;}

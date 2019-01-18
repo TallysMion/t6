@@ -27,6 +27,7 @@ void writerCarro(void* car, int seek, void* arq);
 void readerCarro(void* car, int seek, void* arq);
 int getSizeCarro();
 double compareCarro(void* carA, void* carB);
+void* allocarCarro();
 
 
 #endif

@@ -27,5 +27,6 @@ void setValueReg(void* reg, void* value);
 void writerReg(void* reg, int seek, void* arq);
 void readerReg(void* reg, int seek, void* arq);
 int getSizeReg();
+void* allocarReg();
 
 #endif

@@ -1,0 +1,73 @@
+dc engav--4
+Carros Colididos -> br.AAA0A88 / br.AAA9C86
+Carros Colididos -> br.AAA0A16 / br.AAA9C86
+Carros Colididos -> br.AAA2A42 / br.AAA9C86
+Carros Colididos -> br.AAA3A00 / br.AAA9C86
+Carros Colididos -> br.AAA9C86 / br.AAA9C87
+Carros Colididos -> br.AAA9C87 / br.AAA9C86
+Carros Colididos -> br.AAA9C97 / br.AAA9C86
+Carros Colididos -> br.AAA0D00 / br.AAA9C86
+rau br.AAA9C24
+Removido -> br.AAA9C24 (482.500000 ,126.570000)
+rau br.AAA9C25
+Removido -> br.AAA9C25 (482.725000 ,127.695000)
+rau br.AAA9C35
+Removido -> br.AAA9C35 (482.725000 ,127.695000)
+rau br.AAA9C55
+Removido -> br.AAA9C55 (454.960000 ,172.500000)
+rau br.AAA9C56
+Removido -> br.AAA9C56 (456.085000 ,172.725000)
+rau br.AAA9C66
+Removido -> br.AAA9C66 (456.085000 ,172.725000)
+rau br.AAA9C86
+Removido -> br.AAA9C86 (347.500000 ,220.760000)
+rau br.AAA9C87
+Removido -> br.AAA9C87 (347.725000 ,221.885000)
+rau br.AAA9C97
+Removido -> br.AAA9C97 (347.725000 ,221.885000)
+rau br.AAA0D10
+Removido -> br.AAA0D10 (545.570000 ,552.500000)
+rau br.AAA0D11
+Removido -> br.AAA0D11 (546.695000 ,552.725000)
+rau br.AAA0D21
+Removido -> br.AAA0D21 (546.695000 ,552.725000)
+rau br.AAA0D41
+Removido -> br.AAA0D41 (752.500000 ,426.680000)
+rau br.AAA0D42
+Removido -> br.AAA0D42 (752.725000 ,427.805000)
+rau br.AAA0D52
+Removido -> br.AAA0D52 (752.725000 ,427.805000)
+rau br.AAA0D72
+Removido -> br.AAA0D72 (686.730000 ,552.500000)
+rau br.AAA0D73
+Removido -> br.AAA0D73 (687.855000 ,552.725000)
+rau br.AAA0D83
+Removido -> br.AAA0D83 (687.855000 ,552.725000)
+rau br.AAA1D03
+Removido -> br.AAA1D03 (752.500000 ,100.530000)
+rau br.AAA1D04
+Removido -> br.AAA1D04 (752.725000 ,101.655000)
+rau br.AAA1D14
+Removido -> br.AAA1D14 (752.725000 ,101.655000)
+rau br.AAA1D34
+Removido -> br.AAA1D34 (581.610000 ,552.500000)
+rau br.AAA1D35
+Removido -> br.AAA1D35 (582.735000 ,552.725000)
+rau br.AAA1D45
+Removido -> br.AAA1D45 (582.735000 ,552.725000)
+rau br.AAA1D65
+Removido -> br.AAA1D65 (752.500000 ,386.200000)
+rau br.AAA1D66
+Removido -> br.AAA1D66 (752.725000 ,387.325000)
+rau br.AAA1D76
+Removido -> br.AAA1D76 (752.725000 ,387.325000)
+rau br.AAA1D96
+Removido -> br.AAA1D96 (503.020000 ,362.500000)
+rau br.AAA1D97
+Removido -> br.AAA1D97 (504.145000 ,362.725000)
+rau br.AAA2D07
+Removido -> br.AAA2D07 (504.145000 ,362.725000)
+dc engav--4rem
+Carros Colididos -> br.AAA0A88 / br.AAA0D00
+Carros Colididos -> br.AAA0A16 / br.AAA0D00
+Carros Colididos -> br.AAA2A42 / br.AAA0D00

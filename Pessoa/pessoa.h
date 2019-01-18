@@ -42,4 +42,6 @@ void writerPessoaEnd(void* pes, int seek, void* arq);
 void readerPessoaEnd(void* pes, int seek, void* arq);
 int getSizePessoaEnd();
 
+void* allocarPessoa();
+
 #endif
