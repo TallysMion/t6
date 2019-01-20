@@ -86,6 +86,7 @@ void* getObject(char* pathName, int indice, void (*reader)(void* obj, int seek, 
     
 
     arq = fopen(pathName, "r+b");
+    if(arq==NULL) return NULL;
     fread(&qtd, sizeof(long int), 1, arq);
     fread(&block, sizeof(int), 1, arq); 
     int primeiroItem = ftell(arq);   
@@ -122,7 +123,7 @@ void* getAll(char* pathName, void (*reader)(void* obj, int seek, void* arq), voi
     for(int c=0; c<qtd; c++){
         fseek(arq, (primeiroItem + c*(block + sizeof(mark))), SEEK_SET);    
         fread(&emp, sizeof(mark), 1, arq);
-        if(emp == 1){
+        if(emp == full){
              void *ob; ob = allocar();
              reader(ob, ftell(arq), arq);
             //  fread(ob, block, 1, arq);

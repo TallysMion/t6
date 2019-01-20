@@ -46,6 +46,7 @@ void* allocarCarro(){
 }
 
 double compareCarro(carro* objA, carro* objB){
+    if(!strcmp(objA->placa, objB->placa)) return 0;
     double result = sqrt(pow(objB->x - objA->x, 2) + pow(objB->y - objA->y, 2));
     if(objB->x > objA->x && objB->y > objA->y){
         return result;

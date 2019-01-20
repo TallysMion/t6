@@ -53,6 +53,7 @@ void* allocarHidr(){
 }
 
 double compareHidr(Hidrante* objA, Hidrante* objB){
+    if(!strcmp(objA->id, objB->id)) return 0;
     double result = sqrt(pow(objB->x - objA->x, 2) + pow(objB->y - objA->y, 2));
     if(objB->x > objA->x && objB->y > objA->y){
         return result;

@@ -520,8 +520,50 @@ void merge(Tree* arvore, Node* folha){
 		free(esq);
 		esq = NULL;
 	}
+	if(dir == NULL && esq == NULL){
+		double elem[folha->max_elementos*2];
+		int dats[folha->max_elementos*2];
 
-	if(dir == NULL){
+		int k=0;
+		for(int j=0; j<folha->max_elementos; j++){
+			if(folha->elementos[j] == -1) break;
+			elem[k] = folha->elementos[j];
+			dats[k] = folha->elementoData[j];
+			k++;
+		}
+		for(int j=0; j<pai->max_elementos; j++){
+			elem[k] = pai->elementos[j];
+			dats[k] = pai->elementos[j];
+			k++;
+		}
+		
+		if(k+1 < pai->max_elementos){
+			pai->filhos[i] = -1;
+			for(int i=0; i < k+1; i++){
+				pai->elementos[i] = elem[i];
+				pai->elementoData[i] = dats[i];
+			}
+			pai->total_elementos = k;
+			pai->total_filhos = 0;
+		}else{
+			pai->filhos[i] = -1;
+			for(int i=0; i < k+1; i++){
+				pai->elementos[i] = -1;
+				pai->elementoData[i] = -1;
+			}
+			pai->total_elementos = 0;
+			pai->total_filhos = 0;
+
+			for(int i=0; i < k+1; i++){
+				adicionar_elemento(arvore, pai, elem[i], dats[i]);
+			}
+			
+		}
+		
+
+	}
+
+	if(dir == NULL && esq != NULL){
 		double elem[folha->max_elementos*2];
 		int dats[folha->max_elementos*2];
 
@@ -613,7 +655,7 @@ void merge(Tree* arvore, Node* folha){
 		}
 		return;
 	}
-	if(esq == NULL){
+	if(esq == NULL && dir != NULL){
 		double elem[folha->max_elementos*2];
 		int dats[folha->max_elementos*2];
 
@@ -1014,7 +1056,7 @@ void* BTREE_closestNeibord(Tree* tree, double ref, void* reference, int ctr){
 	if(tree->raiz == NULL)
 		return NULL;
 
-	if(tree->raiz->total_elementos == 0)
+	if(tree->raiz->elementos[0] == -1)
 		return NULL;
 
 
@@ -1024,8 +1066,10 @@ void* BTREE_closestNeibord(Tree* tree, double ref, void* reference, int ctr){
 	
 	int i = 0;
 	do{
+		if(i >= tree->raiz->max_elementos) return NULL;
 		if(tree->raiz->elementos[i] != -1){
 			*minDistObj = getObject(tree->Data, tree->raiz->elementoData[i], tree->reader, tree->allocar);
+			if(*minDistObj==NULL) continue;
 			*minDist = abs(tree->compare(reference, *minDistObj));
 		}
 		i++;

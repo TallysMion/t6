@@ -47,14 +47,15 @@ int getSizeSemaf(){
 void* allocarSemaf(){
     Semaforo* sm;
     sm = (Semaforo*) calloc(1, sizeof(Semaforo));
-    sm->id   = (char*) calloc(155, sizeof(char));
-    sm->cor1 = (char*) calloc(155, sizeof(char));
-    sm->cor2 = (char*) calloc(155, sizeof(char));
+    sm->id   = (char*) calloc(55, sizeof(char));
+    sm->cor1 = (char*) calloc(55, sizeof(char));
+    sm->cor2 = (char*) calloc(55, sizeof(char));
     return sm;
 }
 
 double compareSemaf(Semaforo* objA, Semaforo* objB){
-        double result = sqrt(pow(objB->x - objA->x, 2) + pow(objB->y - objA->y, 2));
+    if(!strcmp(objA->id, objB->id)) return 0;
+    double result = sqrt(pow(objB->x - objA->x, 2) + pow(objB->y - objA->y, 2));
     if(objB->x > objA->x && objB->y > objA->y){
         return result;
     }

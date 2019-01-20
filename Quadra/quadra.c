@@ -57,6 +57,7 @@ void* allocarQuadra(){
 }
 
 double compareQuadra(Quadra* objA, Quadra* objB){
+    if(!strcmp(objA->cep, objB->cep)) return 0;
     double result = sqrt(pow(objB->x - objA->x, 2) + pow(objB->y - objA->y, 2));
     if(objB->x > objA->x && objB->y > objA->y){
         return result;

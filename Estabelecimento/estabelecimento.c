@@ -174,9 +174,9 @@ void* allocarEstab(){
     Endereco* end;
     end = (Endereco*) calloc(1, sizeof(Endereco));
     end->tipo    = 0;
-    end->cep     = (char*) calloc(55 , sizeof(char*));
-    end->face    = (char*) calloc(55 , sizeof(char*));
-    end->num     = (char*) calloc(55 , sizeof(char*));
+    end->cep     = (char*) calloc(55 , sizeof(char));
+    end->face    = (char*) calloc(55 , sizeof(char));
+    end->num     = (char*) calloc(55 , sizeof(char));
     end->comp    = NULL;
     end->estab = result;
     

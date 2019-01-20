@@ -2407,6 +2407,7 @@ void detectColision(char* text, Info* info){
     char *result;
 
     //while para carros{
+    // BTREE_PRINT(info->bd->carroTree);
     Lista cars = BTREE_getAll(info->bd->carroTree);
     void* posic = Lista_getFirst(cars);
     while(1){
@@ -2415,6 +2416,7 @@ void detectColision(char* text, Info* info){
 
             //detecta se esse carro esta colidido
             void* closestCar = BTREE_closestNeibord(info->bd->carroTree, getXRec(getRecCarro(item)), item, 0);
+            if(closestCar == NULL) break;
             Item ij = createItem(getRecCarro(item), 0);
             Item ik = createItem(getRecCarro(closestCar), 0);
             if(Item_overlap(ij, ik) != 1 || item == closestCar){
